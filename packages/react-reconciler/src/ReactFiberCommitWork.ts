@@ -6,7 +6,11 @@
 import type { FiberNode } from "./ReactFiber";
 import {
   Callback,
+  ChildDeletion,
+  Passive,
   LayoutMask,
+  MountLayoutDev,
+  MountPassiveDev,
   MutationMask,
   PassiveMask,
   Placement,
@@ -55,7 +59,10 @@ import {
 } from "./ReactWorkTags";
 import type { OffscreenInstance } from "./ReactFiberOffscreenComponent";
 import type { Wakeable } from "shared/ReactTypes";
-import { resolveRetryWakeable } from "./ReactFiberWorkLoop";
+import {
+  captureCommitPhaseError,
+  resolveRetryWakeable,
+} from "./ReactFiberWorkLoop";
 
 // 删除操作需要在向上回溯过程中临时记住"最近的 host 父节点"，官方用模块级变量在
 // commitDeletionEffectsOnFiber 递归间传递。
@@ -79,7 +86,11 @@ function commitHookEffectListMount(
     do {
       if ((effect.tag & flags) === flags) {
         const create = effect.create;
-        effect.destroy = create();
+        try {
+          effect.destroy = create();
+        } catch (error) {
+          captureCommitPhaseError(finishedWork, finishedWork.return, error);
+        }
       }
       effect = effect.next;
     } while (effect !== firstEffect);
@@ -91,6 +102,7 @@ function commitHookEffectListMount(
 function commitHookEffectListUnmount(
   flags: HookFlags,
   finishedWork: FiberNode,
+  nearestMountedAncestor: FiberNode | null = finishedWork.return,
 ): void {
   const updateQueue: FunctionComponentUpdateQueue | null =
     finishedWork.updateQueue;
@@ -103,7 +115,15 @@ function commitHookEffectListUnmount(
         const destroy = effect.destroy;
         if (destroy !== undefined) {
           effect.destroy = undefined;
-          destroy();
+          try {
+            destroy();
+          } catch (error) {
+            captureCommitPhaseError(
+              finishedWork,
+              nearestMountedAncestor,
+              error,
+            );
+          }
         }
       }
       effect = effect.next;
@@ -144,6 +164,28 @@ function commitDetachRef(current: FiberNode): void {
     } else {
       currentRef.current = null;
     }
+  }
+}
+
+// 对照官方安全调用：commit 阶段的 ref/生命周期异常交给仍挂载的错误边界。
+function safelyDetachRef(
+  fiber: FiberNode,
+  nearestMountedAncestor: FiberNode | null,
+): void {
+  try {
+    commitDetachRef(fiber);
+  } catch (error) {
+    captureCommitPhaseError(fiber, nearestMountedAncestor, error);
+  }
+}
+function safelyCallComponentWillUnmount(
+  fiber: FiberNode,
+  nearestMountedAncestor: FiberNode | null,
+): void {
+  try {
+    fiber.stateNode.componentWillUnmount?.();
+  } catch (error) {
+    captureCommitPhaseError(fiber, nearestMountedAncestor, error);
   }
 }
 
@@ -317,7 +359,7 @@ function commitDeletionEffectsOnFiber(
     case HostComponent: {
       // 先清 ref，随后故意 fall through 到 HostText 分支——
       // 宿主的子节点由它自己整体移除，所以递归时把 hostParent 置空，避免子节点重复 remove
-      commitDetachRef(deletedFiber);
+      safelyDetachRef(deletedFiber, nearestMountedAncestor);
     }
     case HostText: {
       // 只需移除最近的宿主子节点：递归期间 hostParent 置空，嵌套的 host 节点不会各自 remove，
@@ -390,8 +432,16 @@ function commitDeletionEffectsOnFiber(
       // 所有 layout/passive effect 的 destroy 都必须执行一次，否则会漏清理订阅等资源
       // （MemoComponent 本身没有 hook updateQueue，这里调用是安全的空操作，只为与官方
       // case 分组保持一致，真正的清理发生在它包裹的内部 fiber 上）
-      commitHookEffectListUnmount(HookLayout, deletedFiber);
-      commitHookEffectListUnmount(HookPassive, deletedFiber);
+      commitHookEffectListUnmount(
+        HookInsertion,
+        deletedFiber,
+        nearestMountedAncestor,
+      );
+      commitHookEffectListUnmount(
+        HookLayout,
+        deletedFiber,
+        nearestMountedAncestor,
+      );
       recursivelyTraverseDeletionEffects(
         finishedRoot,
         nearestMountedAncestor,
@@ -400,13 +450,9 @@ function commitDeletionEffectsOnFiber(
       return;
     }
     case ClassComponent: {
-      // 先清 ref，再调用 componentWillUnmount（本项目错误边界未落地，直接调用，
-      // 异常留给上层渲染调用方处理）
-      commitDetachRef(deletedFiber);
-      const instance = deletedFiber.stateNode;
-      if (typeof instance.componentWillUnmount === "function") {
-        instance.componentWillUnmount();
-      }
+      // 从仍挂载的祖先捕获卸载错误，随后继续清理其余子节点。
+      safelyDetachRef(deletedFiber, nearestMountedAncestor);
+      safelyCallComponentWillUnmount(deletedFiber, nearestMountedAncestor);
       recursivelyTraverseDeletionEffects(
         finishedRoot,
         nearestMountedAncestor,
@@ -485,27 +531,31 @@ function commitBeforeMutationEffectsOnFiber(
   root: FiberRootNode,
   finishedWork: FiberNode,
 ): void {
-  const flags = finishedWork.flags;
+  try {
+    const flags = finishedWork.flags;
 
-  switch (finishedWork.tag) {
-    case ClassComponent: {
-      recursivelyTraverseBeforeMutationEffects(root, finishedWork);
-      if (flags & Snapshot) {
-        const current = finishedWork.alternate;
-        const instance = finishedWork.stateNode;
-        if (current !== null) {
-          const prevProps = current.memoizedProps;
-          const prevState = current.memoizedState;
-          instance.__reactInternalSnapshotBeforeUpdate =
-            instance.getSnapshotBeforeUpdate(prevProps, prevState);
+    switch (finishedWork.tag) {
+      case ClassComponent: {
+        recursivelyTraverseBeforeMutationEffects(root, finishedWork);
+        if (flags & Snapshot) {
+          const current = finishedWork.alternate;
+          const instance = finishedWork.stateNode;
+          if (current !== null) {
+            const prevProps = current.memoizedProps;
+            const prevState = current.memoizedState;
+            instance.__reactInternalSnapshotBeforeUpdate =
+              instance.getSnapshotBeforeUpdate(prevProps, prevState);
+          }
         }
+        return;
       }
-      return;
+      default: {
+        recursivelyTraverseBeforeMutationEffects(root, finishedWork);
+        return;
+      }
     }
-    default: {
-      recursivelyTraverseBeforeMutationEffects(root, finishedWork);
-      return;
-    }
+  } catch (error) {
+    captureCommitPhaseError(finishedWork, finishedWork.return, error);
   }
 }
 
@@ -615,139 +665,154 @@ function commitMutationEffectsOnFiber(
   root: FiberRootNode,
   lanes: Lanes,
 ): void {
-  const current = finishedWork.alternate;
-  const flags = finishedWork.flags;
+  try {
+    const current = finishedWork.alternate;
+    const flags = finishedWork.flags;
 
-  switch (finishedWork.tag) {
-    case HostComponent: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
+    switch (finishedWork.tag) {
+      case HostComponent: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
 
-      if (flags & Ref) {
-        if (current !== null) {
-          commitDetachRef(current);
-        }
-      }
-
-      if (flags & Update) {
-        const instance = finishedWork.stateNode;
-        if (instance != null) {
-          const newProps = finishedWork.memoizedProps;
-          const oldProps = current !== null ? current.memoizedProps : newProps;
-          const type = finishedWork.type;
-          const updatePayload = finishedWork.updateQueue;
-          finishedWork.updateQueue = null;
-          if (updatePayload !== null) {
-            commitUpdate(
-              instance,
-              updatePayload,
-              type,
-              oldProps,
-              newProps,
-              finishedWork,
-            );
+        if (flags & Ref) {
+          if (current !== null) {
+            safelyDetachRef(current, finishedWork.return);
           }
         }
-      }
-      return;
-    }
-    case HostText: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
 
-      if (flags & Update) {
-        if (finishedWork.stateNode === null) {
-          throw new Error(
-            "This should have a text node initialized. This error is likely " +
-              "caused by a bug in React. Please file an issue.",
+        if (flags & Update) {
+          const instance = finishedWork.stateNode;
+          if (instance != null) {
+            const newProps = finishedWork.memoizedProps;
+            const oldProps =
+              current !== null ? current.memoizedProps : newProps;
+            const type = finishedWork.type;
+            const updatePayload = finishedWork.updateQueue;
+            finishedWork.updateQueue = null;
+            if (updatePayload !== null) {
+              commitUpdate(
+                instance,
+                updatePayload,
+                type,
+                oldProps,
+                newProps,
+                finishedWork,
+              );
+            }
+          }
+        }
+        return;
+      }
+      case HostText: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
+
+        if (flags & Update) {
+          if (finishedWork.stateNode === null) {
+            throw new Error(
+              "This should have a text node initialized. This error is likely " +
+                "caused by a bug in React. Please file an issue.",
+            );
+          }
+          const textInstance = finishedWork.stateNode;
+          const newText = finishedWork.memoizedProps;
+          const oldText = current !== null ? current.memoizedProps : newText;
+          commitTextUpdate(textInstance, oldText, newText);
+        }
+        return;
+      }
+      case HostRoot: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
+        return;
+      }
+      case HostPortal: {
+        // 官方在 mutation 模式下 Update flag 对应的分支只服务 supportsPersistence
+        // （replaceContainerChildren，本项目 supportsPersistence 恒为 false），Portal 自身
+        // 无生命周期，行为等同于 Fragment/Mode：只需递归子树并处理 Placement/Deletion。
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
+        return;
+      }
+      case FunctionComponent:
+      case ForwardRef:
+      case MemoComponent: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
+
+        if (flags & Update) {
+          // 对照官方：useInsertionEffect 的销毁+挂载都在这里、DOM 变更之后立刻完成——它不像
+          // useLayoutEffect 那样把挂载推迟到 commitLayoutEffects，因为它的定位就是"比
+          // useLayoutEffect 更早"，必须在浏览器/其他组件读取布局信息之前就把 <style> 插进去。
+          commitHookEffectListUnmount(
+            HookInsertion | HookHasEffect,
+            finishedWork,
           );
+          commitHookEffectListMount(
+            HookInsertion | HookHasEffect,
+            finishedWork,
+          );
+
+          // layout effect 的销毁提前到 mutation 阶段（销毁旧值），挂载则统一放到
+          // commit 完全结束、root.current 已切换之后的 commitLayoutEffects——这样能保证一棵树里
+          // 所有兄弟组件的销毁都先跑完，才轮到任何一个组件挂载新的 layout effect，不会互相干扰。
+          // MemoComponent 本身没有 hook updateQueue，这里调用是安全的空操作。
+          commitHookEffectListUnmount(HookLayout | HookHasEffect, finishedWork);
         }
-        const textInstance = finishedWork.stateNode;
-        const newText = finishedWork.memoizedProps;
-        const oldText = current !== null ? current.memoizedProps : newText;
-        commitTextUpdate(textInstance, oldText, newText);
+        return;
       }
-      return;
-    }
-    case HostRoot: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
-      return;
-    }
-    case HostPortal: {
-      // 官方在 mutation 模式下 Update flag 对应的分支只服务 supportsPersistence
-      // （replaceContainerChildren，本项目 supportsPersistence 恒为 false），Portal 自身
-      // 无生命周期，行为等同于 Fragment/Mode：只需递归子树并处理 Placement/Deletion。
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
-      return;
-    }
-    case FunctionComponent:
-    case ForwardRef:
-    case MemoComponent: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
+      case ClassComponent: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
 
-      if (flags & Update) {
-        // 对照官方：useInsertionEffect 的销毁+挂载都在这里、DOM 变更之后立刻完成——它不像
-        // useLayoutEffect 那样把挂载推迟到 commitLayoutEffects，因为它的定位就是"比
-        // useLayoutEffect 更早"，必须在浏览器/其他组件读取布局信息之前就把 <style> 插进去。
-        commitHookEffectListUnmount(
-          HookInsertion | HookHasEffect,
-          finishedWork,
-        );
-        commitHookEffectListMount(HookInsertion | HookHasEffect, finishedWork);
-
-        // layout effect 的销毁提前到 mutation 阶段（销毁旧值），挂载则统一放到
-        // commit 完全结束、root.current 已切换之后的 commitLayoutEffects——这样能保证一棵树里
-        // 所有兄弟组件的销毁都先跑完，才轮到任何一个组件挂载新的 layout effect，不会互相干扰。
-        // MemoComponent 本身没有 hook updateQueue，这里调用是安全的空操作。
-        commitHookEffectListUnmount(HookLayout | HookHasEffect, finishedWork);
-      }
-      return;
-    }
-    case ClassComponent: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
-
-      if (flags & Ref) {
-        if (current !== null) {
-          commitDetachRef(current);
+        if (flags & Ref) {
+          if (current !== null) {
+            safelyDetachRef(current, finishedWork.return);
+          }
         }
+        return;
       }
-      return;
-    }
-    case SuspenseComponent: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
+      case SuspenseComponent: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
 
-      // Visibility flag 打在子 Offscreen fiber 上（completeWork 阶段），真正的隐藏/显示
-      // 切换由 OffscreenComponent 自己的 case 处理，这里只负责挂 retry 监听
-      if (flags & Update) {
-        attachSuspenseRetryListeners(finishedWork);
-      }
-      return;
-    }
-    case OffscreenComponent: {
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
-
-      if (flags & Visibility) {
-        const offscreenInstance: OffscreenInstance = finishedWork.stateNode;
-        const isHidden = finishedWork.pendingProps.mode === "hidden";
-        offscreenInstance.isHidden = isHidden;
-        if (supportsMutation) {
-          hideOrUnhideAllChildren(finishedWork, isHidden);
+        // Visibility flag 打在子 Offscreen fiber 上（completeWork 阶段），真正的隐藏/显示
+        // 切换由 OffscreenComponent 自己的 case 处理，这里只负责挂 retry 监听
+        if (flags & Update) {
+          attachSuspenseRetryListeners(finishedWork);
         }
+        return;
       }
-      return;
+      case OffscreenComponent: {
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
+
+        if (flags & Visibility) {
+          const offscreenInstance: OffscreenInstance = finishedWork.stateNode;
+          const isHidden = finishedWork.pendingProps.mode === "hidden";
+          offscreenInstance.isHidden = isHidden;
+          if (supportsMutation) {
+            hideOrUnhideAllChildren(finishedWork, isHidden);
+          }
+          if (isHidden && current !== null && current.memoizedState === null) {
+            let child = finishedWork.child;
+            while (child !== null) {
+              disappearLayoutEffects(child);
+              child = child.sibling;
+            }
+          }
+        }
+        return;
+      }
+      default: {
+        // Fragment/Mode 等：无自身 DOM，只递归子树并处理 Placement
+        recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        commitReconciliationEffects(finishedWork);
+        return;
+      }
     }
-    default: {
-      // Fragment/Mode 等：无自身 DOM，只递归子树并处理 Placement
-      recursivelyTraverseMutationEffects(root, finishedWork, lanes);
-      commitReconciliationEffects(finishedWork);
-      return;
-    }
+  } catch (error) {
+    captureCommitPhaseError(finishedWork, finishedWork.return, error);
   }
 }
 
@@ -802,48 +867,68 @@ function commitLayoutEffectsOnFiber(
   root: FiberRootNode,
   finishedWork: FiberNode,
 ): void {
-  const flags = finishedWork.flags;
+  try {
+    const flags = finishedWork.flags;
 
-  switch (finishedWork.tag) {
-    case FunctionComponent:
-    case ForwardRef:
-    case MemoComponent: {
-      recursivelyTraverseLayoutEffects(root, finishedWork);
-      if (flags & Update) {
-        commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);
-      }
-      break;
-    }
-    case ClassComponent: {
-      recursivelyTraverseLayoutEffects(root, finishedWork);
-      const instance = finishedWork.stateNode;
-      if (flags & Update) {
-        const current = finishedWork.alternate;
-        if (current === null) {
-          instance.componentDidMount();
-        } else {
-          const prevProps = current.memoizedProps;
-          const prevState = current.memoizedState;
-          instance.componentDidUpdate(
-            prevProps,
-            prevState,
-            instance.__reactInternalSnapshotBeforeUpdate,
-          );
+    switch (finishedWork.tag) {
+      case OffscreenComponent: {
+        if (finishedWork.memoizedState !== null) return;
+        if (
+          finishedWork.alternate !== null &&
+          finishedWork.alternate.memoizedState !== null
+        ) {
+          let child = finishedWork.child;
+          while (child !== null) {
+            reappearLayoutEffects(child);
+            child = child.sibling;
+          }
+          return;
         }
+        recursivelyTraverseLayoutEffects(root, finishedWork);
+        break;
       }
-      if (flags & Callback) {
-        commitClassCallbacks(finishedWork);
+      case FunctionComponent:
+      case ForwardRef:
+      case MemoComponent: {
+        recursivelyTraverseLayoutEffects(root, finishedWork);
+        if (flags & Update) {
+          commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);
+        }
+        break;
       }
-      break;
+      case ClassComponent: {
+        recursivelyTraverseLayoutEffects(root, finishedWork);
+        const instance = finishedWork.stateNode;
+        if (flags & Update) {
+          const current = finishedWork.alternate;
+          if (current === null) {
+            instance.componentDidMount();
+          } else {
+            const prevProps = current.memoizedProps;
+            const prevState = current.memoizedState;
+            instance.componentDidUpdate(
+              prevProps,
+              prevState,
+              instance.__reactInternalSnapshotBeforeUpdate,
+            );
+          }
+        }
+        if (flags & Callback) {
+          commitClassCallbacks(finishedWork);
+        }
+        break;
+      }
+      default: {
+        recursivelyTraverseLayoutEffects(root, finishedWork);
+        break;
+      }
     }
-    default: {
-      recursivelyTraverseLayoutEffects(root, finishedWork);
-      break;
-    }
-  }
 
-  if (flags & Ref) {
-    commitAttachRef(finishedWork);
+    if (flags & Ref) {
+      commitAttachRef(finishedWork);
+    }
+  } catch (error) {
+    captureCommitPhaseError(finishedWork, finishedWork.return, error);
   }
 }
 
@@ -880,7 +965,7 @@ function commitPassiveMountOnFiber(
     case FunctionComponent:
     case ForwardRef: {
       recursivelyTraversePassiveMountEffects(root, finishedWork);
-      if (flags & Update) {
+      if (flags & Passive) {
         commitHookEffectListMount(HookPassive | HookHasEffect, finishedWork);
       }
       return;
@@ -899,9 +984,36 @@ export function commitPassiveMountEffects(
   commitPassiveMountOnFiber(root, finishedWork);
 }
 
+// 删除子树的 passive 销毁保留到 passive 阶段；顺序为父到子，与 layout 销毁分开。
+function commitPassiveUnmountInsideDeletedTree(
+  fiber: FiberNode,
+  nearestMountedAncestor: FiberNode,
+): void {
+  if (
+    fiber.tag === FunctionComponent ||
+    fiber.tag === ForwardRef ||
+    fiber.tag === MemoComponent
+  ) {
+    commitHookEffectListUnmount(HookPassive, fiber, nearestMountedAncestor);
+  }
+  let child = fiber.child;
+  while (child !== null) {
+    commitPassiveUnmountInsideDeletedTree(child, nearestMountedAncestor);
+    child = child.sibling;
+  }
+  fiber.return = null;
+  if (fiber.alternate !== null) fiber.alternate.return = null;
+}
+
 function recursivelyTraversePassiveUnmountEffects(
   parentFiber: FiberNode,
 ): void {
+  if (parentFiber.flags & ChildDeletion) {
+    for (const deleted of parentFiber.deletions ?? []) {
+      commitPassiveUnmountInsideDeletedTree(deleted, parentFiber);
+    }
+    parentFiber.deletions = null;
+  }
   if (parentFiber.subtreeFlags & PassiveMask) {
     let child = parentFiber.child;
     while (child !== null) {
@@ -922,7 +1034,7 @@ function commitPassiveUnmountOnFiber(finishedWork: FiberNode): void {
     case FunctionComponent:
     case ForwardRef: {
       recursivelyTraversePassiveUnmountEffects(finishedWork);
-      if (flags & Update) {
+      if (flags & Passive) {
         commitHookEffectListUnmount(HookPassive | HookHasEffect, finishedWork);
       }
       return;
@@ -936,4 +1048,76 @@ function commitPassiveUnmountOnFiber(finishedWork: FiberNode): void {
 
 export function commitPassiveUnmountEffects(finishedWork: FiberNode): void {
   commitPassiveUnmountOnFiber(finishedWork);
+}
+
+// 对照 commitDoubleInvokeEffectsInDEV：四次独立遍历，不能逐组件销毁后立即重建。
+export function commitDoubleInvokeEffectsInDEV(root: FiberNode): void {
+  if (!__DEV__) return;
+  function visit(fiber: FiberNode, flag: number, mount: boolean): void {
+    if (fiber.tag === OffscreenComponent && fiber.memoizedState !== null)
+      return;
+    let child = fiber.child;
+    while (child !== null) {
+      visit(child, flag, mount);
+      child = child.sibling;
+    }
+    if ((fiber.flags & flag) !== 0) {
+      if (fiber.tag === ClassComponent) {
+        const instance = fiber.stateNode;
+        try {
+          if (mount) instance.componentDidMount?.();
+          else instance.componentWillUnmount?.();
+        } catch (error) {
+          captureCommitPhaseError(fiber, fiber.return, error);
+        }
+      } else if (mount)
+        commitHookEffectListMount(
+          flag === MountLayoutDev ? HookLayout : HookPassive,
+          fiber,
+        );
+      else
+        commitHookEffectListUnmount(
+          flag === MountLayoutDev ? HookLayout : HookPassive,
+          fiber,
+        );
+      if (mount) fiber.flags &= ~flag;
+    }
+  }
+  visit(root, MountLayoutDev, false);
+  visit(root, MountPassiveDev, false);
+  visit(root, MountLayoutDev, true);
+  visit(root, MountPassiveDev, true);
+}
+
+function disappearLayoutEffects(fiber: FiberNode): void {
+  if (fiber.tag === OffscreenComponent && fiber.memoizedState !== null) return;
+  if (fiber.tag === FunctionComponent || fiber.tag === ForwardRef)
+    commitHookEffectListUnmount(HookLayout, fiber);
+  else if (fiber.tag === ClassComponent) {
+    safelyDetachRef(fiber, fiber.return);
+    safelyCallComponentWillUnmount(fiber, fiber.return);
+  } else if (fiber.tag === HostComponent) safelyDetachRef(fiber, fiber.return);
+  let child = fiber.child;
+  while (child !== null) {
+    disappearLayoutEffects(child);
+    child = child.sibling;
+  }
+}
+function reappearLayoutEffects(fiber: FiberNode): void {
+  if (fiber.tag === OffscreenComponent && fiber.memoizedState !== null) return;
+  let child = fiber.child;
+  while (child !== null) {
+    reappearLayoutEffects(child);
+    child = child.sibling;
+  }
+  try {
+    if (fiber.tag === FunctionComponent || fiber.tag === ForwardRef)
+      commitHookEffectListMount(HookLayout, fiber);
+    else if (fiber.tag === ClassComponent) {
+      fiber.stateNode.componentDidMount?.();
+      commitAttachRef(fiber);
+    } else if (fiber.tag === HostComponent) commitAttachRef(fiber);
+  } catch (error) {
+    captureCommitPhaseError(fiber, fiber.return, error);
+  }
 }

@@ -2,8 +2,8 @@
  * @file 事件插件系统：委托监听 + 事件抽取 + 分发
  * @description 对照官方 packages/react-dom-bindings/src/events/DOMPluginEventSystem.js。
  * 官方按插件（SimpleEventPlugin/EnterLeaveEventPlugin/ChangeEventPlugin/...）拆分
- * extractEvents，本项目只落地 SimpleEventPlugin 这一条主链路，直接把它的逻辑内联在
- * extractEvents 里，不做插件注册表这层抽象（当前只有一个插件，加这层是不会被用到的间接层）。
+ * extractEvents，本项目内联 SimpleEventPlugin 和 ChangeEventPlugin 的常用客户端路径。
+ * React 18.3.1 对应代码位于 packages/react-dom/src/events。
  *
  * 跳过的官方逻辑：
  * - Portal 场景下沿 fiber 树向上找匹配 rootContainer 的祖先重映射（本项目无 Portal）
@@ -14,6 +14,9 @@
  *   不需要额外的 BatchedContext 包裹
  */
 
+import { flushSyncCallbacks } from "react-reconciler/src/ReactFiberWorkLoop";
+import { updateValueIfChanged } from "../client/inputValueTracking";
+import { restoreControlledState } from "../client/ReactDOMInput";
 import type { FiberNode } from "react-reconciler/src/ReactFiber";
 import { HostComponent } from "react-reconciler/src/ReactWorkTags";
 
@@ -158,6 +161,50 @@ function extractEvents(
   }
 }
 
+// ChangeEventPlugin 主链路：文本 input/change、checkbox/radio click、select change。
+function extractChangeEvent(
+  queue: DispatchQueue,
+  name: DOMEventName,
+  inst: FiberNode | null,
+  event: Event,
+  target: EventTarget | null,
+): void {
+  if (!(target instanceof Element)) return;
+  const tag = target.nodeName;
+  const type = (target as HTMLInputElement).type;
+  const checkable =
+    tag === "INPUT" && (type === "checkbox" || type === "radio");
+  const nativeChange =
+    (tag === "SELECT" || (tag === "INPUT" && type === "file")) &&
+    name === "change";
+  const textChange =
+    (tag === "INPUT" || tag === "TEXTAREA") &&
+    !checkable &&
+    (name === "input" || name === "change");
+  if (
+    !nativeChange &&
+    !(
+      (textChange || (checkable && name === "click")) &&
+      updateValueIfChanged(target)
+    )
+  )
+    return;
+  const capture = accumulateSinglePhaseListeners(
+    inst,
+    "onChange",
+    true,
+  ).reverse();
+  const bubble = accumulateSinglePhaseListeners(inst, "onChange", false);
+  const synthetic = new SyntheticEvent(
+    "onChange",
+    "change",
+    inst,
+    event as any,
+    target,
+  );
+  queue.push({ event: synthetic, listeners: capture.concat(bubble) });
+}
+
 function executeDispatch(
   event: BaseSyntheticEvent,
   listener: (event: BaseSyntheticEvent) => void,
@@ -167,7 +214,7 @@ function executeDispatch(
   try {
     listener(event);
   } catch (error) {
-    // 对照官方 reportGlobalError：不吞掉监听器抛出的错误，异步抛给全局，不打断同批次
+    // 对照官方 executeDispatch 的错误隔离语义：不吞掉监听器抛出的错误，异步抛给全局，不打断同批次
     // 其余监听器的执行（浏览器原生事件监听器之间也是这个语义）
     setTimeout(() => {
       throw error;
@@ -234,7 +281,25 @@ export function dispatchEventForPluginEventSystem(
     nativeEventTarget,
     eventSystemFlags,
   );
-  processDispatchQueue(dispatchQueue, eventSystemFlags);
+  const bubble = (eventSystemFlags & IS_CAPTURE_PHASE) === 0;
+  if (bubble)
+    extractChangeEvent(
+      dispatchQueue,
+      domEventName,
+      targetInst,
+      nativeEvent,
+      nativeEventTarget,
+    );
+  try {
+    processDispatchQueue(dispatchQueue, eventSystemFlags);
+  } finally {
+    if (bubble) {
+      // 先提交事件内更新，再恢复受控值；没有 setState 的受控输入也必须恢复。
+      flushSyncCallbacks();
+      if (nativeEventTarget instanceof Element)
+        restoreControlledState(nativeEventTarget);
+    }
+  }
 }
 
 function addTrappedEventListener(

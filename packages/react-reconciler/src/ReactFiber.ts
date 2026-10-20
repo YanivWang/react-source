@@ -10,7 +10,13 @@ import { NoFlags, StaticMask, type Flags } from "./ReactFiberFlags";
 import { NoLanes, type Lanes } from "./ReactFiberLane";
 import type { Dependencies } from "./ReactInternalTypes";
 import { ConcurrentRoot, type RootTag } from "./ReactRootTags";
-import { ConcurrentMode, NoMode, type TypeOfMode } from "./ReactTypeOfMode";
+import {
+  ConcurrentMode,
+  NoMode,
+  StrictLegacyMode,
+  StrictEffectsMode,
+  type TypeOfMode,
+} from "./ReactTypeOfMode";
 import {
   ContextConsumer,
   ContextProvider,
@@ -23,12 +29,14 @@ import {
   IndeterminateComponent,
   LazyComponent,
   MemoComponent,
+  Mode,
   OffscreenComponent,
   SuspenseComponent,
   type WorkTag,
 } from "./ReactWorkTags";
 import {
   REACT_PROVIDER_TYPE,
+  REACT_STRICT_MODE_TYPE,
   REACT_CONTEXT_TYPE,
   REACT_FORWARD_REF_TYPE,
   REACT_LAZY_TYPE,
@@ -240,6 +248,10 @@ export function createFiberFromTypeAndProps(
     fiberTag = HostComponent;
   } else if (type === REACT_FRAGMENT_TYPE) {
     return createFiberFromFragment(pendingProps.children, mode, lanes, key);
+  } else if (type === REACT_STRICT_MODE_TYPE) {
+    fiberTag = Mode;
+    mode |= StrictLegacyMode;
+    if ((mode & ConcurrentMode) !== NoMode) mode |= StrictEffectsMode;
   } else if (type === REACT_SUSPENSE_TYPE) {
     return createFiberFromSuspense(pendingProps, mode, lanes, key);
   } else if (type === REACT_OFFSCREEN_TYPE) {

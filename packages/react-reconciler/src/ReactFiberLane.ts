@@ -459,3 +459,37 @@ export function claimNextRetryLane(): Lane {
 export function markRootPinged(root: FiberRootNode, pingedLanes: Lanes): void {
   root.pingedLanes |= root.suspendedLanes & pingedLanes;
 }
+
+// 对照 markRootEntangled：同一更新队列中的 transition 及传递关联必须一起选择。
+export function markRootEntangled(
+  root: FiberRootNode,
+  entangledLanes: Lanes,
+): void {
+  const rootEntangled = (root.entangledLanes |= entangledLanes);
+  let lanes = rootEntangled;
+  while (lanes !== NoLanes) {
+    const lane = getHighestPriorityLane(lanes);
+    const index = 31 - Math.clz32(lane);
+    if (
+      (lane & entangledLanes) !== NoLanes ||
+      (root.entanglements[index] & entangledLanes) !== NoLanes
+    ) {
+      root.entanglements[index] |= entangledLanes;
+    }
+    lanes &= ~lane;
+  }
+}
+
+export function markRootSuspended(
+  root: FiberRootNode,
+  suspendedLanes: Lanes,
+): void {
+  root.suspendedLanes |= suspendedLanes;
+  root.pingedLanes &= ~suspendedLanes;
+  let lanes = suspendedLanes;
+  while (lanes !== NoLanes) {
+    const lane = getHighestPriorityLane(lanes);
+    root.expirationTimes[31 - Math.clz32(lane)] = NoTimestamp;
+    lanes &= ~lane;
+  }
+}

@@ -48,3 +48,10 @@ export function unwindWork(workInProgress: FiberNode): FiberNode | null {
       return null;
   }
 }
+
+// 抢占/切换 root 时并非错误恢复；只还原已压栈的祖先，不消费 ShouldCapture。
+export function unwindInterruptedWork(workInProgress: FiberNode): void {
+  if (workInProgress.tag === ContextProvider) {
+    popProvider(workInProgress.type._context, workInProgress);
+  }
+}

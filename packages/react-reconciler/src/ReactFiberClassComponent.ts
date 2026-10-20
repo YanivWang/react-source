@@ -4,12 +4,15 @@
  * class 组件的实例化、setState/forceUpdate 的 updater 注入、挂载/更新两条生命周期调用链。
  */
 
+import { StrictLegacyMode, StrictEffectsMode } from "./ReactTypeOfMode";
+import { MountLayoutDev } from "./ReactFiberFlags";
 import shallowEqual from "shared/shallowEqual";
 
 import type { FiberNode } from "./ReactFiber";
 import {
   createUpdate,
   enqueueUpdate,
+  entangleTransitions,
   processUpdateQueue,
   initializeUpdateQueue,
   cloneUpdateQueue,
@@ -18,7 +21,7 @@ import {
   resetHasForceUpdateBeforeProcessing,
 } from "./ReactFiberClassUpdateQueue";
 import { Update as UpdateEffect, Snapshot } from "./ReactFiberFlags";
-import type { Lanes } from "./ReactFiberLane";
+import { NoLanes, type Lanes } from "./ReactFiberLane";
 import {
   requestEventTime,
   requestUpdateLane,
@@ -42,6 +45,7 @@ const classComponentUpdater = {
     const root = enqueueUpdate(fiber, update, lane);
     if (root !== null) {
       scheduleUpdateOnFiber(root, fiber, lane, eventTime);
+      entangleTransitions(root, fiber, lane);
     }
   },
 
@@ -59,6 +63,7 @@ const classComponentUpdater = {
     const root = enqueueUpdate(fiber, update, lane);
     if (root !== null) {
       scheduleUpdateOnFiber(root, fiber, lane, eventTime);
+      entangleTransitions(root, fiber, lane);
     }
   },
 };
@@ -79,6 +84,8 @@ export function constructClassInstance(
   Component: any,
   props: any,
 ): any {
+  if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0)
+    new Component(props);
   const instance = new Component(props);
   // 挂载 updater：react 包的 Component.prototype.setState/forceUpdate 都是转发给这个 updater
   instance.updater = classComponentUpdater;
@@ -105,8 +112,8 @@ function applyDerivedStateFromProps(
       : Object.assign({}, prevState, partialState);
   workInProgress.memoizedState = newState;
 
-  // processUpdateQueue 下次读 baseState 时要从这个新 state 起算
-  if (workInProgress.updateQueue !== null) {
+  // 还有被跳过的更新时必须保留重放起点，不能用派生后的紧急 state 覆盖 baseState。
+  if (workInProgress.lanes === NoLanes && workInProgress.updateQueue !== null) {
     workInProgress.updateQueue.baseState = newState;
   }
 }
@@ -122,6 +129,13 @@ export function mountClassInstance(
   newProps: any,
 ): void {
   const instance = workInProgress.stateNode;
+  if (
+    __DEV__ &&
+    (workInProgress.mode & StrictEffectsMode) !== 0 &&
+    typeof instance.componentDidMount === "function"
+  ) {
+    workInProgress.flags |= MountLayoutDev;
+  }
   instance.props = newProps;
   instance.state = workInProgress.memoizedState;
   instance.refs = {};

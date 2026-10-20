@@ -1,3 +1,5 @@
+> 当前核心修复与运行验收以 [React 18.3.1 核心验证记录](./verification-core-react18.3.1.md) 为准。下列 Phase 保留开发脉络，不代表完整官方实现或全分支通过。
+
 # React 源码实现路线图
 
 本文档描述 react-source 项目的功能实现路径，按 React 18 的渲染主链路自然顺序逐步搭建核心模块。
@@ -152,19 +154,19 @@
 - [x] **useMemo / useCallback**：mountMemo/updateMemo、mountCallback/updateCallback，areHookInputsEqual 对比 deps，变化则重算/返回新引用，否则复用缓存
 - [x] **useEffect**：mountEffect/updateEffect（`ReactFiberHooks.ts` 里的 `mountEffectImpl`/`updateEffectImpl`，deps 复用 areHookInputsEqual，标记 Passive fiber flag），effect 节点用 pushEffect 串成循环链表挂在 `fiber.updateQueue`（与 ClassComponent updateQueue 结构不同，只是复用字段名）
   - commit 阶段异步执行：`commitRootImpl` 检测到 Passive flag 后 `scheduleCallback(NormalPriority, flushPassiveEffects)`，先 `commitPassiveUnmountEffects` 再 `commitPassiveMountEffects`
-  - 简化范围：`PassiveMask` 简化为只含 `Passive` 位（官方还含 Visibility/ChildDeletion），未做 StrictMode 双调用
+  - 简化范围：`PassiveMask` 包含 `Passive | ChildDeletion`；DEV StrictMode 已补 render 双调用与 layout/passive effect 的模拟卸载/重挂载，生产模式不启用
 - [x] **useLayoutEffect**：mountLayoutEffect/updateLayoutEffect（标记 Update fiber flag，复用同一套 pushEffect/deps 比较），`commitRootImpl` 在 `commitMutationEffects` 之后、`root.current` 切换之后同步跑 `commitLayoutEffects`
   - 旧 layout effect 的销毁提前到 mutation 阶段（`commitMutationEffectsOnFiber` 的 FunctionComponent 分支），保证一棵树里所有兄弟组件的销毁都先跑完才轮到挂载
-  - 组件整体卸载时（`commitDeletionEffectsOnFiber` 的 FunctionComponent 分支）统一清理 layout + passive effect 的 destroy
+  - 组件整体卸载时，mutation 清理 insertion/layout，passive 阶段再清理 useEffect；删除树中的 passive cleanup 按父到子执行
 - [x] **useTransition**：mountTransition/updateTransition + startTransition（`ReactFiberHooks.ts`）。start 函数内部：先把 `currentUpdatePriority` 提升到 `ContinuousEventPriority` 并 `setPending(true)`（走一次紧急更新让"进入 pending"立刻反映到 UI），再把 `ReactCurrentBatchConfig.transition` 置为非 null，`setPending(false)` 与 callback() 内部的更新在这个标记内一起派发；`requestUpdateLane` 检测到 `transition` 非空就走 `claimNextTransitionLane`（同一事件内的多次更新复用 `currentEventTransitionLane`，直到 `performConcurrentWorkOnRoot` 重置）
   - 新增 `packages/react/src/ReactCurrentBatchConfig.ts`（`{ transition }` 字段），聚合进 `ReactSharedInternals`
-  - 简化范围：不支持异步 action（callback 返回 Promise 时官方会 entangle async action scope、延后 isPending 变回 false），本项目 startTransition 只接受同步回调；`Transition` 对象简化为空对象占位，不含官方的 `_updatedFibers`/`types` 等 DEV 调试字段
+  - 简化范围：对齐 React 18.3.1 的同步 scope；React 19 async Action 不是 React 18 的缺失功能。`Transition` 对象省略 DEV 调试字段；队列 Transition entanglement 已接通
 - [x] **useDeferredValue**：mountDeferredValue/updateDeferredValue（`ReactFiberHooks.ts`），值变化且当前渲染含紧急 lane（`!includesOnlyNonUrgentLanes(renderLanes)`）时保留旧值、派生一条 deferred lane 稍后单独渲染；否则直接用新值
-  - `requestDeferredLane` 简化为直接复用 `claimNextTransitionLane`（官方有独立的 `DeferredLane` 位，本项目 lane 位表未单独开一位，效果上仍能让 deferred 渲染独立成一条 lane）
-  - 简化范围：不支持 `initialValue` 第二参数（配合 Suspense 预渲染场景，本项目暂无 Suspense）
+  - React 18.3.1 使用 `claimNextTransitionLane` 分配延后更新；不能用 React 19 的 DeferredLane 解释此版本
+  - 版本边界：React 18.3.1 的 `useDeferredValue` 没有 `initialValue` 第二参数
 - [x] **useSyncExternalStore**：mountSyncExternalStore/updateSyncExternalStore（`ReactFiberHooks.ts`）。渲染时直接读一次 `getSnapshot()` 作为本次值（打破"只依赖参数/上次状态"的常规，只因 store 更新语义恒为同步）；`mountEffect` 挂一条订阅 effect（`subscribeToStore`，commit 后才真正调用外部 `subscribe`），另 `pushEffect` 一条不比较 deps 的 passive effect（`updateStoreInstance`），每次 commit 后同步 `inst` 缓存并补一次快照检查
   - `subscribeToStore`/`updateStoreInstance` 检测到快照变化（`checkIfSnapshotChanged`）都调用 `forceStoreRerender`：新增 `enqueueConcurrentRenderForLane`（`ReactFiberConcurrentUpdates.ts`，只冒泡 lane、不携带 update 对象）+ `scheduleUpdateOnFiber`，强制走 `SyncLane` 同步重渲染
-  - 简化范围：不支持 `getServerSnapshot`（SSR/hydrate 明确不做，见文末「待实现 › 明确搁置」）；不做官方 render 阶段被并发事件打断时的 `pushStoreConsistencyCheck` 一致性检查（依赖 commit 前整树扫描 `StoreConsistency` flag + 事件系统，Phase 6 才落地），只保留 `subscribeToStore` + `updateStoreInstance` 这条被动检测路径——足够覆盖"外部 store 变化触发重渲染"这个可验证的主路径
+  - 简化范围：不支持 `getServerSnapshot`（SSR/hydrate 明确不做，见文末「待实现 › 明确搁置」）；已补 `pushStoreConsistencyCheck` 和提交前 `StoreConsistency` 扫描，非阻塞 render 快照变化时同步重渲染后再提交
 - [x] **useInsertionEffect**：mountInsertionEffect/updateInsertionEffect（`ReactFiberHooks.ts`），与 useLayoutEffect 共用同一套 `mountEffectImpl`/`updateEffectImpl`，只是 hookFlags 换成新增的 `HookInsertion`（`ReactHookEffectTags.ts`）。区别在 commit 阶段消费的时机：`commitMutationEffectsOnFiber`（`ReactFiberCommitWork.ts`）在 DOM 变更完成后立刻按 `HookInsertion | HookHasEffect` 跑完销毁+挂载，不像 layout effect 那样把挂载推迟到 `commitLayoutEffects`——因为它的定位就是"比 useLayoutEffect 更早"，必须在其他组件读取布局信息之前把 `<style>` 等副作用插好
   - 简化范围：不做官方针对 CSS-in-JS 库的额外时序保证之外的特殊处理，机制上与 useLayoutEffect 完全对称，只是挂载时机提前到 mutation 子阶段
 - [x] **useId**：mountId/updateId（`ReactFiberHooks.ts`）。官方还有 hydrate 分支（treeContext 的 `forkStack`/`idStack` 按组件树路径编码 id，保证 SSR/CSR 一致），本项目没有 `hydrateRoot`，永远走不到那个分支，只落地客户端分支——模块级自增计数器 `globalClientIdCounter` 生成 `:{identifierPrefix}r{n}:` 形式的 id。`identifierPrefix` 挂在 `FiberRootNode` 上，由 `createRoot(container, { identifierPrefix })` 透传（`ReactFiberReconciler.ts` 的 `createContainer` 新增第三个参数），`mountId` 通过新增的 `getWorkInProgressRoot()`（`ReactFiberWorkLoop.ts`）取当前渲染所属的 root
@@ -172,7 +174,7 @@
 - [x] **useImperativeHandle**：mountImperativeHandle/updateImperativeHandle（`ReactFiberHooks.ts`）。与 useLayoutEffect 共用同一套 `mountEffectImpl`/`updateEffectImpl`（hookFlags 用 `HookLayout`，挂载/销毁时机与 useLayoutEffect 完全一致——DOM 变更之后、浏览器绘制之前），真正的读写逻辑在新增的 `imperativeHandleEffect`：`create()` 算出暴露对象，按 `typeof ref` 分两路挂到 `ref.current` 或调用 `ref(instance)`，返回的清理函数在下次重新执行/卸载时把 ref 清空。deps 额外 `concat([ref])`——ref 引用本身变化（比如从一个 callback ref 换成另一个）也要重新跑一次 create，否则旧 ref 上挂的是过期对象
   - 只在 `packages/react/src/ReactHooks.ts` 新增对外 API（转发到当前 dispatcher），不需要 reconciler 侧新增 fiber flag 或 commit 分支——复用的是 useLayoutEffect 已有的整套 effect 基础设施
   - 顺带修正 `ReactForwardRef.ts` 的类型：`render` 的第二个参数（父组件传下来的 ref 容器）此前误标成解析后的实例类型 `Ref`，与 `useImperativeHandle` 期望接收的 `{ current } | ((instance) => void) | null` 容器类型不一致；同时把默认 `Props` 从 `Record<string, never>`（索引签名强制所有键为 `never`，与交叉进来的 `ref` 属性冲突）改成 `object`
-  - 简化范围：不做官方 DEV 模式下 `typeof create !== 'function'` 的警告（`create` 不是函数时静默出错，与 useEffect/useLayoutEffect 对齐的取舍）
+  - 简化范围：省略部分 DEV 参数校验警告；effect 执行错误仍通过错误边界处理
 
 #### 5.3.1 ReactFiberConcurrentUpdates（并发更新入队）
 
@@ -210,10 +212,10 @@
 
 **简化范围**（渐进式搭建，明确取舍）：
 
-- 只落地 SimpleEventPlugin 这一条主链路，不做 EnterLeaveEventPlugin（onMouseEnter/Leave，用 onMouseOver/onMouseOut 代替）、ChangeEventPlugin/SelectEventPlugin/BeforeInputEventPlugin（跨浏览器兼容 polyfill）、FormActionEventPlugin、ScrollEndEventPlugin
-- 不做 hydration/Suspense 相关的 `findInstanceBlockingEvent` 阻塞重放逻辑（本项目无 hydrate，见 Phase 10）；不做 Portal 场景的祖先 fiber 重映射（本项目无 Portal）；不做 legacyFBSupport / non-delegated events / passive touch 特殊处理；不做受控组件状态回滚（`ReactDOMControlledComponent`）
-- **不引入官方的 `batchedUpdates`/`ReactDOMUpdateBatching.ts` 机制**：官方用它包裹事件分发主要是为受控组件回滚兜底、以及历史 legacy 模式的批处理保证。本项目 `ensureRootIsScheduled`（`ReactFiberWorkLoop.ts`）已经是"同 lane 重复调用直接早退 + SyncLane 走微任务统一 flush"，同一事件回调内连续多次 `setState` 只要停留在同一 lane，微任务 flush 前只会累积、不会重复提交——天然满足"多次 setState 只触发一次重渲染"的验收标准，不需要额外的 `BatchedContext` 包裹
-- `getListener.ts` 不做 `shouldPreventMouseEvent`（disabled 表单元素抑制鼠标事件）；`SyntheticEvent` 不做 `getModifierState`（跨浏览器修饰键归一化）
+- 已落地 SimpleEventPlugin 和 ChangeEventPlugin 常用客户端路径（文本输入、checkbox/radio、select/file）；不做 EnterLeave/Select/BeforeInput 等完整插件与旧浏览器 polyfill。React 19 Form Action 等不属于 18.3.1 对照范围
+- 不做 hydration/Suspense 相关的 `findInstanceBlockingEvent` 阻塞重放逻辑（本项目无 hydrate，见 Phase 10）；不做 Portal 场景的祖先 fiber 重映射（本项目无 Portal）；不做 legacyFBSupport / non-delegated events / passive touch 特殊处理；事件结束时先 flush 同步队列，再恢复当前受控值，包含同名 radio 联动恢复
+- **不引入官方的 `batchedUpdates`/`ReactDOMUpdateBatching.ts` 机制**：官方用它包裹事件分发主要是为受控组件回滚兜底、以及历史 legacy 模式的批处理保证。本项目 `ensureRootIsScheduled`（`ReactFiberWorkLoop.ts`）已经是"同 lane 重复调用直接早退 + SyncLane 走微任务统一 flush"，同一事件回调内连续多次 `setState` 只要停留在同一 lane，微任务 flush 前只会累积、不会重复提交——天然满足"多次 setState 只触发一次重渲染"的验收标准，不需要额外的 `BatchedContext` 包裹；当前常用受控输入路径在事件结束时额外执行 flush 与状态恢复
+- `getListener.ts` 已补 disabled 交互元素抑制鼠标事件；`SyntheticEvent` 不做 `getModifierState`（跨浏览器修饰键归一化）
 
 **阶段目标验收**：能够监听 onClick、onChange 等事件，事件回调中多次 setState 只触发一次重渲染（`fixtures/events`）。
 
@@ -306,7 +308,7 @@
 - [x] **显示 fallback**：`unwindWork`（`ReactFiberUnwindWork.ts`）遇到打了 `ShouldCapture` 的 `SuspenseComponent` 翻转成 `DidCapture` 并重新进入 `updateSuspenseComponent`（`ReactFiberBeginWork.ts`）；`showFallback` 由 `DidCapture` 决定——`mount`/`update` 两个分支分别调用 `mountSuspenseFallbackChildren`/`updateSuspenseFallbackChildren`，用 `OffscreenComponent` 包裹 primary children（隐藏但不销毁）+ 正常渲染 fallback
 - [x] **OffscreenComponent**：`packages/react-reconciler/src/ReactFiberOffscreenComponent.ts`（官方 `ReactFiberOffscreenComponent.old.js` 简化版，`OffscreenState` 只保留 `baseLanes`，去掉 cachePool/transitions）—— Suspense 用它包裹主内容并隐藏，保留 Fiber 状态不销毁；`updateOffscreenComponent`（`ReactFiberBeginWork.ts`）始终正常 reconcile children（不做官方 hidden 时 bail-out-and-defer 到 OffscreenLane 的机制），隐藏效果完全交给 commit 阶段的 `Visibility` flag + `hideInstance`/`unhideInstance`（`ReactFiberCommitWork.ts` 的 `OffscreenComponent` 分支）处理
 - [x] **ping/retry 重渲染**：commit 阶段 `attachSuspenseRetryListeners`（`ReactFiberCommitWork.ts`）消费 Suspense 边界 `updateQueue` 里记录的 wakeable，挂上 `resolveRetryWakeable` 监听；Promise resolve 后触发 `pingSuspendedRoot`（`ReactFiberWorkLoop.ts`）用 `mergeLanes` 把之前挂起的 lanes 重新标记为待调度并 `ensureRootIsScheduled`，重渲染时 `updateSuspenseComponent` 读到资源已就绪（`AsyncBox` 不再 throw），正常渲染分支替换掉 fallback
-- 简化范围：不含 `SuspenseContext` 栈 / SSR dehydration / `SuspenseList`；`use`（试验性 hook）与 `lazy`（代码分割）暂未实现，留待 9.2 继续
+- 简化范围：不含 `SuspenseContext` 栈 / SSR dehydration / `SuspenseList`；`lazy` 已在 9.1 实现并修复 Function/Class/memo/forwardRef 解析；`use` 不属于 React 18.3.1 稳定公开 API
 - 补 ReactSymbols 的 `REACT_SUSPENSE_TYPE`、ReactWorkTags 的 `SuspenseComponent`/`OffscreenComponent` 等
 
 **验收**：`fixtures/suspense`——单个 Suspense 挂起 2s 后从 fallback 自动切到真实内容；一个 Suspense 包裹两个异步子节点，两者都完成才整体切换；多个独立 Suspense 互不影响
@@ -331,13 +333,13 @@
 
 #### 9.3 错误边界与异常处理
 
-- [x] **ErrorBoundary**：class 组件实现 `getDerivedStateFromError`/`componentDidCatch`，捕获流程完全复用 9.0 的 `throwException`/`unwindWork` 地基，没有新增 commit 代码
+- [x] **ErrorBoundary**：class 组件实现 `getDerivedStateFromError`/`componentDidCatch`，render 错误沿 `throwException`/`unwindWork` 恢复，commit 错误另走 `captureCommitPhaseError`
 - [x] **捕获与回退**：render 阶段抛错 → `throwException`（9.0）沿 `return` 链找最近的错误边界 → 标记 `ShouldCapture` → `unwindWork`（9.0）翻转 `DidCapture` → 重新进入 `updateClassComponent`（`ReactFiberBeginWork.ts`）
   - `updateClassComponent` 新增分流：`current === null` 时说明边界组件自身也是本次渲染首次挂载（第一次 beginWork 已经 `constructClassInstance`/`mountClassInstance` 过），走新增的 `resumeMountClassInstance`（`ReactFiberClassComponent.ts`，官方同名函数的简化版）消费 `CaptureUpdate` 算出 fallback state；`current !== null`（边界组件是复用的已挂载节点）则仍走原有 `updateClassInstance`——`CaptureUpdate` 塞进它的 base 队列，走 `processUpdateQueue` 时被消费
-  - `getStateFromUpdate`（`ReactFiberClassUpdateQueue.ts`）的 `CaptureUpdate` 分支：`hasForceUpdate = true` 后 fallthrough 到 `UpdateState`（浅合并语义相同，额外强制跳过 `shouldComponentUpdate` 短路）
+  - `getStateFromUpdate`（`ReactFiberClassUpdateQueue.ts`）的 `CaptureUpdate` 分支：清除 `ShouldCapture`、设置 `DidCapture` 后 fallthrough 到 `UpdateState`；finishClassComponent 即使被 sCU 拦截也处理 DidCapture fallback
 - **retry**：本次未新增任何机制——错误边界捕获后，用户在 `componentDidCatch`/fallback UI 里手动 `setState` 即可触发正常更新流程重新挂载被卸载的子树，这条路径天然可行，不需要额外代码
 - **简化范围**（本次明确不做，留待后续）：
-  - commit 阶段生命周期（`componentDidMount`/`componentDidUpdate`/`componentWillUnmount`/`getSnapshotBeforeUpdate`）抛错仍然直接冒泡崩溃——官方用独立的 `captureCommitPhaseError` 机制处理（commit 完成后同步触发一次新的渲染），不复用 `throwException`/`unwindWork`，属于新的一块地基，本次未实现
+  - 已补 `captureCommitPhaseError`：生命周期、ref、effect 的 commit 错误进入仍挂载祖先边界的 SyncLane；componentDidCatch-only 与更新时 fallback 也已修复，验证覆盖范围见核心记录
   - 不追踪 componentStack（`componentDidCatch` 的第二个参数恒为 `{componentStack: ""}`）
   - `HostRoot` 兜底（无任何边界捕获）只做整棵树卸载 + `console.error`，不做官方的 `logCapturedError` 格式化
 

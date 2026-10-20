@@ -68,3 +68,5 @@ export const REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
  * 用于识别 lazy() 懒加载组件（Phase 9）
  */
 export const REACT_LAZY_TYPE = Symbol.for("react.lazy");
+
+export const REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");

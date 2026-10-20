@@ -47,7 +47,7 @@ export function registerSimpleEvents(): void {
   // change 事件语义上对应 onChange，但 React 实际靠 input 事件驱动受控 input 的 onChange
   // （ChangeEventPlugin 才是完整实现），本项目简化为原生 change 事件直接映射 onChange，
   // 覆盖 checkbox/radio/select 等场景；文本输入建议用 onInput 语义等价的场景
-  registerSimpleEvent("change", "onChange");
+  registerTwoPhaseEvent("onChange", ["change", "input", "click"]);
   registerSimpleEvent("focusin", "onFocus");
   registerSimpleEvent("focusout", "onBlur");
 }

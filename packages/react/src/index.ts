@@ -8,7 +8,11 @@ import { createContext } from "./ReactContext";
 import { forwardRef } from "./ReactForwardRef";
 import { lazy } from "./ReactLazy";
 import { memo } from "./ReactMemo";
-import { REACT_SUSPENSE_TYPE } from "shared/ReactSymbols";
+import {
+  REACT_SUSPENSE_TYPE,
+  REACT_FRAGMENT_TYPE,
+  REACT_STRICT_MODE_TYPE,
+} from "shared/ReactSymbols";
 import { Component, PureComponent } from "./ReactBaseClasses";
 
 // Suspense 运行时就是 REACT_SUSPENSE_TYPE 这个 symbol（beginWork 靠 === 比较分发），
@@ -18,6 +22,27 @@ interface SuspenseType {
   (props: { children?: any; fallback?: any }): any;
 }
 const Suspense = REACT_SUSPENSE_TYPE as unknown as SuspenseType;
+const Fragment = REACT_FRAGMENT_TYPE as unknown as (props: {
+  children?: any;
+}) => any;
+const StrictMode = REACT_STRICT_MODE_TYPE as unknown as (props: {
+  children?: any;
+}) => any;
+function createRef<T>(): { current: T | null } {
+  const ref = { current: null };
+  if (__DEV__) Object.seal(ref);
+  return ref;
+}
+function startTransition(scope: () => void): void {
+  const config = ReactSharedInternals.ReactCurrentBatchConfig;
+  const previous = config.transition;
+  config.transition = {};
+  try {
+    scope();
+  } finally {
+    config.transition = previous;
+  }
+}
 import {
   useCallback,
   useContext,
@@ -46,6 +71,10 @@ export {
   Component,
   PureComponent,
   Suspense,
+  Fragment,
+  StrictMode,
+  createRef,
+  startTransition,
   createContext,
   createElement,
   forwardRef,
@@ -79,6 +108,10 @@ export default {
   Component,
   PureComponent,
   Suspense,
+  Fragment,
+  StrictMode,
+  createRef,
+  startTransition,
   createContext,
   createElement,
   forwardRef,

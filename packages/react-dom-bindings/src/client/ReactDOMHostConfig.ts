@@ -2,9 +2,8 @@
  * @file react-dom 的 DOM HostConfig 实现（简版）
  * @description reconciler 通过 HostConfig 与具体渲染器解耦，react-dom 构建时通过 fork
  * 把本模块注入 reconciler（替换掉只抛错的 ReactFiberConfig 占位模块）。这里只覆盖
- * 同步主链路（挂载/更新/删除）用得到的方法子集，属性处理只做 className/style/普通字符串
- * 属性的简版（dangerouslySetInnerHTML/布尔属性等 DOMPropertyOperations 完整体系留到后续
- * Phase 再补）。事件处理器（on*）不再在这里处理——Phase 6 事件系统落地后，setProp 直接
+ * 客户端挂载/更新/删除、常用 DOM 属性、样式、受控表单所需的子集。
+ * 事件处理器（on*）由 root 委托监听；setProp 直接
  * 跳过函数类型的 prop（不当成 DOM 属性设置），真正的监听靠 updateFiberProps 存到
  * ReactDOMComponentTree 的 WeakMap 上，由事件委托系统统一读取分发。
  *
@@ -14,36 +13,85 @@
  */
 
 import { precacheFiberNode, updateFiberProps } from "./ReactDOMComponentTree";
+import { setValueForStyles } from "./CSSPropertyOperations";
+import { updateControlledState } from "./ReactDOMInput";
 
 export type Container = Element;
 
-// 属性设置/对比只覆盖主链路用得到的子集（className/style/普通字符串属性），
-// 不是 react-dom DOMPropertyOperations 的完整还原（dangerouslySetInnerHTML、布尔属性等
-// 留到对应 Phase 再补）。事件处理器（on*）不当 DOM 属性设置，真正的监听走事件委托系统。
+// 常用属性子集不等同于完整 DOMPropertyOperations；事件处理器不写到 DOM 属性。
 
-/** 设置单个属性到 DOM 元素 */
+// 对照 DOMPropertyOperations：布尔属性的存在即为 true，不能写入字符串 "false"。
+const booleanAttributes = new Set([
+  "allowFullScreen",
+  "async",
+  "autoFocus",
+  "autoPlay",
+  "controls",
+  "default",
+  "defer",
+  "disabled",
+  "disablePictureInPicture",
+  "disableRemotePlayback",
+  "formNoValidate",
+  "hidden",
+  "loop",
+  "noModule",
+  "noValidate",
+  "open",
+  "playsInline",
+  "readOnly",
+  "required",
+  "reversed",
+  "scoped",
+  "seamless",
+  "itemScope",
+]);
+const propertyBooleans = new Set(["checked", "multiple", "muted", "selected"]);
+
 function setProp(domElement: Element, propKey: string, value: any): void {
-  if (typeof value === "function") {
-    // 事件处理器（onClick 等）不当 DOM 属性设置——真正的监听靠 createInstance/commitUpdate
-    // 调用 updateFiberProps 存下整份 props，事件委托系统按 registrationName 现取现读
+  if (
+    /^on/i.test(propKey) ||
+    propKey === "ref" ||
+    propKey === "key" ||
+    propKey === "suppressHydrationWarning" ||
+    propKey === "suppressContentEditableWarning"
+  )
+    return;
+  if (propKey === "style") {
+    if (value != null) setValueForStyles(domElement, value);
     return;
   }
-  if (propKey === "style" && typeof value === "object" && value !== null) {
-    const style = (domElement as HTMLElement).style;
-    for (const styleName in value) {
-      style.setProperty(styleName, value[styleName]);
-    }
+  if (propertyBooleans.has(propKey)) {
+    (domElement as any)[propKey] = Boolean(value);
     return;
   }
-  if (propKey === "className") {
-    domElement.className = value == null ? "" : String(value);
+  const attribute =
+    propKey === "className" ? "class" : propKey === "htmlFor" ? "for" : propKey;
+  if (booleanAttributes.has(propKey)) {
+    if (value) domElement.setAttribute(attribute.toLowerCase(), "");
+    else domElement.removeAttribute(attribute.toLowerCase());
     return;
   }
-  if (value == null) {
-    domElement.removeAttribute(propKey);
+  if (propKey === "download" || propKey === "capture") {
+    if (value === false || value == null) domElement.removeAttribute(attribute);
+    else
+      domElement.setAttribute(attribute, value === true ? "" : String(value));
     return;
   }
-  domElement.setAttribute(propKey, String(value));
+  if (
+    value == null ||
+    typeof value === "function" ||
+    typeof value === "symbol" ||
+    (typeof value === "boolean" &&
+      !/^(data-|aria-)/.test(propKey) &&
+      !["contentEditable", "draggable", "spellCheck", "value"].includes(
+        propKey,
+      ))
+  ) {
+    domElement.removeAttribute(attribute);
+    return;
+  }
+  domElement.setAttribute(attribute, String(value));
 }
 
 /** 挂载时设置初始属性（跳过 children，children 由 HostText fiber 单独 append） */
@@ -52,9 +100,15 @@ function setInitialProperties(
   props: Record<string, any>,
 ): void {
   for (const propKey in props) {
-    if (propKey === "children") {
+    const form = ["INPUT", "TEXTAREA", "SELECT"].includes(domElement.nodeName);
+    if (
+      propKey === "children" ||
+      (form &&
+        ["value", "defaultValue", "checked", "defaultChecked"].includes(
+          propKey,
+        ))
+    )
       continue;
-    }
     setProp(domElement, propKey, props[propKey]);
   }
 }
@@ -65,6 +119,7 @@ function diffProperties(
   nextProps: Record<string, any>,
 ): any[] | null {
   const updatePayload: any[] = [];
+  let eventChanged = false;
 
   const propKeySet: Set<string> = new Set();
   for (const propKey in lastProps) {
@@ -83,14 +138,23 @@ function diffProperties(
     if (lastValue === nextValue) {
       continue;
     }
-    if (typeof nextValue === "function") {
-      // 事件处理器变化忽略（事件系统未实现）
+    if (/^on/i.test(propKey)) {
+      // 即使没有 DOM 属性变化，也必须提交缓存 props，事件委托才能读到新监听器。
+      eventChanged = true;
       continue;
     }
-    updatePayload.push(propKey, nextValue);
+    if (propKey === "style") {
+      const updates: Record<string, any> = {};
+      for (const name in lastValue)
+        if (nextValue == null || !(name in nextValue)) updates[name] = "";
+      for (const name in nextValue)
+        if (lastValue == null || lastValue[name] !== nextValue[name])
+          updates[name] = nextValue[name];
+      updatePayload.push(propKey, updates);
+    } else updatePayload.push(propKey, nextValue);
   }
 
-  return updatePayload.length > 0 ? updatePayload : null;
+  return updatePayload.length > 0 || eventChanged ? updatePayload : null;
 }
 
 // 根容器由 createRoot 在 createContainer 前注入，getRootHostContainer 返回它。
@@ -119,6 +183,8 @@ export function createInstance(
   // 事件系统靠这两份映射反查 DOM 节点对应的 Fiber、以及取当前 props 上的监听器
   precacheFiberNode(internalInstanceHandle, domElement);
   updateFiberProps(domElement, props);
+  if (type === "input" || type === "textarea")
+    updateControlledState(domElement, props, true);
   return domElement;
 }
 
@@ -142,12 +208,13 @@ export function appendInitialChild(
 }
 
 export function finalizeInitialChildren(
-  _instance: Element,
-  _type: string,
-  _props: Record<string, any>,
+  instance: Element,
+  type: string,
+  props: Record<string, any>,
   _rootContainerInstance: Container,
   _hostContext: unknown,
 ): boolean {
+  if (type === "select") updateControlledState(instance, props, true);
   // DOM 渲染器在这里返回 shouldAutoFocusHostComponent（autofocus 等初始副作用），
   // 简版不需要，恒返回 false
   return false;
@@ -161,7 +228,11 @@ export function prepareUpdate(
   _rootContainerInstance: Container,
   _hostContext: unknown,
 ): any[] | null {
-  return diffProperties(oldProps, newProps);
+  const payload = diffProperties(oldProps, newProps);
+  // 表单包装逻辑必须在 option 等子节点提交后执行，即使 value 本身没有变化。
+  return (
+    payload ?? (["input", "textarea", "select"].includes(_type) ? [] : null)
+  );
 }
 
 export function commitUpdate(
@@ -175,9 +246,15 @@ export function commitUpdate(
   for (let i = 0; i < updatePayload.length; i += 2) {
     const propKey = updatePayload[i];
     const propValue = updatePayload[i + 1];
-    setProp(instance, propKey, propValue);
+    const form = ["INPUT", "TEXTAREA", "SELECT"].includes(instance.nodeName);
+    if (
+      !form ||
+      !["value", "defaultValue", "checked", "defaultChecked"].includes(propKey)
+    )
+      setProp(instance, propKey, propValue);
   }
   updateFiberProps(instance, newProps);
+  updateControlledState(instance, newProps);
 }
 
 export function commitTextUpdate(

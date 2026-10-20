@@ -5,7 +5,11 @@
  */
 
 import { createFiberRoot } from "./ReactFiberRoot";
-import { createUpdate, enqueueUpdate } from "./ReactFiberClassUpdateQueue";
+import {
+  createUpdate,
+  enqueueUpdate,
+  entangleTransitions,
+} from "./ReactFiberClassUpdateQueue";
 import type { Fiber, FiberRoot } from "./ReactInternalTypes";
 import { NoLane, type Lane } from "./ReactFiberLane";
 import type { RootTag } from "./ReactRootTags";
@@ -61,6 +65,7 @@ export function updateContainer(
   const root = enqueueUpdate(current, update, lane);
   if (root !== null) {
     scheduleUpdateOnFiber(root, current, lane, eventTime);
+    entangleTransitions(root, current, lane);
   }
 
   return lane;

@@ -2,7 +2,7 @@
 
 ## 项目定位
 
-个人学习/实现项目，目标是手写还原 React 18 源码的主链路和核心 API，做到与官方实现 **1:1 对照**（架构、模块划分、核心算法逐一还原，不是"写一个简化版 React"）。
+个人学习/实现项目，当前核心修复以官方 **React v18.3.1** 为固定基准，保留可对照的架构、函数名和数据结构。外围与兼容分支可以简化；不能将已验证的核心场景外推为完整官方移植。验收范围见 [核心验证记录](./docs/verification-core-react18.3.1.md)。
 
 代码组织方式尽量贴近官方仓库 [facebook/react](https://github.com/facebook/react)，方便随时对照源码。
 
@@ -17,7 +17,7 @@
   - `packages/scheduler` — 调度器（时间切片、优先级）
   - `packages/shared` — 跨包共享的工具函数、常量、类型
 
-> `react-dom` / `scheduler` 尚未创建；`react` / `shared` / `react-reconciler` 已搭建，后续按开发进度逐个补齐，不提前铺摊子。
+> 上述包均已创建；核心行为以验证记录和当前实现为准。React 18.3.1 的 DOM 代码在官方 `packages/react-dom/src`；本仓库沿用 `react-dom-bindings` 目录名，不代表算法应对齐 React 19。
 
 ## 开发约定
 
@@ -47,8 +47,8 @@ monorepo 骨架、reconciler 主链路（同步 + 并发）、react-dom 简版�
 - `packages/shared`：跨包共享工具/常量/类型（objectIs、hasOwnProperty、ReactSymbols、ReactTypes 等）
 - `packages/react`：JSX 运行时（createElement/jsx/jsxDEV + jsx-runtime/jsx-dev-runtime 入口）、`Component`/`PureComponent` 基类（`ReactBaseClasses.ts`），构建产出 cjs（dev+prod）和 iife 三种格式
 - `packages/react-reconciler`：Fiber 主链路——Fiber 数据结构、更新队列、beginWork/completeWork、commit mutation、单/多节点 diff、Fragment、Fiber 树反射（`reflection.ts` 转出 `findCurrentHostFiber`）、**完整 Lane 模型 + 可中断 workLoop**（`ensureRootIsScheduled`/`workLoopConcurrent`/`flushSync`）、HostConfig 接口（**构建时 fork 注入**，对齐官方 forks.js）、**Hooks**（useState/useReducer/useRef/useMemo/useCallback/useEffect/useLayoutEffect/useTransition/useDeferredValue/useSyncExternalStore/useContext）、**Context API**（`ReactFiberStack.ts` 通用栈 + `ReactFiberNewContext.ts` 的 pushProvider/popProvider/readContext/propagateContextChange）、**Class 组件生命周期**（`ReactFiberClassComponent.ts` 的 constructClassInstance/mountClassInstance/updateClassInstance，commit 补 before-mutation 子阶段跑 getSnapshotBeforeUpdate）
-- `packages/react-dom`（简版）：`createRoot(container).render(element)` 渲染到真实 DOM（DefaultLane 并发异步提交）；HostConfig 由 build.js 的 fork 插件 / vite alias 把 `ReactFiberConfig` 替换为 `packages/react-dom-bindings` 的 `ReactDOMHostConfig`；npm 分发文件夹 + bundles.js 注册（cjs dev/prod）。简版边界：不含 hydrate / legacy render / 事件系统 / shouldSetTextContent 优化
+- `packages/react-dom`（简版）：`createRoot(container).render(element)` 渲染到真实 DOM（DefaultLane 并发异步提交）；HostConfig 由 build.js 的 fork 插件 / vite alias 把 `ReactFiberConfig` 替换为 `packages/react-dom-bindings` 的 `ReactDOMHostConfig`；npm 分发文件夹 + bundles.js 注册（cjs dev/prod）。简版边界：不含 hydrate / legacy render / shouldSetTextContent 优化；已包含常用合成事件和受控表单主链
 - `packages/scheduler`（对照官方完整结构）：`unstable_scheduleCallback`/`unstable_shouldYield` 等导出、taskQueue/timerQueue 双最小堆、MessageChannel 宏任务 + 5ms 时间片、`SchedulerHostConfig` 构建时 fork 注入
-- 常用命令：`pnpm dev`（fixtures 调试）、`pnpm lint` / `pnpm lint:fix`、`pnpm format` / `pnpm format:check`、`pnpm build`、`npx tsc --noEmit`
+- 常用命令：`pnpm dev`（fixtures 调试）、`pnpm lint` / `pnpm lint:fix`、`pnpm format` / `pnpm format:check`、`pnpm build`、`pnpm typecheck`、`pnpm test`（官方 18.3.1 dev/prod 对比）
 
 `hooks` / `事件系统` / `context` / `class 生命周期` 已落地，按渲染链路推进顺序逐个搭建（当前从 Phase 9 其他核心 API + 性能优化继续）。详细进度见 [docs/roadmap.md](./docs/roadmap.md)；React 核心原理（分层架构、Fiber/Lane/Diff/Hooks 等知识点 + Mermaid 流程图）见 [docs/react-core.md](./docs/react-core.md)。

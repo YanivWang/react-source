@@ -11,6 +11,7 @@ import {
   updateContainer,
   type OpaqueRoot,
 } from "react-reconciler/src/ReactFiberReconciler";
+import { flushSync } from "react-reconciler/src/ReactFiberWorkLoop";
 import { ConcurrentRoot } from "react-reconciler/src/ReactRootTags";
 import {
   setRootHostContainer,
@@ -20,18 +21,28 @@ import { listenToAllSupportedEvents } from "react-dom-bindings/src/events/DOMPlu
 
 export interface RootType {
   render(children: any): void;
-  _internalRoot: OpaqueRoot;
+  unmount(): void;
+  _internalRoot: OpaqueRoot | null;
 }
 
 export class ReactDOMRoot implements RootType {
-  _internalRoot: OpaqueRoot;
+  _internalRoot: OpaqueRoot | null;
 
   constructor(root: OpaqueRoot) {
     this._internalRoot = root;
   }
 
   render(children: any): void {
+    if (this._internalRoot === null)
+      throw new Error("Cannot update an unmounted root.");
     updateContainer(children, this._internalRoot);
+  }
+
+  unmount(): void {
+    const root = this._internalRoot;
+    if (root === null) return;
+    this._internalRoot = null;
+    flushSync(() => updateContainer(null, root));
   }
 }
 

@@ -9,6 +9,7 @@
  * Phase 9.4，useId 见 Phase 9，均按官方结构逐步补齐。
  */
 
+import { StrictLegacyMode, StrictEffectsMode } from "./ReactTypeOfMode";
 import ReactSharedInternals from "shared/ReactSharedInternals";
 import is from "shared/objectIs";
 
@@ -16,11 +17,18 @@ import type { FiberNode } from "./ReactFiber";
 import type { FiberRootNode } from "./ReactFiberRoot";
 import {
   Passive as PassiveEffect,
+  MountLayoutDev,
+  MountPassiveDev,
+  StoreConsistency,
   Update as UpdateEffect,
 } from "./ReactFiberFlags";
 import {
   NoLanes,
+  removeLanes,
   isSubsetOfLanes,
+  isTransitionLane,
+  markRootEntangled,
+  includesBlockingLane,
   mergeLanes,
   NoLane,
   SyncLane,
@@ -73,6 +81,7 @@ export interface Update<S, A> {
 
 export interface UpdateQueue<S, A> {
   pending: Update<S, A> | null;
+  lanes: Lanes;
   dispatch: Dispatch<A> | null;
   lastRenderedReducer: ((state: S, action: A) => S) | null;
   lastRenderedState: S | null;
@@ -93,6 +102,9 @@ let currentlyRenderingFiber: FiberNode = null as any;
 // current 树的 hook 链表指针 / workInProgress 树正在构建的 hook 链表指针
 let currentHook: Hook | null = null;
 let workInProgressHook: Hook | null = null;
+let didScheduleRenderPhaseUpdate = false;
+let didScheduleRenderPhaseUpdateDuringThisPass = false;
+const RE_RENDER_LIMIT = 25;
 
 // 对照官方 basicStateReducer：useState 是 useReducer 的特例，action 是函数则调用（reducer 形式），
 // 否则直接作为新 state（对象/基础类型形式）
@@ -178,6 +190,7 @@ function mountState<S>(
 
   const queue: UpdateQueue<S, BasicStateAction<S>> = {
     pending: null,
+    lanes: NoLanes,
     dispatch: null,
     lastRenderedReducer: basicStateReducer,
     lastRenderedState: initialState,
@@ -213,6 +226,7 @@ function mountReducer<S, I, A>(
 
   const queue: UpdateQueue<S, A> = {
     pending: null,
+    lanes: NoLanes,
     dispatch: null,
     lastRenderedReducer: reducer,
     lastRenderedState: initialState,
@@ -257,6 +271,8 @@ function updateReducer<S, A>(
     }
     baseQueue = pendingQueue;
     hook.baseQueue = baseQueue;
+    // current 也保留这批共享更新：并发 render 被丢弃后，重启仍能重放它们。
+    if (currentHook !== null) currentHook.baseQueue = baseQueue;
     queue.pending = null;
   }
 
@@ -340,6 +356,38 @@ function updateReducer<S, A>(
 
 // 对照官方 mountRef：ref 对象只在 mount 时创建一次，之后每次渲染 updateRef 都原样返回，
 // 不依赖 deps 比较——这也是 useRef 天然“跨渲染保持同一个引用”的由来。
+function rerenderReducer<S, A>(
+  reducer: (state: S, action: A) => S,
+): [S, Dispatch<A>] {
+  const hook = updateWorkInProgressHook();
+  const queue = hook.queue as UpdateQueue<S, A> | null;
+  if (queue === null)
+    throw new Error(
+      "Should have a queue. Hooks cannot be called conditionally.",
+    );
+  queue.lastRenderedReducer = reducer;
+  let newState = hook.memoizedState;
+  const pending = queue.pending;
+  if (pending !== null) {
+    queue.pending = null;
+    const first = pending.next;
+    let update = first;
+    do {
+      newState = reducer(newState, update.action);
+      update = update.next;
+    } while (update !== first);
+    if (!is(newState, hook.memoizedState)) markWorkInProgressReceivedUpdate();
+    hook.memoizedState = newState;
+    if (hook.baseQueue === null) hook.baseState = newState;
+    queue.lastRenderedState = newState;
+  }
+  return [newState, queue.dispatch as Dispatch<A>];
+}
+
+function rerenderState<S>(): [S, Dispatch<BasicStateAction<S>>] {
+  return rerenderReducer(basicStateReducer);
+}
+
 function mountRef<T>(initialValue: T): { current: T } {
   const hook = mountWorkInProgressHook();
   const ref = { current: initialValue };
@@ -454,6 +502,7 @@ export interface Effect {
 
 export interface FunctionComponentUpdateQueue {
   lastEffect: Effect | null;
+  stores: Array<{ getSnapshot: () => unknown; value: unknown }> | null;
 }
 
 // 对照官方 pushEffect：把新 effect 接到 circular list 尾部（lastEffect.next 始终指向头部）。
@@ -473,7 +522,7 @@ function pushEffect(
   let componentUpdateQueue: FunctionComponentUpdateQueue | null =
     currentlyRenderingFiber.updateQueue;
   if (componentUpdateQueue === null) {
-    componentUpdateQueue = { lastEffect: null };
+    componentUpdateQueue = { lastEffect: null, stores: null };
     currentlyRenderingFiber.updateQueue = componentUpdateQueue;
     componentUpdateQueue.lastEffect = effect.next = effect;
   } else {
@@ -502,6 +551,12 @@ function mountEffectImpl(
   const hook = mountWorkInProgressHook();
   const nextDeps = deps === undefined ? null : deps;
   currentlyRenderingFiber.flags |= fiberFlags;
+  if (__DEV__ && (currentlyRenderingFiber.mode & StrictEffectsMode) !== 0) {
+    if (hookFlags === HookPassive)
+      currentlyRenderingFiber.flags |= MountPassiveDev;
+    else if (hookFlags === HookLayout)
+      currentlyRenderingFiber.flags |= MountLayoutDev;
+  }
   hook.memoizedState = pushEffect(
     hookFlags | HookHasEffect,
     create,
@@ -520,12 +575,12 @@ function updateEffectImpl(
 ): void {
   const hook = updateWorkInProgressHook();
   const nextDeps = deps === undefined ? null : deps;
-  const prevEffect: Effect = hook.memoizedState;
-  const destroy = prevEffect.destroy;
-
-  if (nextDeps !== null) {
-    const prevDeps = prevEffect.deps;
-    if (areHookInputsEqual(nextDeps, prevDeps)) {
+  let destroy: Effect["destroy"] = undefined;
+  // render-phase 重渲染必须与已提交的 effect 比较；首次挂载还没有 currentHook。
+  if (currentHook !== null) {
+    const prevEffect: Effect = currentHook.memoizedState;
+    destroy = prevEffect.destroy;
+    if (nextDeps !== null && areHookInputsEqual(nextDeps, prevEffect.deps)) {
       hook.memoizedState = pushEffect(hookFlags, create, destroy, nextDeps);
       return;
     }
@@ -645,16 +700,13 @@ function updateImperativeHandle<T>(
   );
 }
 
-// 对照官方 requestDeferredLane：本项目 lane 位表没有单独的 DeferredLane 位（简化范围，
-// 官方 DeferredLane 独立于 TransitionLanes，用于区分"用户触发的 transition"与"useDeferredValue
-// 派生的渲染"），这里简化为直接复用 claimNextTransitionLane 轮转分配，效果上仍能让
-// deferred 渲染独立成一条 lane、不阻塞紧急更新，只是不与官方一样单独占一个 bit。
+// React 18.3.1 useDeferredValue 复用 TransitionLane；不存在 React 19 的 initialValue 参数。
 function requestDeferredLane(): Lane {
   return claimNextTransitionLane();
 }
 
 // 对照官方 mountDeferredValueImpl：mount 时没有"上一次的值"可比较，直接以当前值渲染。
-// 简化范围：不支持第二个 initialValue 参数（配合 Suspense 预渲染场景使用，本项目暂无 Suspense）。
+// 按 React 18.3.1：首次客户端渲染直接使用当前值。
 function mountDeferredValue<T>(value: T): T {
   const hook = mountWorkInProgressHook();
   hook.memoizedState = value;
@@ -698,8 +750,7 @@ function updateDeferredValueImpl<T>(hook: Hook, prevValue: T, value: T): T {
 // ContinuousEventPriority 之后但转场标记之前，走一条紧急优先级更新让"进入 pending"立刻反映到
 // UI；setPending(false) 与 callback() 内部真正的状态更新一起落在 transition 标记内，
 // 因此会被 requestUpdateLane 分配同一条 TransitionLane、同批次渲染。
-// 简化范围：不支持异步 action（callback 返回 Promise 时官方会 entangle 一个async action
-// scope、深化 isPending 直到 Promise resolve），本项目 startTransition 只接受同步回调。
+// 对齐 React 18.3.1 的同步 scope；React 19 async Action 不在此版本范围。
 function startTransition(
   setPending: Dispatch<BasicStateAction<boolean>>,
   callback: () => void,
@@ -750,9 +801,21 @@ interface StoreInstance<T> {
 // 不会滞后于当前时刻。mountEffect 挂一个订阅 effect（commit 后才真正 subscribe），另外用
 // pushEffect 直接挂一个不比较 deps 的 passive effect（updateStoreInstance），每次 commit 后
 // 都同步 inst 的缓存字段，顺带检测 render→commit 这段窗口内 store 是否被改过。
-// 简化范围：不支持 getServerSnapshot（SSR/hydrate 明确不做，见 roadmap Phase 10）；不做官方
-// render 阶段被并发事件打断时的 pushStoreConsistencyCheck 一致性检查（依赖事件系统，
-// Phase 6 才落地），只保留 subscribeToStore + updateStoreInstance 这条"被动检测"路径。
+// SSR/getServerSnapshot 不在范围内；客户端非阻塞渲染在提交前检查 StoreConsistency。
+function pushStoreConsistencyCheck(
+  fiber: FiberNode,
+  getSnapshot: () => unknown,
+  value: unknown,
+): void {
+  const root = getWorkInProgressRoot();
+  if (root === null || includesBlockingLane(root, renderLanes)) return;
+  fiber.flags |= StoreConsistency;
+  let queue: FunctionComponentUpdateQueue | null = fiber.updateQueue;
+  if (queue === null)
+    fiber.updateQueue = queue = { lastEffect: null, stores: null };
+  (queue.stores ??= []).push({ getSnapshot, value });
+}
+
 function mountSyncExternalStore<T>(
   subscribe: (onStoreChange: () => void) => () => void,
   getSnapshot: () => T,
@@ -761,6 +824,7 @@ function mountSyncExternalStore<T>(
   const hook = mountWorkInProgressHook();
 
   const nextSnapshot = getSnapshot();
+  pushStoreConsistencyCheck(fiber, getSnapshot, nextSnapshot);
   hook.memoizedState = nextSnapshot;
   const inst: StoreInstance<T> = {
     value: nextSnapshot,
@@ -793,6 +857,7 @@ function updateSyncExternalStore<T>(
   const hook = updateWorkInProgressHook();
 
   const nextSnapshot = getSnapshot();
+  pushStoreConsistencyCheck(fiber, getSnapshot, nextSnapshot);
   const prevSnapshot = (currentHook ?? hook).memoizedState;
   const snapshotChanged = !is(prevSnapshot, nextSnapshot);
   if (snapshotChanged) {
@@ -896,9 +961,15 @@ function dispatchReducerAction<S, A>(
     eagerState: null,
     next: null as any,
   };
+  if (isRenderPhaseUpdate(fiber)) {
+    enqueueRenderPhaseUpdate(queue, update);
+    return;
+  }
+
   const root = enqueueConcurrentHookUpdate(fiber, queue, update, lane);
   if (root !== null) {
     scheduleUpdateOnFiber(root, fiber, lane, requestEventTime());
+    entangleTransitionUpdate(root, queue, lane);
   }
 }
 
@@ -921,6 +992,10 @@ function dispatchSetState<S, A>(
     eagerState: null,
     next: null as any,
   };
+  if (isRenderPhaseUpdate(fiber)) {
+    enqueueRenderPhaseUpdate(queue, update);
+    return;
+  }
 
   const alternate = fiber.alternate;
   if (
@@ -947,7 +1022,73 @@ function dispatchSetState<S, A>(
   const root = enqueueConcurrentHookUpdate(fiber, queue, update, lane);
   if (root !== null) {
     scheduleUpdateOnFiber(root, fiber, lane, requestEventTime());
+    entangleTransitionUpdate(root, queue, lane);
   }
+}
+
+function entangleTransitionUpdate<S, A>(
+  root: FiberRootNode,
+  queue: UpdateQueue<S, A>,
+  lane: Lane,
+): void {
+  if (isTransitionLane(lane)) {
+    queue.lanes = (queue.lanes & root.pendingLanes) | lane;
+    markRootEntangled(root, queue.lanes);
+  }
+}
+
+function isRenderPhaseUpdate(fiber: FiberNode): boolean {
+  return (
+    fiber === currentlyRenderingFiber ||
+    (fiber.alternate !== null && fiber.alternate === currentlyRenderingFiber)
+  );
+}
+
+function enqueueRenderPhaseUpdate<S, A>(
+  queue: UpdateQueue<S, A>,
+  update: Update<S, A>,
+): void {
+  didScheduleRenderPhaseUpdate =
+    didScheduleRenderPhaseUpdateDuringThisPass = true;
+  const pending = queue.pending;
+  if (pending === null) update.next = update;
+  else {
+    update.next = pending.next;
+    pending.next = update;
+  }
+  queue.pending = update;
+}
+
+// 本次计算结果未变时复用已提交的 effect 队列，不能因执行过 render 就重新提交 effect。
+export function bailoutHooks(
+  current: FiberNode,
+  workInProgress: FiberNode,
+  lanes: Lanes,
+): void {
+  workInProgress.updateQueue = current.updateQueue;
+  workInProgress.flags &= ~(
+    PassiveEffect |
+    UpdateEffect |
+    MountPassiveDev |
+    MountLayoutDev
+  );
+  current.lanes = removeLanes(current.lanes, lanes);
+}
+
+export function resetHooksAfterThrow(): void {
+  ReactCurrentDispatcher.current = ContextOnlyDispatcher;
+  if (didScheduleRenderPhaseUpdate && currentlyRenderingFiber !== null) {
+    let hook: Hook | null = currentlyRenderingFiber.memoizedState;
+    while (hook !== null) {
+      if (hook.queue !== null) hook.queue.pending = null;
+      hook = hook.next;
+    }
+  }
+  didScheduleRenderPhaseUpdate =
+    didScheduleRenderPhaseUpdateDuringThisPass = false;
+  renderLanes = NoLanes;
+  currentlyRenderingFiber = null as any;
+  currentHook = workInProgressHook = null;
 }
 
 // 渲染阶段外调用 hook（不合法调用）统一走这个 dispatcher，行为是直接抛错
@@ -1010,10 +1151,21 @@ const HooksDispatcherOnUpdate = {
   useId: updateId,
 };
 
-// 对照官方 renderWithHooks：渲染前重置 hook 相关模块状态、按 mount/update 切换 dispatcher，
-// 渲染后把 dispatcher 恢复成 ContextOnlyDispatcher（渲染阶段外调用 hook 会立即报错）。
-// secondArg 对应官方同名参数：只有 ForwardRef 会传（render(props, ref)），其余组件类型不传。
-export function renderWithHooks<Props>(
+function rerenderTransition(): [boolean, (callback: () => void) => void] {
+  const [isPending] = rerenderState<boolean>();
+  const hook = updateWorkInProgressHook();
+  return [isPending, hook.memoizedState];
+}
+
+const HooksDispatcherOnRerender = {
+  ...HooksDispatcherOnUpdate,
+  useState: rerenderState,
+  useReducer: rerenderReducer,
+  useTransition: rerenderTransition,
+};
+
+// 对照官方 18.3.1：render-phase 更新在同一次 render 内重试，不提交中间状态。
+function renderWithHooksImpl<Props>(
   current: FiberNode | null,
   workInProgress: FiberNode,
   Component: (props: Props, secondArg?: any) => any,
@@ -1023,24 +1175,69 @@ export function renderWithHooks<Props>(
 ): any {
   renderLanes = nextRenderLanes;
   currentlyRenderingFiber = workInProgress;
-
+  currentHook = workInProgressHook = null;
+  didScheduleRenderPhaseUpdate =
+    didScheduleRenderPhaseUpdateDuringThisPass = false;
   workInProgress.memoizedState = null;
   workInProgress.updateQueue = null;
   workInProgress.lanes = NoLanes;
-
   ReactCurrentDispatcher.current =
     current === null || current.memoizedState === null
       ? HooksDispatcherOnMount
       : HooksDispatcherOnUpdate;
-
-  const children = Component(props, secondArg);
-
+  let children = Component(props, secondArg);
+  let rerenders = 0;
+  while (didScheduleRenderPhaseUpdateDuringThisPass) {
+    if (rerenders++ >= RE_RENDER_LIMIT) {
+      throw new Error(
+        "Too many re-renders. React limits the number of renders to prevent an infinite loop.",
+      );
+    }
+    didScheduleRenderPhaseUpdateDuringThisPass = false;
+    currentHook = workInProgressHook = null;
+    workInProgress.updateQueue = null;
+    ReactCurrentDispatcher.current = HooksDispatcherOnRerender;
+    children = Component(props, secondArg);
+  }
+  const tooFew = currentHook !== null && (currentHook as Hook).next !== null;
   ReactCurrentDispatcher.current = ContextOnlyDispatcher;
-
   renderLanes = NoLanes;
   currentlyRenderingFiber = null as any;
-  currentHook = null;
-  workInProgressHook = null;
+  currentHook = workInProgressHook = null;
+  didScheduleRenderPhaseUpdate = false;
+  if (tooFew)
+    throw new Error(
+      "Rendered fewer hooks than expected. This may be caused by an accidental early return statement.",
+    );
+  return children;
+}
 
+// React 18.3.1 的 StrictLegacyMode 在 DEV 再执行一次组件 render；生产产物不启用。
+export function renderWithHooks<Props>(
+  current: FiberNode | null,
+  workInProgress: FiberNode,
+  Component: (props: Props, secondArg?: any) => any,
+  props: Props,
+  secondArg: any,
+  lanes: Lanes,
+): any {
+  let children = renderWithHooksImpl(
+    current,
+    workInProgress,
+    Component,
+    props,
+    secondArg,
+    lanes,
+  );
+  if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0) {
+    children = renderWithHooksImpl(
+      current,
+      workInProgress,
+      Component,
+      props,
+      secondArg,
+      lanes,
+    );
+  }
   return children;
 }

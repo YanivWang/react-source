@@ -1,6 +1,6 @@
 # react-source
 
-React 18 源码的个人还原实现。目标是照着官方仓库 [facebook/react](https://github.com/facebook/react) 1:1 还原主链路和核心 API（架构、模块划分、核心算法逐一对照），不是写一个简化版 React。
+React 18 源码的 TypeScript 学习实现。当前客户端核心流程以官方 [v18.3.1](https://github.com/facebook/react/tree/v18.3.1) 为对照基准，保留主要函数名与数据结构，便于追踪调用链。外围功能和部分兼容分支有意简化，具体修复、验证范围与限制见 [核心验证记录](./docs/verification-core-react18.3.1.md)。
 
 ## 技术栈
 
@@ -127,7 +127,7 @@ babel automatic runtime 实际使用的 JSX 工厂实现，通过 `ReactSharedIn
 平台无关的宿主环境接口占位模块（对齐官方 `ReactFiberConfig.js` / `forks/ReactFiberConfig.custom.js`），构建时被 react-dom-bindings 的 `ReactDOMHostConfig` fork 替换。
 
 **packages/react-dom-bindings/src/client/ReactDOMHostConfig.ts**  
-DOM 平台的 HostConfig 实现（对齐官方独立的 `react-dom-bindings` 包，供 react-dom 等渲染器共享）：`createInstance`/`createTextInstance`、`appendChild`/`insertBefore`/`removeChild`、`prepareUpdate`/`commitUpdate` 等。
+DOM 平台的 HostConfig 实现（仓库沿用较新目录命名；React 18.3.1 对应实现实际位于 `packages/react-dom/src`）：`createInstance`/`createTextInstance`、`appendChild`/`insertBefore`/`removeChild`、`prepareUpdate`/`commitUpdate` 等。
 
 **packages/scheduler/src/Scheduler.ts**  
 调度器主循环：`unstable_scheduleCallback`/`unstable_shouldYield`/`unstable_now` 等导出，taskQueue/timerQueue 双最小堆管理任务过期时间。
@@ -151,11 +151,16 @@ pnpm format:check
 # 类型检查
 npx tsc --noEmit
 
-# 构建（输出 cjs / esm / iife 三种产物）
+# 官方 18.3.1 与本地实现逐场景对比（development + production）
+pnpm test
+
+# 构建（输出 cjs / iife 产物）
 pnpm build
 ```
 
 ## 文档
+
+- [核心验证记录](./docs/verification-core-react18.3.1.md) — 当前分支修复、官方对照用例、面试主题入口和未覆盖边界
 
 - [docs/roadmap.md](./docs/roadmap.md) — 实现路线图，按 React 18 渲染主链路自然顺序划分 Phase，记录已完成/待实现清单
 - [docs/react-core.md](./docs/react-core.md) — React 核心原理笔记：分层架构、Fiber/Lane/UpdateQueue 数据结构、beginWork/completeWork/commit/Diff/调度接入等核心流程，每个知识点配 Mermaid 流程图

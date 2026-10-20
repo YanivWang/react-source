@@ -8,10 +8,12 @@ import {
   NoLanes,
   isSubsetOfLanes,
   mergeLanes,
+  isTransitionLane,
+  markRootEntangled,
   type Lane,
   type Lanes,
 } from "./ReactFiberLane";
-import { Callback } from "./ReactFiberFlags";
+import { Callback, DidCapture, ShouldCapture } from "./ReactFiberFlags";
 import type { FiberNode } from "./ReactFiber";
 import type { FiberRootNode } from "./ReactFiberRoot";
 import { markSkippedUpdateLanes } from "./ReactFiberWorkLoop";
@@ -19,8 +21,7 @@ import { enqueueConcurrentClassUpdate } from "./ReactFiberConcurrentUpdates";
 
 // 对照官方 packages/react-reconciler/src/ReactFiberClassUpdateQueue.new.js：Update 对象是
 // 不可变的纯数据（payload 携带新 state/新 element），shared.pending 是循环链表（last 指向
-// 最新一条，last.next 指向最旧一条），处理时解环拼到 base 队列上。回调 effect 与 forceUpdate
-// 等 class 组件特性留到 Phase 8，这里先保留结构、省略 effect 收集。
+// 最新一条，last.next 指向最旧一条），处理时解环拼到 base 队列上；callback 在 layout 阶段执行。
 
 export const UpdateState = 0;
 export const ReplaceState = 1;
@@ -139,20 +140,41 @@ export function enqueueUpdate<State>(
   return enqueueConcurrentClassUpdate(fiber, sharedQueue, update, lane);
 }
 
-/**
- * 对照官方 enqueueCapturedUpdate：throwException 找到错误边界后，把 capture update 直接接到
- * 它的 base 队列尾部（不经过 shared.pending，跳过并发暂存——unwind 发生在 render 阶段内部，
- * 不需要等下一次 prepareFreshStack 才刷回）。
- *
- * 简化范围：省略官方"queue 与 current 共享则先克隆"的分支——能走到这里的边界 fiber 必然已在
- * 本次渲染中执行过 mountClassInstance（initializeUpdateQueue）或 updateClassInstance
- * （cloneUpdateQueue），queue 此时已独立于 current，不会命中共享分支。
- */
+// 对照官方 entangleTransitions：同一 Class/root 队列里的 Transition 共同完成。
+export function entangleTransitions(
+  root: FiberRootNode,
+  fiber: FiberNode,
+  lane: Lane,
+): void {
+  const queue = fiber.updateQueue;
+  if (queue !== null && isTransitionLane(lane)) {
+    const lanes = mergeLanes(queue.shared.lanes & root.pendingLanes, lane);
+    queue.shared.lanes = lanes;
+    markRootEntangled(root, lanes);
+  }
+}
+
+// 捕获错误的 update 只写 WIP；边界 bailout 时队列可能仍与 current 共用，必须先克隆。
 export function enqueueCapturedUpdate<State>(
   workInProgress: FiberNode,
   capturedUpdate: Update<State>,
 ): void {
-  const queue: UpdateQueue<State> = workInProgress.updateQueue;
+  let queue: UpdateQueue<State> = workInProgress.updateQueue;
+  const current = workInProgress.alternate;
+  if (current !== null && queue === current.updateQueue) {
+    let first: Update<State> | null = null;
+    let last: Update<State> | null = null;
+    let update = queue.firstBaseUpdate;
+    while (update !== null) {
+      const clone = { ...update, next: null };
+      if (last === null) first = clone;
+      else last.next = clone;
+      last = clone;
+      update = update.next;
+    }
+    queue = { ...queue, firstBaseUpdate: first, lastBaseUpdate: last };
+    workInProgress.updateQueue = queue;
+  }
   const lastBaseUpdate = queue.lastBaseUpdate;
   if (lastBaseUpdate === null) {
     queue.firstBaseUpdate = capturedUpdate;
@@ -174,9 +196,9 @@ export function checkHasForceUpdateAfterProcessing(): boolean {
   return hasForceUpdate;
 }
 
-// 单 lane 模型下 update 不会因优先级不足被跳过（只有 SyncLane 一条 lane），
-// 但保留官方 getStateFromUpdate 的完整语义：payload 是对象则浅合并，是函数则作为 reducer 调用。
+// payload 是对象则浅合并，是函数则用 prevState/nextProps 计算。
 function getStateFromUpdate<State>(
+  workInProgress: FiberNode,
   update: Update<State>,
   prevState: State,
   nextProps: any,
@@ -191,11 +213,8 @@ function getStateFromUpdate<State>(
       return payload;
     }
     case CaptureUpdate: {
-      // 捕获的 update（错误边界重放）：即使 shouldComponentUpdate 会拦截，fallback 渲染也
-      // 必须强制执行，复用 hasForceUpdate 短路 updateClassInstance 里的 sCU 判断。
-      // 对照官方：故意 fallthrough 到 UpdateState，两者 payload 合并语义完全一致，
-      // CaptureUpdate 只是额外强制更新。
-      hasForceUpdate = true;
+      workInProgress.flags =
+        (workInProgress.flags & ~ShouldCapture) | DidCapture;
     }
     case UpdateState: {
       const payload = update.payload;
@@ -328,7 +347,13 @@ export function processUpdateQueue<State>(
           newLastBaseUpdate = clone;
         }
 
-        newState = getStateFromUpdate(currentUpdate, newState, props, instance);
+        newState = getStateFromUpdate(
+          workInProgress,
+          currentUpdate,
+          newState,
+          props,
+          instance,
+        );
         const callback = currentUpdate.callback;
         if (callback !== null && currentUpdate.lane !== NoLane) {
           workInProgress.flags |= Callback;

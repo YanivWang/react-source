@@ -7,3 +7,5 @@
 
 export { createRoot } from "./src/client/ReactDOMClient";
 export { createPortal } from "react-reconciler/src/ReactPortal";
+
+export { flushSync } from "react-reconciler/src/ReactFiberWorkLoop";

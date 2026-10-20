@@ -12,3 +12,6 @@ export type TypeOfMode = number;
 
 export const NoMode: TypeOfMode = 0b000000;
 export const ConcurrentMode: TypeOfMode = 0b000001;
+
+export const StrictLegacyMode: TypeOfMode = 0b001000;
+export const StrictEffectsMode: TypeOfMode = 0b010000;

@@ -50,10 +50,15 @@ export const MutationMask =
 // effect 的子树。Callback 并入 LayoutMask——setState/forceUpdate 的回调也在 layout 子阶段
 // 执行（即使组件没有 componentDidMount/Update 生命周期，只要传了 callback 也要跑）。Ref 并入
 // LayoutMask——commitAttachRef（Phase 9.2 forwardRef 落地）同样放在 layout 子阶段执行。
-export const LayoutMask = Update | Callback | Ref;
-export const PassiveMask = Passive;
+export const LayoutMask = Update | Callback | Ref | Visibility;
+export const PassiveMask = Passive | ChildDeletion;
 // before-mutation 子阶段（getSnapshotBeforeUpdate）用到的掩码，Phase 8 补上
 export const BeforeMutationMask = Snapshot;
 
 // 在 clone（createWorkInProgress）时不会被重置的 flag 集合
 export const StaticMask = RefStatic;
+
+export const MountLayoutDev = 0b01000000000000000000000000;
+export const MountPassiveDev = 0b10000000000000000000000000;
+
+export const StoreConsistency = 0b010000000000000;

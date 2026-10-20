@@ -20,6 +20,14 @@ export default function getListener(
   if (props === null) {
     return null;
   }
+  if (
+    props.disabled &&
+    ["button", "input", "select", "textarea"].includes(inst.type) &&
+    /^on(?:Click|DoubleClick|MouseDown|MouseMove|MouseUp|MouseEnter)(?:Capture)?$/.test(
+      registrationName,
+    )
+  )
+    return null;
   const listener = props[registrationName];
   if (listener != null && typeof listener !== "function") {
     throw new Error(
