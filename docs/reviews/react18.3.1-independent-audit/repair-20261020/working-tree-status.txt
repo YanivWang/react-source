@@ -1,0 +1,76 @@
+ M CLAUDE.md
+ M README.md
+ M docs/roadmap.md
+ M docs/verification-core-react18.3.1.md
+ M package.json
+ D packages/react-dom-bindings/package.json
+ D packages/react-dom-bindings/src/client/CSSPropertyOperations.ts
+ D packages/react-dom-bindings/src/client/ReactDOMComponentTree.ts
+ D packages/react-dom-bindings/src/client/ReactDOMHostConfig.ts
+ D packages/react-dom-bindings/src/client/ReactDOMInput.ts
+ D packages/react-dom-bindings/src/client/inputValueTracking.ts
+ D packages/react-dom-bindings/src/events/DOMEventNames.ts
+ D packages/react-dom-bindings/src/events/DOMEventProperties.ts
+ D packages/react-dom-bindings/src/events/DOMPluginEventSystem.ts
+ D packages/react-dom-bindings/src/events/EventRegistry.ts
+ D packages/react-dom-bindings/src/events/EventSystemFlags.ts
+ D packages/react-dom-bindings/src/events/ReactDOMEventListener.ts
+ D packages/react-dom-bindings/src/events/SyntheticEvent.ts
+ D packages/react-dom-bindings/src/events/getEventTarget.ts
+ D packages/react-dom-bindings/src/events/getListener.ts
+ D packages/react-dom-bindings/src/shared/CSSProperty.ts
+ M packages/react-dom/package.json
+ M packages/react-dom/src/client/ReactDOMRoot.ts
+ M packages/react-reconciler/src/ReactFiber.ts
+ M packages/react-reconciler/src/ReactFiberBeginWork.ts
+ M packages/react-reconciler/src/ReactFiberClassComponent.ts
+ M packages/react-reconciler/src/ReactFiberClassUpdateQueue.ts
+ M packages/react-reconciler/src/ReactFiberCommitWork.ts
+ M packages/react-reconciler/src/ReactFiberCompleteWork.ts
+ M packages/react-reconciler/src/ReactFiberConcurrentUpdates.ts
+ D packages/react-reconciler/src/ReactFiberConfig.ts
+ M packages/react-reconciler/src/ReactFiberFlags.ts
+ M packages/react-reconciler/src/ReactFiberHooks.ts
+ M packages/react-reconciler/src/ReactFiberNewContext.ts
+ M packages/react-reconciler/src/ReactFiberOffscreenComponent.ts
+ M packages/react-reconciler/src/ReactFiberReconciler.ts
+ M packages/react-reconciler/src/ReactFiberRoot.ts
+ M packages/react-reconciler/src/ReactFiberThrow.ts
+ M packages/react-reconciler/src/ReactFiberUnwindWork.ts
+ M packages/react-reconciler/src/ReactFiberWorkLoop.ts
+ D packages/react-reconciler/src/forks/ReactFiberConfig.custom.ts
+ D packages/react-reconciler/src/forks/ReactFiberConfig.dom.ts
+ M packages/scheduler/index.ts
+ D packages/scheduler/src/Scheduler.ts
+ D packages/scheduler/src/SchedulerFeatureFlags.ts
+ D packages/scheduler/src/SchedulerHostConfig.ts
+ D packages/scheduler/src/forks/SchedulerHostConfig.default.ts
+ M pnpm-lock.yaml
+ M scripts/rollup/build.js
+ M scripts/rollup/wrappers.js
+ M scripts/vite/vite.config.mts
+ M tsconfig.json
+?? docs/reviews/
+?? packages/react-dom/src/client/CSSPropertyOperations.ts
+?? packages/react-dom/src/client/ReactDOMComponent.ts
+?? packages/react-dom/src/client/ReactDOMComponentTree.ts
+?? packages/react-dom/src/client/ReactDOMHostConfig.ts
+?? packages/react-dom/src/client/ReactDOMInput.ts
+?? packages/react-dom/src/client/ReactDOMSelect.ts
+?? packages/react-dom/src/client/ReactDOMTextarea.ts
+?? packages/react-dom/src/client/ToStringValue.ts
+?? packages/react-dom/src/client/inputValueTracking.ts
+?? packages/react-dom/src/events/
+?? packages/react-dom/src/shared/
+?? packages/react-reconciler/src/ReactFiberHostConfig.ts
+?? packages/react-reconciler/src/ReactFiberHostContext.ts
+?? packages/react-reconciler/src/ReactFiberLazyComponent.ts
+?? packages/react-reconciler/src/ReactFiberSuspenseComponent.ts
+?? packages/react-reconciler/src/ReactFiberSuspenseContext.ts
+?? packages/react-reconciler/src/forks/ReactFiberHostConfig.custom.ts
+?? packages/react-reconciler/src/forks/ReactFiberHostConfig.dom.ts
+?? packages/scheduler/src/forks/Scheduler.ts
+?? scripts/tests/regression-probe.cjs
+?? scripts/tests/regression.test.cjs
+?? scripts/tests/regressions.cjs
+?? scripts/tests/source-correspondence.cjs

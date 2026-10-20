@@ -1,0 +1,317 @@
+[
+  {
+    "path": "scripts/rollup/forks.js",
+    "line": 244,
+    "text": "  './packages/react-reconciler/src/ReactFiberReconciler.js': ("
+  },
+  {
+    "path": "packages/shared/ReactFeatureFlags.js",
+    "line": 84,
+    "text": "export const enableNewReconciler = false;"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberCompleteWork.old.js",
+    "line": 642,
+    "text": "function bubbleProperties(completedWork: Fiber) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberConcurrentUpdates.new.js",
+    "line": 45,
+    "text": "const concurrentQueues: Array<any> = [];"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.new.js",
+    "line": 2065,
+    "text": "  // Make sure to account for lanes that were updated by a concurrent event"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberConcurrentUpdates.old.js",
+    "line": 34,
+    "text": "export function pushConcurrentUpdateQueue("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberNewContext.old.js",
+    "line": 625,
+    "text": "export function prepareToReadContext("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberThrow.old.js",
+    "line": 272,
+    "text": "function getNearestSuspenseBoundaryToCapture(returnFiber: Fiber) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberSuspenseComponent.old.js",
+    "line": 70,
+    "text": "export function shouldCaptureSuspense("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberThrow.old.js",
+    "line": 535,
+    "text": "  do {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberCommitWork.old.js",
+    "line": 1157,
+    "text": "function hideOrUnhideAllChildren(finishedWork, isHidden) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberCommitWork.old.js",
+    "line": 1861,
+    "text": "    case ClassComponent: {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberCommitWork.old.js",
+    "line": 1906,
+    "text": "        const prevOffscreenSubtreeWasHidden = offscreenSubtreeWasHidden;"
+  },
+  {
+    "path": "packages/scheduler/src/forks/Scheduler.js",
+    "line": 189,
+    "text": "function workLoop(hasTimeRemaining, initialTime) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassComponent.old.js",
+    "line": 622,
+    "text": "function constructClassInstance("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassComponent.old.js",
+    "line": 856,
+    "text": "function mountClassInstance("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassComponent.old.js",
+    "line": 1123,
+    "text": "function updateClassInstance("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberBeginWork.old.js",
+    "line": 3172,
+    "text": "function updatePortalComponent("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 1949,
+    "text": "function rerenderDeferredValue<T>(value: T): T {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberBeginWork.old.js",
+    "line": 1484,
+    "text": "function mountLazyComponent("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberCommitWork.old.js",
+    "line": 474,
+    "text": "      case HostRoot: {"
+  },
+  {
+    "path": "packages/react-dom/src/client/ReactDOMComponent.js",
+    "line": 283,
+    "text": "function setInitialDOMProperties("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassUpdateQueue.old.js",
+    "line": 391,
+    "text": "        if (__DEV__) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberFlags.js",
+    "line": 31,
+    "text": "export const Visibility = /*                   */ 0b00000000000010000000000000;"
+  },
+  {
+    "path": "packages/scheduler/src/forks/Scheduler.js",
+    "line": 551,
+    "text": "if (typeof localSetImmediate === 'function') {"
+  },
+  {
+    "path": "packages/react/src/ReactElement.js",
+    "line": 362,
+    "text": "export function createElement(type, config, children) {"
+  },
+  {
+    "path": "packages/react/src/jsx/ReactJSXElement.js",
+    "line": 210,
+    "text": "export function jsx(type, config, maybeKey) {"
+  },
+  {
+    "path": "packages/react-dom/src/client/ReactDOMRoot.js",
+    "line": 166,
+    "text": "export function createRoot("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberReconciler.old.js",
+    "line": 321,
+    "text": "export function updateContainer("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiber.old.js",
+    "line": 249,
+    "text": "export function createWorkInProgress(current: Fiber, pendingProps: any): Fiber {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberCompleteWork.old.js",
+    "line": 642,
+    "text": "function bubbleProperties(completedWork: Fiber) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactChildFiber.old.js",
+    "line": 744,
+    "text": "  function reconcileChildrenArray("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 759,
+    "text": "function updateReducer<S, I, A>("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassUpdateQueue.old.js",
+    "line": 457,
+    "text": "export function processUpdateQueue<State>("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberConcurrentUpdates.new.js",
+    "line": 45,
+    "text": "const concurrentQueues: Array<any> = [];"
+  },
+  {
+    "path": "packages/scheduler/src/forks/Scheduler.js",
+    "line": 189,
+    "text": "function workLoop(hasTimeRemaining, initialTime) {"
+  },
+  {
+    "path": "packages/scheduler/src/SchedulerMinHeap.js",
+    "line": 16,
+    "text": "export function push(heap: Heap, node: Node): void {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 373,
+    "text": "export function renderWithHooks<Props, SecondArg>("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 1549,
+    "text": "function pushEffect(tag, create, destroy, deps) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.old.js",
+    "line": 1985,
+    "text": "function commitRootImpl("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberBeginWork.old.js",
+    "line": 452,
+    "text": "function updateMemoComponent("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberNewContext.old.js",
+    "line": 625,
+    "text": "export function prepareToReadContext("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassComponent.old.js",
+    "line": 160,
+    "text": "function applyDerivedStateFromProps("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberThrow.old.js",
+    "line": 405,
+    "text": "function throwException("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.old.js",
+    "line": 2570,
+    "text": "export function captureCommitPhaseError("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberBeginWork.old.js",
+    "line": 1484,
+    "text": "function mountLazyComponent("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.old.js",
+    "line": 1019,
+    "text": "function finishConcurrentRender(root, exitStatus, lanes) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 1936,
+    "text": "function mountDeferredValue<T>(value: T): T {"
+  },
+  {
+    "path": "packages/react-dom/src/client/ReactDOMComponent.js",
+    "line": 283,
+    "text": "function setInitialDOMProperties("
+  },
+  {
+    "path": "packages/react-dom/src/events/ReactDOMEventListener.js",
+    "line": 86,
+    "text": "export function createEventListenerWrapperWithPriority("
+  },
+  {
+    "path": "packages/react-dom/src/events/DOMPluginEventSystem.js",
+    "line": 234,
+    "text": "function processDispatchQueueItemsInOrder("
+  },
+  {
+    "path": "packages/react-dom/src/client/ReactDOMInput.js",
+    "line": 137,
+    "text": "export function updateWrapper(element: Element, props: Object) {"
+  },
+  {
+    "path": "packages/react-dom/src/client/ReactDOMTextarea.js",
+    "line": 128,
+    "text": "export function updateWrapper(element: Element, props: Object) {"
+  },
+  {
+    "path": "packages/react-dom/src/client/ReactDOMSelect.js",
+    "line": 171,
+    "text": "export function postMountWrapper(element: Element, props: Object) {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 1268,
+    "text": "function mountSyncExternalStore<T>("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.old.js",
+    "line": 1157,
+    "text": "function isRenderConsistentWithExternalStores(finishedWork: Fiber): boolean {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHooks.old.js",
+    "line": 2093,
+    "text": "function mountId(): string {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.old.js",
+    "line": 2812,
+    "text": "function commitDoubleInvokeEffectsInDEV("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberClassUpdateQueue.old.js",
+    "line": 677,
+    "text": "export function commitUpdateQueue<State>("
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberBeginWork.old.js",
+    "line": 670,
+    "text": "function updateOffscreenComponent("
+  },
+  {
+    "path": "packages/scheduler/src/forks/Scheduler.js",
+    "line": 485,
+    "text": "function requestPaint() {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberWorkLoop.old.js",
+    "line": 447,
+    "text": "export function requestUpdateLane(fiber: Fiber): Lane {"
+  },
+  {
+    "path": "packages/react-reconciler/src/ReactFiberHostContext.old.js",
+    "line": 46,
+    "text": "function pushHostContainer(fiber: Fiber, nextRootInstance: Container) {"
+  }
+]

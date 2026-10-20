@@ -7,6 +7,9 @@ import { REACT_FORWARD_REF_TYPE, REACT_MEMO_TYPE } from "shared/ReactSymbols";
 import is from "shared/objectIs";
 import type { ReactContext, ReactProviderType } from "shared/ReactTypes";
 import shallowEqual from "shared/shallowEqual";
+import { resolveDefaultProps } from "./ReactFiberLazyComponent";
+import { pushHostContainer, pushHostContext } from "./ReactFiberHostContext";
+import { shouldSetTextContent } from "./ReactFiberHostConfig";
 
 import {
   cloneChildFibers,
@@ -32,19 +35,25 @@ import {
 } from "./ReactFiber";
 import {
   ChildDeletion,
+  ContentReset,
   DidCapture,
   NoFlags,
   PerformedWork,
   Placement,
   Ref,
+  RefStatic,
+  StaticMask,
 } from "./ReactFiberFlags";
 import {
   NoLanes,
+  NoLane,
+  OffscreenLane,
+  removeLanes,
   includesSomeLane,
   mergeLanes,
   type Lanes,
 } from "./ReactFiberLane";
-import { StrictLegacyMode } from "./ReactTypeOfMode";
+import { ConcurrentMode, NoMode, StrictLegacyMode } from "./ReactTypeOfMode";
 import { renderWithHooks, bailoutHooks } from "./ReactFiberHooks";
 import {
   prepareToReadContext,
@@ -74,7 +83,13 @@ import type {
   OffscreenProps,
   OffscreenState,
 } from "./ReactFiberOffscreenComponent";
-import type { SuspenseState } from "./ReactFiberThrow";
+import { pushRenderLanes } from "./ReactFiberWorkLoop";
+import {
+  suspenseStackCursor,
+  pushSuspenseContext,
+  InvisibleParentSuspenseContext,
+} from "./ReactFiberSuspenseContext";
+import type { SuspenseState } from "./ReactFiberSuspenseComponent";
 
 // 模块级状态：本次 beginWork 是否接收到了新的 props/state/context。
 // 官方用 didReceiveUpdate 在 dispatch 顶层与各 update* 分支之间传递"是否要重渲染"的信号，
@@ -90,7 +105,7 @@ function markRef(current: FiberNode | null, workInProgress: FiberNode): void {
     (current === null && ref !== null) ||
     (current !== null && current.ref !== ref)
   ) {
-    workInProgress.flags |= Ref;
+    workInProgress.flags |= Ref | RefStatic;
   }
 }
 
@@ -147,6 +162,7 @@ function mountIndeterminateComponent(
 
   if (shouldConstruct(Component)) {
     workInProgress.tag = ClassComponent;
+    prepareToReadContext(workInProgress, renderLanes);
     constructClassInstance(workInProgress, Component, props);
     mountClassInstance(workInProgress, Component, props);
     return finishClassComponent(
@@ -231,6 +247,7 @@ function updateClassComponent(
   nextProps: any,
   renderLanes: Lanes,
 ): FiberNode | null {
+  prepareToReadContext(workInProgress, renderLanes);
   if (workInProgress.stateNode === null) {
     constructClassInstance(workInProgress, Component, nextProps);
     mountClassInstance(workInProgress, Component, nextProps);
@@ -338,6 +355,7 @@ function updateMemoComponent(
   nextProps: any,
   renderLanes: Lanes,
 ): FiberNode | null {
+  nextProps = resolveDefaultProps(Component.type, nextProps);
   if (current === null) {
     const type = Component.type;
     const child = createFiberFromTypeAndProps(
@@ -375,7 +393,7 @@ function updateMemoComponent(
   return newChild;
 }
 
-// 对照官方 mountLazyComponent（简化：不含 resolveDefaultProps/热更新分支，只处理
+// 对照官方 mountLazyComponent（简化：省略热更新，解析默认 props 后处理
 // FunctionComponent/ClassComponent 两种最常见的懒加载目标）：_init(_payload) 还没 resolve
 // 时直接 throw 出内部的 thenable（ReactLazy.ts 的 lazyInitializer），被 Suspense 的
 // throwException 捕获走挂起流程；resolve 后这里能拿到真正的 Component，按 shouldConstruct
@@ -387,10 +405,11 @@ function mountLazyComponent(
   elementType: any,
   renderLanes: Lanes,
 ): FiberNode | null {
-  const props = workInProgress.pendingProps;
+  const unresolvedProps = workInProgress.pendingProps;
   const payload = elementType._payload;
   const init = elementType._init;
   const Component = init(payload);
+  const props = resolveDefaultProps(Component, unresolvedProps);
   workInProgress.type = Component;
 
   if (shouldConstruct(Component)) {
@@ -447,8 +466,18 @@ function updatePortalComponent(
   workInProgress: FiberNode,
   renderLanes: Lanes,
 ): FiberNode | null {
+  pushHostContainer(workInProgress, workInProgress.stateNode.containerInfo);
   const nextChildren = workInProgress.pendingProps;
-  reconcileChildren(current, workInProgress, nextChildren, renderLanes);
+  if (current === null) {
+    workInProgress.child = reconcileChildFibers(
+      workInProgress,
+      null,
+      nextChildren,
+      renderLanes,
+    );
+  } else {
+    reconcileChildren(current, workInProgress, nextChildren, renderLanes);
+  }
   return workInProgress.child;
 }
 
@@ -457,6 +486,7 @@ function updateHostRoot(
   workInProgress: FiberNode,
   renderLanes: Lanes,
 ): FiberNode | null {
+  pushHostContainer(workInProgress, workInProgress.stateNode.containerInfo);
   if (current === null) {
     throw new Error("Should have a current fiber. This is a bug in React.");
   }
@@ -484,10 +514,19 @@ function updateHostComponent(
   workInProgress: FiberNode,
   renderLanes: Lanes,
 ): FiberNode | null {
+  pushHostContext(workInProgress);
   const nextProps = workInProgress.pendingProps;
   // 官方这里还有 shouldSetTextContent 的直接文本子节点优化（textarea/option/input 等
   // 直接把 children 当 textContent、不再生成 HostText fiber），等 react-dom 落地时补。
-  const nextChildren = nextProps.children;
+  let nextChildren = nextProps.children;
+  if (shouldSetTextContent(workInProgress.type, nextProps)) {
+    nextChildren = null;
+  } else if (
+    current !== null &&
+    shouldSetTextContent(workInProgress.type, current.memoizedProps)
+  ) {
+    workInProgress.flags |= ContentReset;
+  }
   markRef(current, workInProgress);
   reconcileChildren(current, workInProgress, nextChildren, renderLanes);
   return workInProgress.child;
@@ -662,6 +701,12 @@ function updateSuspenseFallbackChildren(
     currentPrimaryChildFragment,
     primaryChildProps,
   );
+  primaryChildFragment.subtreeFlags =
+    currentPrimaryChildFragment.subtreeFlags & StaticMask;
+  primaryChildFragment.childLanes = removeLanes(
+    currentPrimaryChildFragment.childLanes,
+    renderLanes,
+  );
   primaryChildFragment.return = workInProgress;
 
   let fallbackChildFragment: FiberNode;
@@ -723,7 +768,7 @@ function updateSuspensePrimaryChildren(
   return primaryChildFragment;
 }
 
-// 对照官方 updateSuspenseComponent（简化：不含 SuspenseContext 栈/dehydration/SuspenseList）：
+// 对照官方 updateSuspenseComponent（简化：不含 dehydration/SuspenseList）：
 // showFallback 由 DidCapture 决定——unwindWork 在 throwException 命中这个边界后翻转了这个
 // flag，重新进入 beginWork 时据此判断本次要渡染 fallback 还是 primary。
 function updateSuspenseComponent(
@@ -739,6 +784,11 @@ function updateSuspenseComponent(
     workInProgress.flags &= ~DidCapture;
   }
 
+  let suspenseContext = suspenseStackCursor.current;
+  if (!showFallback && (current === null || current.memoizedState !== null))
+    suspenseContext |= InvisibleParentSuspenseContext;
+  pushSuspenseContext(workInProgress, suspenseContext);
+
   if (current === null) {
     if (showFallback) {
       const fallbackFragment = mountSuspenseFallbackChildren(
@@ -750,7 +800,7 @@ function updateSuspenseComponent(
       const primaryChildFragment = workInProgress.child as FiberNode;
       primaryChildFragment.memoizedState =
         mountSuspenseOffscreenState(renderLanes);
-      workInProgress.memoizedState = { retryLane: renderLanes };
+      workInProgress.memoizedState = { retryLane: NoLane };
       return fallbackFragment;
     }
     const primaryChildFragment = mountSuspensePrimaryChildren(
@@ -779,7 +829,7 @@ function updateSuspenseComponent(
       prevOffscreenState === null
         ? mountSuspenseOffscreenState(renderLanes)
         : updateSuspenseOffscreenState(prevOffscreenState, renderLanes);
-    workInProgress.memoizedState = { retryLane: renderLanes };
+    workInProgress.memoizedState = { retryLane: NoLane };
     return fallbackFragment;
   }
 
@@ -793,32 +843,45 @@ function updateSuspenseComponent(
   return primaryChildFragment;
 }
 
-// 对照官方 updateOffscreenComponent（简化：不做 hidden 时 bail-out-and-defer 到 OffscreenLane
-// 的机制，始终正常 reconcile children——隐藏效果完全交给 commit 阶段的 Visibility flag +
-// hideInstance/unhideInstance 处理，对应 Phase 9.1 计划的简化点 2）。memoizedState 是否为
-// null 由 nextProps.mode 决定（"hidden" 才有 state），completeWork 据此对比新旧状态打
-// Visibility flag。
+// React 18.3.1 的 hidden defer/baseLanes 协议，供 Suspense 内部 primary 树使用。
 function updateOffscreenComponent(
   current: FiberNode | null,
   workInProgress: FiberNode,
   renderLanes: Lanes,
 ): FiberNode | null {
   const nextProps: OffscreenProps = workInProgress.pendingProps;
-  const nextChildren = nextProps.children;
-  const nextIsHidden = nextProps.mode === "hidden";
-
-  if (!nextIsHidden) {
-    workInProgress.memoizedState = null;
+  const prevState: OffscreenState | null =
+    current === null ? null : current.memoizedState;
+  if (nextProps.mode === "hidden") {
+    if ((workInProgress.mode & ConcurrentMode) === NoMode) {
+      workInProgress.memoizedState = { baseLanes: NoLanes };
+      pushRenderLanes(workInProgress, renderLanes);
+    } else if (!includesSomeLane(renderLanes, OffscreenLane)) {
+      const nextBaseLanes = mergeLanes(
+        prevState === null ? NoLanes : prevState.baseLanes,
+        renderLanes,
+      );
+      workInProgress.lanes = workInProgress.childLanes = OffscreenLane;
+      workInProgress.memoizedState = { baseLanes: nextBaseLanes };
+      workInProgress.updateQueue = null;
+      pushRenderLanes(workInProgress, nextBaseLanes);
+      return null;
+    } else {
+      workInProgress.memoizedState = { baseLanes: NoLanes };
+      pushRenderLanes(
+        workInProgress,
+        prevState === null ? renderLanes : prevState.baseLanes,
+      );
+    }
   } else {
-    const prevState: OffscreenState | null =
-      current !== null ? current.memoizedState : null;
-    workInProgress.memoizedState =
-      prevState !== null
-        ? updateSuspenseOffscreenState(prevState, renderLanes)
-        : mountSuspenseOffscreenState(renderLanes);
+    const subtreeLanes =
+      prevState === null
+        ? renderLanes
+        : mergeLanes(prevState.baseLanes, renderLanes);
+    workInProgress.memoizedState = null;
+    pushRenderLanes(workInProgress, subtreeLanes);
   }
-
-  reconcileChildren(current, workInProgress, nextChildren, renderLanes);
+  reconcileChildren(current, workInProgress, nextProps.children, renderLanes);
   return workInProgress.child;
 }
 
@@ -849,7 +912,7 @@ function checkScheduledUpdateOrContext(
   current: FiberNode,
   renderLanes: Lanes,
 ): boolean {
-  // 提前 bailout 前，检查是否有待处理的更新（context 懒传播留到 Phase 7）
+  // 18.3.1 默认 eager Context 传播已经把消费者的工作合并到 lanes。
   const updateLanes = current.lanes;
   return includesSomeLane(updateLanes, renderLanes);
 }
@@ -859,13 +922,31 @@ function attemptEarlyBailoutIfNoScheduledUpdate(
   workInProgress: FiberNode,
   renderLanes: Lanes,
 ): FiberNode | null {
-  // 官方这里还会按 tag 压栈 host context 等，Phase 2/3 的 host config 没有对应的栈
-  // （getHostContext 恒返回空对象），先省略，react-dom 落地时补。ContextProvider 的栈
-  // 必须压——即使这个 fiber 本身 bailout，子树读到的 context._currentValue 也得是新值。
+  if (workInProgress.tag === HostRoot || workInProgress.tag === HostPortal)
+    pushHostContainer(workInProgress, workInProgress.stateNode.containerInfo);
+  else if (workInProgress.tag === HostComponent)
+    pushHostContext(workInProgress);
+  // bailout 仍须维护上下文栈，子树可能还有待处理的更新。
   if (workInProgress.tag === ContextProvider) {
     const newValue = workInProgress.memoizedProps.value;
     const context: ReactContext<any> = workInProgress.type._context;
     pushProvider(workInProgress, context, newValue);
+  }
+  if (workInProgress.tag === OffscreenComponent)
+    return updateOffscreenComponent(current, workInProgress, renderLanes);
+  if (workInProgress.tag === SuspenseComponent) {
+    if (workInProgress.memoizedState !== null) {
+      if (includesSomeLane(renderLanes, workInProgress.child!.childLanes))
+        return updateSuspenseComponent(current, workInProgress, renderLanes);
+      pushSuspenseContext(workInProgress, suspenseStackCursor.current);
+      const child = bailoutOnAlreadyFinishedWork(
+        current,
+        workInProgress,
+        renderLanes,
+      );
+      return child === null ? null : child.sibling;
+    }
+    pushSuspenseContext(workInProgress, suspenseStackCursor.current);
   }
   return bailoutOnAlreadyFinishedWork(current, workInProgress, renderLanes);
 }
@@ -946,7 +1027,9 @@ function beginWork(
         current,
         workInProgress,
         Component,
-        workInProgress.pendingProps,
+        workInProgress.elementType === Component
+          ? workInProgress.pendingProps
+          : resolveDefaultProps(Component, workInProgress.pendingProps),
         renderLanes,
       );
     }
@@ -956,7 +1039,9 @@ function beginWork(
         current,
         workInProgress,
         Component,
-        workInProgress.pendingProps,
+        workInProgress.elementType === Component
+          ? workInProgress.pendingProps
+          : resolveDefaultProps(Component, workInProgress.pendingProps),
         renderLanes,
       );
     }
@@ -974,7 +1059,9 @@ function beginWork(
         current,
         workInProgress,
         Component,
-        workInProgress.pendingProps,
+        workInProgress.elementType === Component
+          ? workInProgress.pendingProps
+          : resolveDefaultProps(Component, workInProgress.pendingProps),
         renderLanes,
       );
     }
@@ -984,7 +1071,9 @@ function beginWork(
         current,
         workInProgress,
         Component,
-        workInProgress.pendingProps,
+        workInProgress.elementType === Component
+          ? workInProgress.pendingProps
+          : resolveDefaultProps(Component, workInProgress.pendingProps),
         renderLanes,
       );
     }

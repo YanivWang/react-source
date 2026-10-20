@@ -13,11 +13,8 @@ import {
 } from "react-reconciler/src/ReactFiberReconciler";
 import { flushSync } from "react-reconciler/src/ReactFiberWorkLoop";
 import { ConcurrentRoot } from "react-reconciler/src/ReactRootTags";
-import {
-  setRootHostContainer,
-  type Container,
-} from "react-dom-bindings/src/client/ReactDOMHostConfig";
-import { listenToAllSupportedEvents } from "react-dom-bindings/src/events/DOMPluginEventSystem";
+import { type Container } from "react-dom/src/client/ReactDOMHostConfig";
+import { listenToAllSupportedEvents } from "react-dom/src/events/DOMPluginEventSystem";
 
 export interface RootType {
   render(children: any): void;
@@ -60,9 +57,7 @@ export function createRoot(
   container: Container,
   options?: RootOptions,
 ): RootType {
-  // 对照官方：先让 HostConfig 记下根容器（getRootHostContainer 返回它），
-  // 再 createContainer 构造 HostRoot fiber。官方用 ConcurrentRoot 作为 createRoot 的根模式。
-  setRootHostContainer(container);
+  // rootContainer 随 begin/complete 的 HostContext 栈保存；createRoot 创建 ConcurrentRoot。
   const identifierPrefix = options?.identifierPrefix ?? "";
   const root = createContainer(container, ConcurrentRoot, identifierPrefix);
   // 事件委托：在根容器上一次性注册所有支持的原生事件监听器（capture+bubble），

@@ -1,3 +1,4 @@
+import { StrictLegacyMode } from "./ReactTypeOfMode";
 /**
  * @file Class/根节点更新队列
  * @description 挂载在 fiber.updateQueue 上的单向循环链表，保存组件/根节点收到的 update
@@ -16,8 +17,14 @@ import {
 import { Callback, DidCapture, ShouldCapture } from "./ReactFiberFlags";
 import type { FiberNode } from "./ReactFiber";
 import type { FiberRootNode } from "./ReactFiberRoot";
-import { markSkippedUpdateLanes } from "./ReactFiberWorkLoop";
-import { enqueueConcurrentClassUpdate } from "./ReactFiberConcurrentUpdates";
+import {
+  isUnsafeClassRenderPhaseUpdate,
+  markSkippedUpdateLanes,
+} from "./ReactFiberWorkLoop";
+import {
+  unsafe_markUpdateLaneFromFiberToRoot,
+  enqueueConcurrentClassUpdate,
+} from "./ReactFiberConcurrentUpdates";
 
 // 对照官方 packages/react-reconciler/src/ReactFiberClassUpdateQueue.new.js：Update 对象是
 // 不可变的纯数据（payload 携带新 state/新 element），shared.pending 是循环链表（last 指向
@@ -137,6 +144,16 @@ export function enqueueUpdate<State>(
   }
 
   const sharedQueue: SharedQueue<State> = updateQueue.shared;
+  if (isUnsafeClassRenderPhaseUpdate()) {
+    const pending = sharedQueue.pending;
+    if (pending === null) update.next = update;
+    else {
+      update.next = pending.next;
+      pending.next = update;
+    }
+    sharedQueue.pending = update;
+    return unsafe_markUpdateLaneFromFiberToRoot(fiber, lane);
+  }
   return enqueueConcurrentClassUpdate(fiber, sharedQueue, update, lane);
 }
 
@@ -208,7 +225,10 @@ function getStateFromUpdate<State>(
     case ReplaceState: {
       const payload = update.payload;
       if (typeof payload === "function") {
-        return payload.call(instance, prevState, nextProps);
+        const nextState = payload.call(instance, prevState, nextProps);
+        if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0)
+          payload.call(instance, prevState, nextProps);
+        return nextState;
       }
       return payload;
     }
@@ -221,6 +241,8 @@ function getStateFromUpdate<State>(
       let partialState;
       if (typeof payload === "function") {
         partialState = payload.call(instance, prevState, nextProps);
+        if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0)
+          payload.call(instance, prevState, nextProps);
       } else {
         partialState = payload;
       }
@@ -396,5 +418,26 @@ export function processUpdateQueue<State>(
     markSkippedUpdateLanes(newLanes);
     workInProgress.lanes = newLanes;
     workInProgress.memoizedState = newState;
+  }
+}
+// React 18.3.1 commitUpdateQueue：先消费 effects，再调用 callback，避免重入重复执行。
+export function commitUpdateQueue<State>(
+  _finishedWork: FiberNode,
+  finishedQueue: UpdateQueue<State> | null,
+  instance: any,
+): void {
+  if (finishedQueue === null) return;
+  const effects = finishedQueue.effects;
+  finishedQueue.effects = null;
+  if (effects !== null) {
+    for (const effect of effects) {
+      const callback = effect.callback;
+      if (callback !== null) {
+        effect.callback = null;
+        if (typeof callback !== "function")
+          throw new Error("Invalid argument passed as callback.");
+        callback.call(instance);
+      }
+    }
   }
 }

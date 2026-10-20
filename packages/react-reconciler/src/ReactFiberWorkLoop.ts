@@ -25,7 +25,7 @@ import {
   PassiveMask,
   StoreConsistency,
 } from "./ReactFiberFlags";
-import { ClassComponent, HostRoot, SuspenseComponent } from "./ReactWorkTags";
+import { ClassComponent, HostRoot } from "./ReactWorkTags";
 import { enqueueUpdate } from "./ReactFiberClassUpdateQueue";
 import {
   createClassErrorUpdate,
@@ -35,7 +35,6 @@ import {
 import { unwindWork, unwindInterruptedWork } from "./ReactFiberUnwindWork";
 import { resetHooksAfterThrow } from "./ReactFiberHooks";
 import {
-  DefaultLane,
   NoLane,
   NoLanes,
   NoTimestamp,
@@ -49,7 +48,8 @@ import {
   includesSomeLane,
   markRootFinished,
   markRootPinged,
-  markRootSuspended,
+  markRootSuspended as markRootSuspended_dontCallThisOne,
+  removeLanes,
   includesOnlyTransitions,
   markRootUpdated,
   markStarvedLanesAsExpired,
@@ -62,8 +62,10 @@ import type { FiberRootNode } from "./ReactFiberRoot";
 import {
   enqueueConcurrentRenderForLane,
   finishQueueingConcurrentUpdates,
+  getConcurrentlyUpdatedLanes,
 } from "./ReactFiberConcurrentUpdates";
 import type { Wakeable } from "shared/ReactTypes";
+import type { SuspenseState } from "./ReactFiberSuspenseComponent";
 import { resetContextDependencies } from "./ReactFiberNewContext";
 import {
   ContinuousEventPriority,
@@ -76,7 +78,11 @@ import {
   setCurrentUpdatePriority,
 } from "./ReactEventPriorities";
 import { ConcurrentMode, NoMode } from "./ReactTypeOfMode";
-import { scheduleMicrotask } from "./ReactFiberConfig";
+import { createCursor, push, pop } from "./ReactFiberStack";
+import {
+  getCurrentEventPriority,
+  scheduleMicrotask,
+} from "./ReactFiberHostConfig";
 import {
   unstable_IdlePriority,
   unstable_ImmediatePriority,
@@ -100,9 +106,7 @@ const now = unstable_now;
 const shouldYield = unstable_shouldYield;
 const ReactCurrentBatchConfig = ReactSharedInternals.ReactCurrentBatchConfig;
 
-// ExecutionContext 位掩码：标记当前处于批量/渲染/提交阶段。官方还有 EventContext（事件系统，
-// Phase 6）与 RetryAfterError（错误边界重试，Phase 9），这里先补 BatchedContext 供 flushSync
-// 与批量更新使用，0b001 位是 Phase 2/3 起就为它预留的。
+// React 18.3.1 ExecutionContext：批处理、render、commit 的位掩码。
 const NoContext = 0b000;
 const BatchedContext = 0b001;
 const RenderContext = 0b010;
@@ -111,6 +115,7 @@ const CommitContext = 0b100;
 // 根节点的渲染退出状态。保留本实现使用的官方状态值。
 const RootInProgress = 0;
 const RootSuspended = 3;
+const RootSuspendedWithDelay = 4;
 const RootCompleted = 5;
 
 // 当前正在处理的 fiber 树根 / 当前处理到的 fiber / 本次渲染的 lanes
@@ -120,6 +125,43 @@ let workInProgressRootRenderLanes: Lanes = NoLanes;
 let workInProgressRootExitStatus = RootInProgress;
 // 本次渲染中被跳过（优先级不足）的 lanes，processUpdateQueue 跳过低优先级 update 时累积到这里
 let workInProgressRootSkippedLanes: Lanes = NoLanes;
+let workInProgressRootPingedLanes: Lanes = NoLanes;
+let workInProgressRootInterleavedUpdatedLanes: Lanes = NoLanes;
+let subtreeRenderLanes: Lanes = NoLanes;
+const subtreeRenderLanesCursor = createCursor(NoLanes);
+const NESTED_UPDATE_LIMIT = 50;
+let nestedUpdateCount = 0;
+let rootWithNestedUpdates: FiberRootNode | null = null;
+
+export function pushRenderLanes(fiber: FiberNode, lanes: Lanes): void {
+  push(subtreeRenderLanesCursor, subtreeRenderLanes, fiber);
+  subtreeRenderLanes = mergeLanes(subtreeRenderLanes, lanes);
+}
+export function popRenderLanes(fiber: FiberNode): void {
+  subtreeRenderLanes = subtreeRenderLanesCursor.current;
+  pop(subtreeRenderLanesCursor, fiber);
+}
+export function renderDidSuspend(): void {
+  if (workInProgressRootExitStatus === RootInProgress)
+    workInProgressRootExitStatus = RootSuspended;
+}
+export function renderDidSuspendDelayIfPossible(): void {
+  if (
+    workInProgressRootExitStatus === RootInProgress ||
+    workInProgressRootExitStatus === RootSuspended
+  )
+    workInProgressRootExitStatus = RootSuspendedWithDelay;
+}
+function markRootSuspended(root: FiberRootNode, lanes: Lanes): void {
+  const suspended = removeLanes(
+    removeLanes(lanes, workInProgressRootPingedLanes),
+    workInProgressRootInterleavedUpdatedLanes,
+  );
+  markRootSuspended_dontCallThisOne(root, suspended);
+}
+export function isUnsafeClassRenderPhaseUpdate(): boolean {
+  return (executionContext & RenderContext) !== NoContext;
+}
 
 // 最近一次 update 的事件时间（requestEventTime 在批处理内复用同一时间戳）
 let currentEventTime: number = NoTimestamp;
@@ -137,6 +179,25 @@ let isFlushingSyncQueue = false;
 // 交给 Scheduler 在 commit 完全结束后异步 flush（对照官方 rootWithPendingPassiveEffects）。
 let rootWithPendingPassiveEffects: FiberRootNode | null = null;
 let pendingPassiveEffectsLanes: Lanes = NoLanes;
+let hasUncaughtError = false;
+let firstUncaughtError: unknown = null;
+export function onUncaughtError(error: unknown): void {
+  if (!hasUncaughtError) {
+    hasUncaughtError = true;
+    firstUncaughtError = error;
+  }
+}
+let legacyErrorBoundariesThatAlreadyFailed: Set<any> | null = null;
+
+export function isAlreadyFailedLegacyErrorBoundary(instance: any): boolean {
+  return legacyErrorBoundariesThatAlreadyFailed?.has(instance) ?? false;
+}
+
+export function markLegacyErrorBoundaryAsFailed(instance: any): void {
+  if (legacyErrorBoundariesThatAlreadyFailed === null)
+    legacyErrorBoundariesThatAlreadyFailed = new Set();
+  legacyErrorBoundariesThatAlreadyFailed.add(instance);
+}
 
 export function getExecutionContext(): number {
   return executionContext;
@@ -165,13 +226,18 @@ export function requestEventTime(): number {
 // 回调内（ReactCurrentBatchConfig.transition 非空）走 TransitionLane，同一事件内的多次更新
 // 复用同一条 lane（currentEventTransitionLane），直到下次真正进入新的事件才重新分配；
 // 否则并发根优先取 flushSync 设置的 DiscreteEventPriority，否则取事件系统的
-// currentUpdatePriority。事件系统 Phase 6 才落地，这里普通 createRoot().render() 的兜底
-// 优先级是 DefaultLane。
+// currentUpdatePriority，最后询问宿主原生事件优先级。
 export function requestUpdateLane(fiber: FiberNode): Lane {
   const mode = fiber.mode;
   if ((mode & ConcurrentMode) === NoMode) {
     return SyncLane;
   }
+
+  if (
+    (executionContext & RenderContext) !== NoContext &&
+    workInProgressRootRenderLanes !== NoLanes
+  )
+    return getHighestPriorityLane(workInProgressRootRenderLanes);
 
   const isTransition = ReactCurrentBatchConfig.transition !== null;
   if (isTransition) {
@@ -185,8 +251,7 @@ export function requestUpdateLane(fiber: FiberNode): Lane {
   if (updateLane !== NoLane) {
     return updateLane;
   }
-  // 对照官方最后会问宿主 getCurrentEventPriority，本项目无事件系统，先固定 DefaultLane
-  return DefaultLane;
+  return getCurrentEventPriority();
 }
 
 // 对照官方 prepareFreshStack：重置 root 的 finished 状态，并把 root.current 克隆成新的
@@ -215,6 +280,9 @@ function prepareFreshStack(root: FiberRootNode, lanes: Lanes): FiberNode {
   workInProgressRootRenderLanes = lanes;
   workInProgressRootExitStatus = RootInProgress;
   workInProgressRootSkippedLanes = NoLanes;
+  workInProgressRootPingedLanes = NoLanes;
+  workInProgressRootInterleavedUpdatedLanes = NoLanes;
+  subtreeRenderLanes = lanes;
 
   // 对照官方：新开一棵栈前，先把上一批（render 阶段之外触发的）并发 update 刷回各自
   // fiber 的 updateQueue，保证接下来遍历到的 updateQueue 一定是最新的
@@ -248,7 +316,7 @@ function performUnitOfWork(unitOfWork: FiberNode): void {
   const next: FiberNode | null = beginWork(
     current,
     unitOfWork,
-    workInProgressRootRenderLanes,
+    subtreeRenderLanes,
   );
 
   unitOfWork.memoizedProps = unitOfWork.pendingProps;
@@ -269,11 +337,7 @@ function completeUnitOfWork(unitOfWork: FiberNode): void {
     const returnFiber: FiberNode | null = completedWork.return;
 
     if ((completedWork.flags & Incomplete) === NoFlags) {
-      const next = completeWork(
-        current,
-        completedWork,
-        workInProgressRootRenderLanes,
-      );
+      const next = completeWork(current, completedWork, subtreeRenderLanes);
 
       if (next !== null) {
         // completeWork 派生了新工作（如 Suspense fallback），继续处理
@@ -339,36 +403,6 @@ function handleError(root: FiberRootNode, thrownValue: any): void {
     thrownValue,
     workInProgressRootRenderLanes,
   );
-  if (
-    thrownValue !== null &&
-    typeof thrownValue === "object" &&
-    typeof thrownValue.then === "function"
-  ) {
-    let boundary = erroredWork.return;
-    while (boundary !== null && boundary.tag !== SuspenseComponent)
-      boundary = boundary.return;
-    const keepVisible =
-      boundary !== null &&
-      boundary.alternate !== null &&
-      boundary.alternate.memoizedState === null &&
-      includesOnlyTransitions(workInProgressRootRenderLanes);
-    if (
-      keepVisible ||
-      (boundary === null &&
-        !includesSomeLane(workInProgressRootRenderLanes, SyncLane))
-    ) {
-      // 已展示内容的 transition 挂起时保留 current UI，等 ping 后重放，不提交 fallback。
-      let interrupted: FiberNode | null = erroredWork;
-      while (interrupted !== null) {
-        unwindInterruptedWork(interrupted);
-        interrupted = interrupted.return;
-      }
-      workInProgress = null;
-      workInProgressRootExitStatus = RootSuspended;
-      markRootSuspended(root, workInProgressRootRenderLanes);
-      return;
-    }
-  }
   completeUnitOfWork(erroredWork);
 }
 
@@ -449,7 +483,9 @@ function renderRootConcurrent(root: FiberRootNode, lanes: Lanes): number {
 // 变更后交换 current 指针。pendingLanes 不再全量清零，而是只清掉本次 commit 掉的 lane、
 // 保留被跳过的低优先级 lane（markRootFinished），提交后再 ensureRootIsScheduled 处理剩余工作。
 function commitRootImpl(root: FiberRootNode): void {
-  flushPassiveEffects();
+  do {
+    flushPassiveEffects();
+  } while (rootWithPendingPassiveEffects !== null);
   const finishedWork = root.finishedWork;
   if (finishedWork === null) {
     return;
@@ -464,8 +500,8 @@ function commitRootImpl(root: FiberRootNode): void {
   // 只把本次真正提交掉的 lane 从 pendingLanes 里清掉，剩余的（被跳过的低优先级 lane）
   // 保留下来，供 ensureRootIsScheduled 继续调度（对应 4.5 的 base 重放链路）
   const remainingLanes = mergeLanes(
-    finishedWork.lanes,
-    finishedWork.childLanes,
+    mergeLanes(finishedWork.lanes, finishedWork.childLanes),
+    getConcurrentlyUpdatedLanes(),
   );
   markRootFinished(root, remainingLanes);
 
@@ -513,14 +549,30 @@ function commitRootImpl(root: FiberRootNode): void {
     }
   }
 
+  if (root.pendingLanes === NoLanes)
+    legacyErrorBoundariesThatAlreadyFailed = null;
+
   // 有剩余工作（被跳过的 lane）则重新调度
   ensureRootIsScheduled(root, now());
+  if (hasUncaughtError) {
+    hasUncaughtError = false;
+    const error = firstUncaughtError;
+    firstUncaughtError = null;
+    throw error;
+  }
   // React 18 ConcurrentRoot：离散同步更新的 passive effects 在当前任务结束前刷新。
   if (
     (finishedWork.mode & ConcurrentMode) !== NoMode &&
     includesSomeLane(lanes, SyncLane)
   )
     flushPassiveEffects();
+  if (includesSomeLane(root.pendingLanes, SyncLane)) {
+    if (rootWithNestedUpdates === root) nestedUpdateCount++;
+    else {
+      nestedUpdateCount = 0;
+      rootWithNestedUpdates = root;
+    }
+  } else nestedUpdateCount = 0;
   flushSyncCallbacks();
 }
 
@@ -601,18 +653,18 @@ function performConcurrentWorkOnRoot(
     : renderRootSync(root, lanes);
 
   if (
-    exitStatus === RootCompleted &&
+    exitStatus !== RootInProgress &&
     !includesBlockingLane(root, lanes) &&
     !isRenderConsistentWithExternalStores(root.current.alternate!)
   ) {
     exitStatus = renderRootSync(root, lanes);
   }
-  if (exitStatus === RootCompleted) {
-    // 只有完成的树可以提交；挂起根等待 ping 后重试。
+  if (exitStatus !== RootInProgress) {
+    // 只有完整退出的树可以进入结束协议。
     const finishedWork = root.current.alternate;
     root.finishedWork = finishedWork;
     root.finishedLanes = lanes;
-    commitRoot(root);
+    finishConcurrentRender(root, exitStatus, lanes);
   }
 
   ensureRootIsScheduled(root, now());
@@ -621,6 +673,22 @@ function performConcurrentWorkOnRoot(
     return performConcurrentWorkOnRoot.bind(null, root);
   }
   return null;
+}
+
+// 保留 18.3.1 的 root 退出状态协议；省略 fallback 的 JND/500ms 等待启发式。
+function finishConcurrentRender(
+  root: FiberRootNode,
+  exitStatus: number,
+  lanes: Lanes,
+): void {
+  if (exitStatus === RootSuspended || exitStatus === RootSuspendedWithDelay) {
+    markRootSuspended(root, lanes);
+    if (exitStatus === RootSuspendedWithDelay && includesOnlyTransitions(lanes))
+      return;
+    // 没有 Suspense 边界的未完成根只能等 ping。
+    if ((root.finishedWork!.flags & Incomplete) !== NoFlags) return;
+  }
+  commitRoot(root);
 }
 
 // 对照官方 performSyncWorkOnRoot：同步任务入口（不经过 Scheduler），取含 SyncLane 的
@@ -640,7 +708,7 @@ function performSyncWorkOnRoot(root: FiberRootNode): null {
 
   const exitStatus = renderRootSync(root, lanes);
 
-  if (exitStatus === RootCompleted) {
+  if (exitStatus !== RootInProgress) {
     const finishedWork = root.current.alternate;
     root.finishedWork = finishedWork;
     root.finishedLanes = lanes;
@@ -734,6 +802,8 @@ export function scheduleSyncCallback(callback: () => any): void {
 }
 
 export function flushSyncCallbacks(): void {
+  if ((executionContext & (RenderContext | CommitContext)) !== NoContext)
+    return;
   if (!isFlushingSyncQueue && syncQueue !== null) {
     isFlushingSyncQueue = true;
     let i = 0;
@@ -747,6 +817,10 @@ export function flushSyncCallbacks(): void {
         } while (callback !== null);
       }
       syncQueue = null;
+    } catch (error) {
+      syncQueue = syncQueue!.slice(i + 1);
+      scheduleMicrotask(flushSyncCallbacks);
+      throw error;
     } finally {
       executionContext = prevExecutionContext;
       isFlushingSyncQueue = false;
@@ -780,15 +854,32 @@ export function flushSync<A, R>(fn: (a: A) => R): R {
 }
 
 // 对照官方 scheduleUpdateOnFiber：把 lane 标记到 root.pendingLanes（markRootUpdated），
-// 然后 ensureRootIsScheduled 决定同步 flush 还是交给 Scheduler。官方这里还有 render 阶段更新、
-// act 警告等分支（Phase 6/9），本项目 updateContainer 是唯一入口、恒在渲染/提交之外触发。
+// 然后 ensureRootIsScheduled 决定同步 flush 还是交给 Scheduler；中途更新要记录 interleaved lanes。
 export function scheduleUpdateOnFiber(
   root: FiberRootNode,
   _fiber: FiberNode,
   lane: Lane,
   eventTime: number,
 ): void {
+  if (nestedUpdateCount > NESTED_UPDATE_LIMIT) {
+    nestedUpdateCount = 0;
+    rootWithNestedUpdates = null;
+    throw new Error(
+      "Maximum update depth exceeded. React limits the number of nested updates to prevent infinite loops.",
+    );
+  }
   markRootUpdated(root, lane, eventTime);
+  if (
+    root === workInProgressRoot &&
+    (executionContext & RenderContext) === NoContext
+  ) {
+    workInProgressRootInterleavedUpdatedLanes = mergeLanes(
+      workInProgressRootInterleavedUpdatedLanes,
+      lane,
+    );
+    if (workInProgressRootExitStatus === RootSuspendedWithDelay)
+      markRootSuspended(root, workInProgressRootRenderLanes);
+  }
   ensureRootIsScheduled(root, eventTime);
 }
 
@@ -814,6 +905,12 @@ export function pingSuspendedRoot(
     pingCache.delete(wakeable);
   }
   markRootPinged(root, pingedLanes);
+  if (root === workInProgressRoot) {
+    workInProgressRootPingedLanes = mergeLanes(
+      workInProgressRootPingedLanes,
+      pingedLanes,
+    );
+  }
   ensureRootIsScheduled(root, now());
 }
 
@@ -828,8 +925,7 @@ function requestRetryLane(fiber: FiberNode): Lane {
 
 // 对照官方 resolveRetryWakeable：Suspense 边界自身挂的 retry 监听（attachSuspenseRetryListeners
 // 在 commit 阶段挂上）触发后调用——从边界 fiber.stateNode 的 retry 缓存里删掉这个 wakeable，
-// 分配一条 retry lane 重新调度整棵子树重新渲染（不复用官方"若 retryLane 已存在就用它"的分支，
-// 简化为每次固定新分配一条）。
+// 优先复用 memoizedState.retryLane，没有指定 lane 时由 retryTimedOutBoundary 分配。
 export function resolveRetryWakeable(
   boundaryFiber: FiberNode,
   wakeable: Wakeable,
@@ -839,7 +935,16 @@ export function resolveRetryWakeable(
     retryCache.delete(wakeable);
   }
 
-  const retryLane = requestRetryLane(boundaryFiber);
+  const suspenseState: SuspenseState | null = boundaryFiber.memoizedState;
+  const retryLane = suspenseState === null ? NoLane : suspenseState.retryLane;
+  retryTimedOutBoundary(boundaryFiber, retryLane);
+}
+
+function retryTimedOutBoundary(
+  boundaryFiber: FiberNode,
+  retryLane: Lane,
+): void {
+  if (retryLane === NoLane) retryLane = requestRetryLane(boundaryFiber);
   const eventTime = requestEventTime();
   const root = enqueueConcurrentRenderForLane(boundaryFiber, retryLane);
   if (root !== null) {
@@ -860,7 +965,9 @@ export function captureCommitPhaseError(
       const instance = fiber.stateNode;
       if (
         typeof fiber.type.getDerivedStateFromError === "function" ||
-        (instance !== null && typeof instance.componentDidCatch === "function")
+        (instance !== null &&
+          typeof instance.componentDidCatch === "function" &&
+          !isAlreadyFailedLegacyErrorBoundary(instance))
       ) {
         const root = enqueueUpdate(
           fiber,

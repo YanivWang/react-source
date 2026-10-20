@@ -13,7 +13,7 @@ import {
 import type { Fiber, FiberRoot } from "./ReactInternalTypes";
 import { NoLane, type Lane } from "./ReactFiberLane";
 import type { RootTag } from "./ReactRootTags";
-import type { Container } from "./ReactFiberConfig";
+import type { Container } from "./ReactFiberHostConfig";
 import {
   requestEventTime,
   requestUpdateLane,

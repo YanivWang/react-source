@@ -1,0 +1,22 @@
+built react (NODE_DEV)
+built react (NODE_PROD)
+built react (UMD_DEV)
+built react (UMD_PROD)
+built react-jsx-runtime (NODE_DEV)
+built react-jsx-runtime (NODE_PROD)
+built react-jsx-dev-runtime (NODE_DEV)
+built react-jsx-dev-runtime (NODE_PROD)
+built react-reconciler (NODE_DEV)
+built react-reconciler (NODE_PROD)
+built react-reconciler-reflection (NODE_DEV)
+built react-reconciler-reflection (NODE_PROD)
+built react-reconciler-constants (NODE_DEV)
+built react-reconciler-constants (NODE_PROD)
+built scheduler (NODE_DEV)
+built scheduler (NODE_PROD)
+built react-dom (NODE_DEV)
+built react-dom (NODE_PROD)
+prepared npm package: react -> build/node_modules/react
+prepared npm package: react-reconciler -> build/node_modules/react-reconciler
+prepared npm package: scheduler -> build/node_modules/scheduler
+prepared npm package: react-dom -> build/node_modules/react-dom

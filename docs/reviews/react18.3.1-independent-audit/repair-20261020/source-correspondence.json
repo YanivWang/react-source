@@ -1,0 +1,331 @@
+{
+  "official": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react",
+  "commit": "f1338f8080abd1386454a10bbf93d67bfe37ce85",
+  "checks": [
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "NoFlags",
+      "value": 0,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "PerformedWork",
+      "value": 1,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Placement",
+      "value": 2,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Update",
+      "value": 4,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Deletion",
+      "value": 8,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "ChildDeletion",
+      "value": 16,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "ContentReset",
+      "value": 32,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Callback",
+      "value": 64,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "DidCapture",
+      "value": 128,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Ref",
+      "value": 512,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Snapshot",
+      "value": 1024,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Passive",
+      "value": 2048,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Visibility",
+      "value": 8192,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "StoreConsistency",
+      "value": 16384,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "HostEffectMask",
+      "value": 32767,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "Incomplete",
+      "value": 32768,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "ShouldCapture",
+      "value": 65536,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "RefStatic",
+      "value": 2097152,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "LayoutStatic",
+      "value": 4194304,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "PassiveStatic",
+      "value": 8388608,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "MountLayoutDev",
+      "value": 16777216,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberFlags.ts",
+      "name": "MountPassiveDev",
+      "value": 33554432,
+      "official": "ReactFiberFlags.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "TotalLanes",
+      "value": 31,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "NoLanes",
+      "value": 0,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "NoLane",
+      "value": 0,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "SyncLane",
+      "value": 1,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "InputContinuousHydrationLane",
+      "value": 2,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "InputContinuousLane",
+      "value": 4,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "DefaultHydrationLane",
+      "value": 8,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "DefaultLane",
+      "value": 16,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "SelectiveHydrationLane",
+      "value": 134217728,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "IdleHydrationLane",
+      "value": 268435456,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "IdleLane",
+      "value": 536870912,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactFiberLane.ts",
+      "name": "OffscreenLane",
+      "value": 1073741824,
+      "official": "ReactFiberLane.new.js"
+    },
+    {
+      "file": "ReactTypeOfMode.ts",
+      "name": "NoMode",
+      "value": 0,
+      "official": "ReactTypeOfMode.js"
+    },
+    {
+      "file": "ReactTypeOfMode.ts",
+      "name": "ConcurrentMode",
+      "value": 1,
+      "official": "ReactTypeOfMode.js"
+    },
+    {
+      "file": "ReactTypeOfMode.ts",
+      "name": "StrictLegacyMode",
+      "value": 8,
+      "official": "ReactTypeOfMode.js"
+    },
+    {
+      "file": "ReactTypeOfMode.ts",
+      "name": "StrictEffectsMode",
+      "value": 16,
+      "official": "ReactTypeOfMode.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "FunctionComponent",
+      "value": 0,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "ClassComponent",
+      "value": 1,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "IndeterminateComponent",
+      "value": 2,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "HostRoot",
+      "value": 3,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "HostPortal",
+      "value": 4,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "HostComponent",
+      "value": 5,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "HostText",
+      "value": 6,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "Fragment",
+      "value": 7,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "Mode",
+      "value": 8,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "ContextConsumer",
+      "value": 9,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "ContextProvider",
+      "value": 10,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "ForwardRef",
+      "value": 11,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "SuspenseComponent",
+      "value": 13,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "MemoComponent",
+      "value": 14,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "LazyComponent",
+      "value": 16,
+      "official": "ReactWorkTags.js"
+    },
+    {
+      "file": "ReactWorkTags.ts",
+      "name": "OffscreenComponent",
+      "value": 22,
+      "official": "ReactWorkTags.js"
+    }
+  ],
+  "status": "PASS"
+}

@@ -13,7 +13,8 @@
 import type { FiberNode } from "./ReactFiber";
 import type { FiberRootNode } from "./ReactFiberRoot";
 import { ClassComponent, HostRoot, SuspenseComponent } from "./ReactWorkTags";
-import { ShouldCapture, Incomplete } from "./ReactFiberFlags";
+import { ShouldCapture, DidCapture, Incomplete } from "./ReactFiberFlags";
+import { shouldCaptureSuspense } from "./ReactFiberSuspenseComponent";
 import {
   getHighestPriorityLane,
   includesSomeLane,
@@ -27,11 +28,17 @@ import {
   type Update,
 } from "./ReactFiberClassUpdateQueue";
 import type { Wakeable } from "shared/ReactTypes";
-import { pingSuspendedRoot } from "./ReactFiberWorkLoop";
+import {
+  onUncaughtError,
+  renderDidSuspendDelayIfPossible,
+  pingSuspendedRoot,
+  isAlreadyFailedLegacyErrorBoundary,
+  markLegacyErrorBoundaryAsFailed,
+} from "./ReactFiberWorkLoop";
 
 // 对照官方 createClassErrorUpdate：payload/callback 复用现有消费链路——payload 走
 // processUpdateQueue 的浅合并语义（getDerivedStateFromError 返回值即 partial state），
-// callback 走 commitClassCallbacks（layout 子阶段统一执行），不需要为 componentDidCatch
+// callback 走 commitUpdateQueue（layout 子阶段统一执行），不需要为 componentDidCatch
 // 新增专门的 commit 分支。
 export function createClassErrorUpdate(
   boundaryFiber: FiberNode,
@@ -49,6 +56,9 @@ export function createClassErrorUpdate(
 
   if (instance !== null && typeof instance.componentDidCatch === "function") {
     update.callback = () => {
+      if (typeof Component.getDerivedStateFromError !== "function") {
+        markLegacyErrorBoundaryAsFailed(instance);
+      }
       instance.componentDidCatch(error, { componentStack: "" });
     };
   }
@@ -63,6 +73,7 @@ export function createRootErrorUpdate(error: any, lane: any): Update<any> {
   update.tag = CaptureUpdate;
   update.payload = { element: null };
   update.callback = () => {
+    onUncaughtError(error);
     console.error(error);
   };
   return update;
@@ -79,13 +90,13 @@ function isThenable(value: any): value is Wakeable {
 }
 
 // 对照官方 getNearestSuspenseBoundaryToCapture：沿 return 链向上找最近的 SuspenseComponent，
-// 且它自身还没有被标记 ShouldCapture（嵌套 Suspense 场景下，内层已经在处理就交给外层）。
+// 正在渲染 fallback 的边界不再捕获（React 18.3.1 shouldCaptureSuspense）。
 function getNearestSuspenseBoundaryToCapture(
   returnFiber: FiberNode | null,
 ): FiberNode | null {
   let node: FiberNode | null = returnFiber;
   while (node !== null) {
-    if (node.tag === SuspenseComponent && (node.flags & ShouldCapture) === 0) {
+    if (node.tag === SuspenseComponent && shouldCaptureSuspense(node)) {
       return node;
     }
     node = node.return;
@@ -118,14 +129,6 @@ function attachPingListener(
     const ping = () => pingSuspendedRoot(root, wakeable, lanes);
     wakeable.then(ping, ping);
   }
-}
-
-// 对照官方 SuspenseState（简化：去掉 dehydrated/treeContext，本项目不做 SSR 水合）。
-// retryLane 目前只是占位字段，不参与调度决策——Suspense fiber.memoizedState 是否为 null
-// 才是真正判断"当前展示 fallback 还是 primary"的依据（对照官方注释：用 state 对象是否
-// 存在表示是否挂起）。
-export interface SuspenseState {
-  retryLane: Lanes;
 }
 
 // 对照官方 attachRetryListener：把 wakeable 记到 Suspense 边界自身的 updateQueue（一个
@@ -175,6 +178,7 @@ export function throwException(
     }
     if (!includesSomeLane(renderLanes, SyncLane)) {
       attachPingListener(root, wakeable, renderLanes);
+      renderDidSuspendDelayIfPossible();
       return;
     }
     value = new Error(
@@ -197,10 +201,11 @@ export function throwException(
         const instance = workInProgress.stateNode;
         const ctor = workInProgress.type;
         const canCapture =
-          (workInProgress.flags & ShouldCapture) === 0 &&
+          (workInProgress.flags & DidCapture) === 0 &&
           (typeof ctor.getDerivedStateFromError === "function" ||
             (instance !== null &&
-              typeof instance.componentDidCatch === "function"));
+              typeof instance.componentDidCatch === "function" &&
+              !isAlreadyFailedLegacyErrorBoundary(instance)));
         if (canCapture) {
           const update = createClassErrorUpdate(workInProgress, value, lane);
           enqueueCapturedUpdate(workInProgress, update);

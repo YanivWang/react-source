@@ -1,0 +1,20 @@
+{
+  "packages/react-reconciler/src/ReactFiberCompleteWork.ts": {
+    "unchanged_since_92e6f0e": true
+  },
+  "packages/react-reconciler/src/ReactFiberConcurrentUpdates.ts": {
+    "unchanged_since_92e6f0e": true
+  },
+  "packages/react-reconciler/src/ReactFiberNewContext.ts": {
+    "unchanged_since_92e6f0e": true
+  },
+  "packages/react-reconciler/src/ReactChildFiber.ts": {
+    "unchanged_since_92e6f0e": true
+  },
+  "packages/scheduler/src/Scheduler.ts": {
+    "unchanged_since_92e6f0e": true
+  },
+  "packages/scheduler/src/forks/SchedulerHostConfig.default.ts": {
+    "unchanged_since_92e6f0e": true
+  }
+}

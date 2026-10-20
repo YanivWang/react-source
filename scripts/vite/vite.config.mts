@@ -11,7 +11,7 @@ export default defineConfig({
   root: path.resolve(rootDir, "fixtures"),
   plugins: [
     // 对照 rollup 侧 build.js 的 react-dom-hostconfig-fork 插件：reconciler 内部对
-    // HostConfig 用的是相对导入 ./ReactFiberConfig，vite 的 resolve.alias 只对裸导入
+    // HostConfig 用的是相对导入 ./ReactFiberHostConfig，vite 的 resolve.alias 只对裸导入
     // 生效、对相对导入不生效，所以必须用一个 resolveId 插件拦截（rollup 侧也是同样理由才
     // 没走 alias 而是自定义插件）。不拦截的话 pnpm dev 会直通 shim 文件、运行时报
     // "must be shimmed by a specific renderer"。
@@ -23,36 +23,13 @@ export default defineConfig({
           .resolve(rootDir, "packages/react-reconciler/src")
           .replace(/\\/g, "/");
         if (
-          source === "./ReactFiberConfig" &&
+          source === "./ReactFiberHostConfig" &&
           importer &&
           importer.replace(/\\/g, "/").startsWith(reconcilerSrcDir + "/")
         ) {
           return path.resolve(
             rootDir,
-            "packages/react-reconciler/src/forks/ReactFiberConfig.dom.ts",
-          );
-        }
-        return null;
-      },
-    },
-    // scheduler 内部对 HostConfig 用相对导入 ./SchedulerHostConfig（与 reconciler 的
-    // ReactFiberConfig 同理），vite alias 只对裸导入生效，故用 resolveId 插件拦截，
-    // 重定向到默认实现（MessageChannel + setTimeout fallback）。
-    {
-      name: "scheduler-hostconfig-fork",
-      enforce: "pre",
-      resolveId(source, importer) {
-        const schedulerSrcDir = path
-          .resolve(rootDir, "packages/scheduler/src")
-          .replace(/\\/g, "/");
-        if (
-          source === "./SchedulerHostConfig" &&
-          importer &&
-          importer.replace(/\\/g, "/").startsWith(schedulerSrcDir + "/")
-        ) {
-          return path.resolve(
-            rootDir,
-            "packages/scheduler/src/forks/SchedulerHostConfig.default.ts",
+            "packages/react-reconciler/src/forks/ReactFiberHostConfig.dom.ts",
           );
         }
         return null;
@@ -140,13 +117,10 @@ export default defineConfig({
         find: "react-dom/client",
         replacement: path.resolve(rootDir, "packages/react-dom/client.ts"),
       },
-      // react-dom-bindings 子路径（react-dom 用 react-dom-bindings/src/... 风格引用），映射到 ts 源码
+      // react-dom 子路径（react-dom 用 react-dom/src/... 风格引用），映射到 ts 源码
       {
-        find: /^react-dom-bindings\/src\/(.*)$/,
-        replacement: path.resolve(
-          rootDir,
-          "packages/react-dom-bindings/src/$1.ts",
-        ),
+        find: /^react-dom\/src\/(.*)$/,
+        replacement: path.resolve(rootDir, "packages/react-dom/src/$1.ts"),
       },
       {
         find: /^react-dom$/,

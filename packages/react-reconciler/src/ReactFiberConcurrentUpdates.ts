@@ -10,7 +10,13 @@
 
 import type { FiberNode } from "./ReactFiber";
 import type { FiberRootNode } from "./ReactFiberRoot";
-import { mergeLanes, NoLane, type Lane } from "./ReactFiberLane";
+import {
+  mergeLanes,
+  NoLane,
+  NoLanes,
+  type Lane,
+  type Lanes,
+} from "./ReactFiberLane";
 import { HostRoot } from "./ReactWorkTags";
 
 export interface ConcurrentUpdate {
@@ -26,6 +32,11 @@ interface ConcurrentQueue {
 // （官方写法：避免为每条 update 分配一个额外的小对象）
 const concurrentQueues: any[] = [];
 let concurrentQueuesIndex = 0;
+let concurrentlyUpdatedLanes: Lanes = NoLanes;
+
+export function getConcurrentlyUpdatedLanes(): Lanes {
+  return concurrentlyUpdatedLanes;
+}
 
 function enqueueUpdate(
   fiber: FiberNode,
@@ -37,6 +48,7 @@ function enqueueUpdate(
   concurrentQueues[concurrentQueuesIndex++] = queue;
   concurrentQueues[concurrentQueuesIndex++] = update;
   concurrentQueues[concurrentQueuesIndex++] = lane;
+  concurrentlyUpdatedLanes = mergeLanes(concurrentlyUpdatedLanes, lane);
 
   // fiber.lanes 在一些地方（beginWork 的提前 bailout 判断）需要立刻可见，不能等到
   // finishQueueingConcurrentUpdates 才更新；childLanes 的冒泡则可以延迟到那时再做。
@@ -78,6 +90,7 @@ function markUpdateLaneFromFiberToRoot(
 export function finishQueueingConcurrentUpdates(): void {
   const endIndex = concurrentQueuesIndex;
   concurrentQueuesIndex = 0;
+  concurrentlyUpdatedLanes = NoLanes;
 
   let i = 0;
   while (i < endIndex) {
@@ -170,3 +183,6 @@ function getRootForUpdatedFiber(sourceFiber: FiberNode): FiberRootNode | null {
   }
   return node.tag === HostRoot ? node.stateNode : null;
 }
+
+export const unsafe_markUpdateLaneFromFiberToRoot =
+  markUpdateLaneFromFiberToRoot;

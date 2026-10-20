@@ -17,7 +17,7 @@
   - `packages/scheduler` — 调度器（时间切片、优先级）
   - `packages/shared` — 跨包共享的工具函数、常量、类型
 
-> 上述包均已创建；核心行为以验证记录和当前实现为准。React 18.3.1 的 DOM 代码在官方 `packages/react-dom/src`；本仓库沿用 `react-dom-bindings` 目录名，不代表算法应对齐 React 19。
+> 官方对照仅使用 `/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react` 的 `codex/react-18.3.1` 分支（v18.3.1，f1338f8080）。DOM 与 HostConfig 已恢复同版本路径。最新修复验收见 [独立复审修复报告](docs/reviews/react18.3.1-independent-audit/repair-report.md)。
 
 ## 开发约定
 
@@ -46,9 +46,9 @@ monorepo 骨架、reconciler 主链路（同步 + 并发）、react-dom 简版�
 - 工具链：ESLint + Prettier（lint/格式化）、Husky + lint-staged + commitlint（提交检查）、Rollup（构建）、Vite（fixtures 源码调试）
 - `packages/shared`：跨包共享工具/常量/类型（objectIs、hasOwnProperty、ReactSymbols、ReactTypes 等）
 - `packages/react`：JSX 运行时（createElement/jsx/jsxDEV + jsx-runtime/jsx-dev-runtime 入口）、`Component`/`PureComponent` 基类（`ReactBaseClasses.ts`），构建产出 cjs（dev+prod）和 iife 三种格式
-- `packages/react-reconciler`：Fiber 主链路——Fiber 数据结构、更新队列、beginWork/completeWork、commit mutation、单/多节点 diff、Fragment、Fiber 树反射（`reflection.ts` 转出 `findCurrentHostFiber`）、**完整 Lane 模型 + 可中断 workLoop**（`ensureRootIsScheduled`/`workLoopConcurrent`/`flushSync`）、HostConfig 接口（**构建时 fork 注入**，对齐官方 forks.js）、**Hooks**（useState/useReducer/useRef/useMemo/useCallback/useEffect/useLayoutEffect/useTransition/useDeferredValue/useSyncExternalStore/useContext）、**Context API**（`ReactFiberStack.ts` 通用栈 + `ReactFiberNewContext.ts` 的 pushProvider/popProvider/readContext/propagateContextChange）、**Class 组件生命周期**（`ReactFiberClassComponent.ts` 的 constructClassInstance/mountClassInstance/updateClassInstance，commit 补 before-mutation 子阶段跑 getSnapshotBeforeUpdate）
-- `packages/react-dom`（简版）：`createRoot(container).render(element)` 渲染到真实 DOM（DefaultLane 并发异步提交）；HostConfig 由 build.js 的 fork 插件 / vite alias 把 `ReactFiberConfig` 替换为 `packages/react-dom-bindings` 的 `ReactDOMHostConfig`；npm 分发文件夹 + bundles.js 注册（cjs dev/prod）。简版边界：不含 hydrate / legacy render / shouldSetTextContent 优化；已包含常用合成事件和受控表单主链
-- `packages/scheduler`（对照官方完整结构）：`unstable_scheduleCallback`/`unstable_shouldYield` 等导出、taskQueue/timerQueue 双最小堆、MessageChannel 宏任务 + 5ms 时间片、`SchedulerHostConfig` 构建时 fork 注入
+- `packages/react-reconciler`：Fiber 主链路——Fiber 数据结构、更新队列、beginWork/completeWork、commit mutation、单/多节点 diff、Fragment、Fiber 树反射（`reflection.ts` 转出 `findCurrentHostFiber`）、**客户端 Lane 模型 + 可中断 workLoop**（`ensureRootIsScheduled`/`workLoopConcurrent`/`flushSync`）、HostConfig 接口（**构建时 fork 注入**，对齐官方 forks.js）、**Hooks**（useState/useReducer/useRef/useMemo/useCallback/useEffect/useLayoutEffect/useTransition/useDeferredValue/useSyncExternalStore/useContext）、**Context API**（`ReactFiberStack.ts` 通用栈 + `ReactFiberNewContext.ts` 的 pushProvider/popProvider/readContext/propagateContextChange）、**Class 组件生命周期**（`ReactFiberClassComponent.ts` 的 constructClassInstance/mountClassInstance/updateClassInstance，commit 补 before-mutation 子阶段跑 getSnapshotBeforeUpdate）
+- `packages/react-dom`（简版）：`createRoot(container).render(element)` 渲染到真实 DOM（DefaultLane 并发异步提交）；HostConfig 由 build.js 的 fork 插件 / vite alias 把 `ReactFiberHostConfig` 替换为 `packages/react-dom` 的 `ReactDOMHostConfig`；npm 分发文件夹 + bundles.js 注册（cjs dev/prod）。简版边界：不含 hydrate / legacy render；已包含常用合成事件和受控表单主链
+- `packages/scheduler`：`forks/Scheduler.ts` 的任务/延时双最小堆、callback 清空与 continuation、宿主循环和 5ms 时间片；宿主优先使用 setImmediate，其次复用 MessageChannel
 - 常用命令：`pnpm dev`（fixtures 调试）、`pnpm lint` / `pnpm lint:fix`、`pnpm format` / `pnpm format:check`、`pnpm build`、`pnpm typecheck`、`pnpm test`（官方 18.3.1 dev/prod 对比）
 
 `hooks` / `事件系统` / `context` / `class 生命周期` 已落地，按渲染链路推进顺序逐个搭建（当前从 Phase 9 其他核心 API + 性能优化继续）。详细进度见 [docs/roadmap.md](./docs/roadmap.md)；React 核心原理（分层架构、Fiber/Lane/Diff/Hooks 等知识点 + Mermaid 流程图）见 [docs/react-core.md](./docs/react-core.md)。

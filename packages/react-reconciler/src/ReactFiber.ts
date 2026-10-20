@@ -18,6 +18,7 @@ import {
   type TypeOfMode,
 } from "./ReactTypeOfMode";
 import {
+  ClassComponent,
   ContextConsumer,
   ContextProvider,
   ForwardRef,
@@ -239,11 +240,9 @@ export function createFiberFromTypeAndProps(
   let fiberTag: WorkTag = IndeterminateComponent;
 
   if (typeof type === "function") {
-    // 官方在这里就用 shouldConstruct(type) 区分 class/function 直接定出 ClassComponent/
-    // IndeterminateComponent 两种 tag；本项目统一先按不确定组件走，挂载时
-    // mountIndeterminateComponent 用同一个 shouldConstruct 判断再定成 ClassComponent/
-    // FunctionComponent——效果等价，只是判断时机延后到第一次 beginWork。
-    fiberTag = IndeterminateComponent;
+    fiberTag = type.prototype?.isReactComponent
+      ? ClassComponent
+      : IndeterminateComponent;
   } else if (typeof type === "string") {
     fiberTag = HostComponent;
   } else if (type === REACT_FRAGMENT_TYPE) {

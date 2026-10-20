@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "react": "workspace:*",
-    "react-dom-bindings": "workspace:*",
     "react-reconciler": "workspace:*",
     "scheduler": "workspace:*",
     "shared": "workspace:*"

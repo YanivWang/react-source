@@ -1,0 +1,4068 @@
+{
+  "baseline": "React 18.3.1",
+  "generatedAt": "2026-10-20T08:43:53.978Z",
+  "observations": [
+    {
+      "mode": "development",
+      "scenario": "basic-state",
+      "reference": {
+        "repo": "official",
+        "test": "basic-state",
+        "version": "18.3.1",
+        "initial": "0",
+        "updated": "1",
+        "expected": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "actual": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "basic-state",
+        "initial": "0",
+        "updated": "1",
+        "expected": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "actual": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "state-batch",
+      "reference": {
+        "repo": "official",
+        "test": "state-batch",
+        "version": "18.3.1",
+        "actual": "2",
+        "expected": "2",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "state-batch",
+        "actual": "2",
+        "expected": "2",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "props",
+      "reference": {
+        "repo": "official",
+        "test": "props",
+        "version": "18.3.1",
+        "initial": {
+          "class": "before",
+          "title": "old",
+          "disabled": false,
+          "color": "red"
+        },
+        "updated": {
+          "class": "after",
+          "title": "new",
+          "disabled": false,
+          "color": "blue"
+        },
+        "expected": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "actual": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "props",
+        "initial": {
+          "class": "before",
+          "title": "old",
+          "disabled": false,
+          "color": "red"
+        },
+        "updated": {
+          "class": "after",
+          "title": "new",
+          "disabled": false,
+          "color": "blue"
+        },
+        "expected": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "actual": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "effect-only",
+      "reference": {
+        "repo": "official",
+        "test": "effect-only",
+        "version": "18.3.1",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "effect-only",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "memo-effect",
+      "reference": {
+        "repo": "official",
+        "test": "memo-effect",
+        "version": "18.3.1",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-effect",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "memo-compare",
+      "reference": {
+        "repo": "official",
+        "test": "memo-compare",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "renders": 1
+        },
+        "expected": {
+          "text": "1",
+          "renders": 1
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-compare",
+        "actual": {
+          "text": "1",
+          "renders": 1
+        },
+        "expected": {
+          "text": "1",
+          "renders": 1
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "handler-update",
+      "reference": {
+        "repo": "official",
+        "test": "handler-update",
+        "version": "18.3.1",
+        "actual": ["new"],
+        "expected": ["new"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "handler-update",
+        "actual": ["new"],
+        "expected": ["new"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "context",
+      "reference": {
+        "repo": "official",
+        "test": "context",
+        "version": "18.3.1",
+        "initial": "first",
+        "updated": "second",
+        "expected": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "actual": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "context",
+        "initial": "first",
+        "updated": "second",
+        "expected": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "actual": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "render-phase",
+      "reference": {
+        "repo": "official",
+        "test": "render-phase",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "renders": 2
+        },
+        "expected": {
+          "text": "1",
+          "renders": 2
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "render-phase",
+        "actual": {
+          "text": "1",
+          "renders": 2
+        },
+        "expected": {
+          "text": "1",
+          "renders": 2
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "render-phase-ref",
+      "reference": {
+        "repo": "official",
+        "test": "render-phase-ref",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "render-phase-ref",
+        "actual": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "ref-update",
+      "reference": {
+        "repo": "official",
+        "test": "ref-update",
+        "version": "18.3.1",
+        "initial": {
+          "first": true,
+          "second": false
+        },
+        "actual": {
+          "first": false,
+          "second": true
+        },
+        "expected": {
+          "first": false,
+          "second": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "ref-update",
+        "initial": {
+          "first": true,
+          "second": false
+        },
+        "actual": {
+          "first": false,
+          "second": true
+        },
+        "expected": {
+          "first": false,
+          "second": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "suspense-update",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-update",
+        "version": "18.3.1",
+        "initial": "<span>ready</span>",
+        "after75ms": "<span>ready</span>",
+        "actual": "loading",
+        "expected": "loading",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-update",
+        "initial": "<span>ready</span>",
+        "after75ms": "<span style=\"display: none;\">ready</span><b>loading</b>",
+        "actual": "loading",
+        "expected": "loading",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "suspense-lazy-function",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-lazy-function",
+        "version": "18.3.1",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-lazy-function",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "siblings-state",
+      "reference": {
+        "repo": "official",
+        "test": "siblings-state",
+        "version": "18.3.1",
+        "actual": "A0B1",
+        "expected": "A0B1",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "siblings-state",
+        "actual": "A0B1",
+        "expected": "A0B1",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "suspense-lazy-class",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-lazy-class",
+        "version": "18.3.1",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-lazy-class",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "error-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "error-boundary",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Uncaught [Error: probe throw]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: probe throw",
+          "ERROR Error: Uncaught [Error: probe throw]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: probe throw",
+          "ERROR The above error occurred in the <Bad> component:\n\n    at Bad (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/probe.cjs:326:13)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/probe.cjs:315:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "error-boundary",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "effect-order",
+      "reference": {
+        "repo": "official",
+        "test": "effect-order",
+        "version": "18.3.1",
+        "actual": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "expected": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "effect-order",
+        "actual": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "expected": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "effect-tree-delete",
+      "reference": {
+        "repo": "official",
+        "test": "effect-tree-delete",
+        "version": "18.3.1",
+        "actual": ["child+", "parent+", "parent-:", "child-:"],
+        "expected": ["child+", "parent+", "parent-:", "child-:"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "effect-tree-delete",
+        "actual": ["child+", "parent+", "parent-:", "child-:"],
+        "expected": ["child+", "parent+", "parent-:", "child-:"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "render-phase-reducer",
+      "reference": {
+        "repo": "official",
+        "test": "render-phase-reducer",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "expected": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "render-phase-reducer",
+        "actual": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "expected": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "memo-context",
+      "reference": {
+        "repo": "official",
+        "test": "memo-context",
+        "version": "18.3.1",
+        "actual": "new",
+        "expected": "new",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-context",
+        "actual": "new",
+        "expected": "new",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "keyed-diff",
+      "reference": {
+        "repo": "official",
+        "test": "keyed-diff",
+        "version": "18.3.1",
+        "actual": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "expected": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "keyed-diff",
+        "actual": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "expected": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "event-order",
+      "reference": {
+        "repo": "official",
+        "test": "event-order",
+        "version": "18.3.1",
+        "actual": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "expected": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "event-order",
+        "actual": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "expected": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "disabled-events",
+      "reference": {
+        "repo": "official",
+        "test": "disabled-events",
+        "version": "18.3.1",
+        "actual": ["parent"],
+        "expected": ["parent"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "disabled-events",
+        "actual": ["parent"],
+        "expected": ["parent"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "controlled-input",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-input",
+        "version": "18.3.1",
+        "actual": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "expected": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-input",
+        "actual": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "expected": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "controlled-restore",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-restore",
+        "version": "18.3.1",
+        "actual": "fixed",
+        "expected": "fixed",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-restore",
+        "actual": "fixed",
+        "expected": "fixed",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "uncontrolled-input",
+      "reference": {
+        "repo": "official",
+        "test": "uncontrolled-input",
+        "version": "18.3.1",
+        "actual": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "expected": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "uncontrolled-input",
+        "actual": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "expected": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "controlled-checkbox",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-checkbox",
+        "version": "18.3.1",
+        "actual": {
+          "checked": true,
+          "calls": [true]
+        },
+        "expected": {
+          "checked": true,
+          "calls": [true]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-checkbox",
+        "actual": {
+          "checked": true,
+          "calls": [true]
+        },
+        "expected": {
+          "checked": true,
+          "calls": [true]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "controlled-select",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-select",
+        "version": "18.3.1",
+        "actual": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "expected": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-select",
+        "actual": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "expected": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "style-removal",
+      "reference": {
+        "repo": "official",
+        "test": "style-removal",
+        "version": "18.3.1",
+        "actual": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "expected": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "style-removal",
+        "actual": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "expected": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "forward-imperative-ref",
+      "reference": {
+        "repo": "official",
+        "test": "forward-imperative-ref",
+        "version": "18.3.1",
+        "actual": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "expected": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "forward-imperative-ref",
+        "actual": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "expected": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "didcatch-only",
+      "reference": {
+        "repo": "official",
+        "test": "didcatch-only",
+        "version": "18.3.1",
+        "actual": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "expected": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "messages": [
+          "ERROR Error: Uncaught [Error: bad]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: bad",
+          "ERROR Error: Uncaught [Error: bad]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: bad",
+          "ERROR The above error occurred in the <Bad> component:\n\n    at Bad (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:361:13)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:349:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "didcatch-only",
+        "actual": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "expected": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "layout-error-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "layout-error-boundary",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Uncaught [Error: layout]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at reportUncaughtErrorInDEV (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:22877:5)\n    at captureCommitPhaseError (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27165:5) Error: layout",
+          "ERROR The above error occurred in the <Bad> component:\n\n    at Bad (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:387:9)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:376:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "layout-error-boundary",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "hook-throw-recovery",
+      "reference": {
+        "repo": "official",
+        "test": "hook-throw-recovery",
+        "version": "18.3.1",
+        "actual": {
+          "text": "6",
+          "invalid": true
+        },
+        "expected": {
+          "text": "6",
+          "invalid": true
+        },
+        "messages": [
+          "ERROR Error: Uncaught [Error: render]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: render",
+          "ERROR Error: Uncaught [Error: render]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: render",
+          "ERROR The above error occurred in the <Bad> component:\n\n    at Bad (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:422:26)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:407:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "hook-throw-recovery",
+        "actual": {
+          "text": "6",
+          "invalid": true
+        },
+        "expected": {
+          "text": "6",
+          "invalid": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "external-store",
+      "reference": {
+        "repo": "official",
+        "test": "external-store",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "expected": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "external-store",
+        "actual": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "expected": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "transition-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "transition-rebase",
+        "version": "18.3.1",
+        "actual": "11:false",
+        "expected": "11:false",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "transition-rebase",
+        "actual": "11:false",
+        "expected": "11:false",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "async-batch",
+      "reference": {
+        "repo": "official",
+        "test": "async-batch",
+        "version": "18.3.1",
+        "actual": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "expected": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "async-batch",
+        "actual": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "expected": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "deferred-value",
+      "reference": {
+        "repo": "official",
+        "test": "deferred-value",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "expected": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "deferred-value",
+        "actual": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "expected": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "strict-mode",
+      "reference": {
+        "repo": "official",
+        "test": "strict-mode",
+        "version": "18.3.1",
+        "actual": {
+          "initial": {
+            "renders": 2,
+            "inits": 2,
+            "effects": ["+0", "-0", "+0"]
+          },
+          "text": "1",
+          "renders": 4,
+          "inits": 2,
+          "effects": ["+0", "-0", "+0", "-0", "+1"]
+        },
+        "expected": {
+          "initial": {
+            "renders": 2,
+            "inits": 2,
+            "effects": ["+0", "-0", "+0"]
+          },
+          "text": "1",
+          "renders": 4,
+          "inits": 2,
+          "effects": ["+0", "-0", "+0", "-0", "+1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "strict-mode",
+        "actual": {
+          "initial": {
+            "renders": 2,
+            "inits": 2,
+            "effects": ["+0", "-0", "+0"]
+          },
+          "text": "1",
+          "renders": 4,
+          "inits": 2,
+          "effects": ["+0", "-0", "+0", "-0", "+1"]
+        },
+        "expected": {
+          "initial": {
+            "renders": 2,
+            "inits": 2,
+            "effects": ["+0", "-0", "+0"]
+          },
+          "text": "1",
+          "renders": 4,
+          "inits": 2,
+          "effects": ["+0", "-0", "+0", "-0", "+1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "root-unmount",
+      "reference": {
+        "repo": "official",
+        "test": "root-unmount",
+        "version": "18.3.1",
+        "actual": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "expected": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "root-unmount",
+        "actual": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "expected": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "external-store-consistency",
+      "reference": {
+        "repo": "official",
+        "test": "external-store-consistency",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "external-store-consistency",
+        "actual": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "concurrent-context-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "concurrent-context-rebase",
+        "version": "18.3.1",
+        "actual": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "expected": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "concurrent-context-rebase",
+        "actual": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "expected": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "lazy-wrappers",
+      "reference": {
+        "repo": "official",
+        "test": "lazy-wrappers",
+        "version": "18.3.1",
+        "actual": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "expected": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "lazy-wrappers",
+        "actual": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "expected": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "scheduler-order",
+      "reference": {
+        "repo": "official",
+        "test": "scheduler-order",
+        "version": "18.3.1",
+        "actual": ["immediate", "normal1", "normal2", "low", "delay"],
+        "expected": ["immediate", "normal1", "normal2", "low", "delay"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "scheduler-order",
+        "actual": ["immediate", "normal1", "normal2", "low", "delay"],
+        "expected": ["immediate", "normal1", "normal2", "low", "delay"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "infinite-render-guard",
+      "reference": {
+        "repo": "official",
+        "test": "infinite-render-guard",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Uncaught [Error: Too many re-renders. React limits the number of renders to prevent an infinite loop.]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Too many re-renders. React limits the number of renders to prevent an infinite loop.",
+          "ERROR Error: Uncaught [Error: Too many re-renders. React limits the number of renders to prevent an infinite loop.]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Too many re-renders. React limits the number of renders to prevent an infinite loop.",
+          "ERROR The above error occurred in the <Bad> component:\n\n    at Bad (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:814:26)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:803:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "infinite-render-guard",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "transition-suspense",
+      "reference": {
+        "repo": "official",
+        "test": "transition-suspense",
+        "version": "18.3.1",
+        "actual": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "expected": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "transition-suspense",
+        "actual": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "expected": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "suspense-layout-reconnect",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-layout-reconnect",
+        "version": "18.3.1",
+        "actual": ["mount", "cleanup", "mount", "cleanup"],
+        "expected": ["mount", "cleanup", "mount", "cleanup"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-layout-reconnect",
+        "actual": ["mount", "cleanup", "mount", "cleanup"],
+        "expected": ["mount", "cleanup", "mount", "cleanup"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "lazy-without-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "lazy-without-boundary",
+        "version": "18.3.1",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "lazy-without-boundary",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "error-boundary-update",
+      "reference": {
+        "repo": "official",
+        "test": "error-boundary-update",
+        "version": "18.3.1",
+        "actual": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "messages": [
+          "ERROR Error: Uncaught [Error: updated]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: updated",
+          "ERROR Error: Uncaught [Error: updated]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: updated",
+          "ERROR The above error occurred in the <Child> component:\n\n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:939:24)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:925:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "error-boundary-update",
+        "actual": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "passive-error-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "passive-error-boundary",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Uncaught [Error: passive]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at reportUncaughtErrorInDEV (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:22877:5)\n    at captureCommitPhaseError (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27165:5) Error: passive",
+          "ERROR The above error occurred in the <Child> component:\n\n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:970:9)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:959:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "passive-error-boundary",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "deleted-tree-error",
+      "reference": {
+        "repo": "official",
+        "test": "deleted-tree-error",
+        "version": "18.3.1",
+        "actual": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "messages": [
+          "ERROR Error: Uncaught [Error: cleanup]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at reportUncaughtErrorInDEV (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:22877:5)\n    at captureCommitPhaseError (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27165:5) Error: cleanup",
+          "ERROR The above error occurred in the <Child> component:\n\n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:997:9)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:983:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "deleted-tree-error",
+        "actual": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "class-lifecycle",
+      "reference": {
+        "repo": "official",
+        "test": "class-lifecycle",
+        "version": "18.3.1",
+        "actual": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "expected": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "class-lifecycle",
+        "actual": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "expected": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "class-transition-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "class-transition-rebase",
+        "version": "18.3.1",
+        "actual": "11",
+        "expected": "11",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "class-transition-rebase",
+        "actual": "11",
+        "expected": "11",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "pure-component",
+      "reference": {
+        "repo": "official",
+        "test": "pure-component",
+        "version": "18.3.1",
+        "actual": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "expected": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "pure-component",
+        "actual": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "expected": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "hook-order-error",
+      "reference": {
+        "repo": "official",
+        "test": "hook-order-error",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Uncaught [Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.",
+          "ERROR Error: Uncaught [Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at beginWork$1 (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27490:7)\n    at performUnitOfWork (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:26599:12) Error: Rendered fewer hooks than expected. This may be caused by an accidental early return statement.",
+          "ERROR The above error occurred in the <Child> component:\n\n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:1140:22)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:1130:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "hook-order-error",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "memo-callback-closure",
+      "reference": {
+        "repo": "official",
+        "test": "memo-callback-closure",
+        "version": "18.3.1",
+        "actual": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "expected": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-callback-closure",
+        "actual": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "expected": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "same-value-bailout",
+      "reference": {
+        "repo": "official",
+        "test": "same-value-bailout",
+        "version": "18.3.1",
+        "actual": 1,
+        "expected": 1,
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "same-value-bailout",
+        "actual": 1,
+        "expected": 1,
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "promise-batch-flushsync",
+      "reference": {
+        "repo": "official",
+        "test": "promise-batch-flushsync",
+        "version": "18.3.1",
+        "actual": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "expected": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "promise-batch-flushsync",
+        "actual": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "expected": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "controlled-select-options",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-select-options",
+        "version": "18.3.1",
+        "actual": {
+          "before": "a",
+          "after": "b"
+        },
+        "expected": {
+          "before": "a",
+          "after": "b"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-select-options",
+        "actual": {
+          "before": "a",
+          "after": "b"
+        },
+        "expected": {
+          "before": "a",
+          "after": "b"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "select-default-reset",
+      "reference": {
+        "repo": "official",
+        "test": "select-default-reset",
+        "version": "18.3.1",
+        "actual": "b",
+        "expected": "b",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "select-default-reset",
+        "actual": "b",
+        "expected": "b",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "controlled-radio-restore",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-radio-restore",
+        "version": "18.3.1",
+        "actual": [true, false],
+        "expected": [true, false],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-radio-restore",
+        "actual": [true, false],
+        "expected": [true, false],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "strict-class",
+      "reference": {
+        "repo": "official",
+        "test": "strict-class",
+        "version": "18.3.1",
+        "actual": {
+          "constructs": 2,
+          "renders": 2,
+          "calls": ["mount", "unmount", "mount", "unmount"]
+        },
+        "expected": {
+          "constructs": 2,
+          "renders": 2,
+          "calls": ["mount", "unmount", "mount", "unmount"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "strict-class",
+        "actual": {
+          "constructs": 2,
+          "renders": 2,
+          "calls": ["mount", "unmount", "mount", "unmount"]
+        },
+        "expected": {
+          "constructs": 2,
+          "renders": 2,
+          "calls": ["mount", "unmount", "mount", "unmount"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "use-id",
+      "reference": {
+        "repo": "official",
+        "test": "use-id",
+        "version": "18.3.1",
+        "actual": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "expected": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "use-id",
+        "actual": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "expected": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "sync-effect-timing",
+      "reference": {
+        "repo": "official",
+        "test": "sync-effect-timing",
+        "version": "18.3.1",
+        "actual": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "expected": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "sync-effect-timing",
+        "actual": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "expected": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "sync-suspense-error",
+      "reference": {
+        "repo": "official",
+        "test": "sync-suspense-error",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR The above error occurred in the <Child> component:\n\n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:1404:24)\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:1393:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "sync-suspense-error",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "ref-cleanup-error",
+      "reference": {
+        "repo": "official",
+        "test": "ref-cleanup-error",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Uncaught [Error: detach]\n    at reportException (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/helpers/runtime-script-errors.js:66:24)\n    at innerInvokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:353:9)\n    at invokeEventListeners (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:286:3)\n    at HTMLUnknownElementImpl._dispatch (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:233:9)\n    at HTMLUnknownElementImpl.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/events/EventTarget-impl.js:104:17)\n    at HTMLUnknownElement.dispatchEvent (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/jsdom@20.0.3/node_modules/jsdom/lib/jsdom/living/generated/EventTarget.js:241:34)\n    at Object.invokeGuardedCallbackDev (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4213:16)\n    at invokeGuardedCallback (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:4277:31)\n    at reportUncaughtErrorInDEV (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:22877:5)\n    at captureCommitPhaseError (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js:27165:5) Error: detach",
+          "ERROR The above error occurred in the <b> component:\n\n    at b\n    at Boundary (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/scenarios.cjs:1417:9)\n\nReact will try to recreate this component tree from scratch using the error boundary you provided, Boundary."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "ref-cleanup-error",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "cancelled-state-effect",
+      "reference": {
+        "repo": "official",
+        "test": "cancelled-state-effect",
+        "version": "18.3.1",
+        "actual": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "expected": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "cancelled-state-effect",
+        "actual": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "expected": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "derived-state-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "derived-state-rebase",
+        "version": "18.3.1",
+        "actual": "11:x",
+        "expected": "11:x",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "derived-state-rebase",
+        "actual": "11:x",
+        "expected": "11:x",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "basic-state",
+      "reference": {
+        "repo": "official",
+        "test": "basic-state",
+        "version": "18.3.1",
+        "initial": "0",
+        "updated": "1",
+        "expected": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "actual": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "basic-state",
+        "initial": "0",
+        "updated": "1",
+        "expected": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "actual": {
+          "initial": "0",
+          "updated": "1"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "state-batch",
+      "reference": {
+        "repo": "official",
+        "test": "state-batch",
+        "version": "18.3.1",
+        "actual": "2",
+        "expected": "2",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "state-batch",
+        "actual": "2",
+        "expected": "2",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "props",
+      "reference": {
+        "repo": "official",
+        "test": "props",
+        "version": "18.3.1",
+        "initial": {
+          "class": "before",
+          "title": "old",
+          "disabled": false,
+          "color": "red"
+        },
+        "updated": {
+          "class": "after",
+          "title": "new",
+          "disabled": false,
+          "color": "blue"
+        },
+        "expected": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "actual": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "props",
+        "initial": {
+          "class": "before",
+          "title": "old",
+          "disabled": false,
+          "color": "red"
+        },
+        "updated": {
+          "class": "after",
+          "title": "new",
+          "disabled": false,
+          "color": "blue"
+        },
+        "expected": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "actual": {
+          "initial": {
+            "class": "before",
+            "title": "old",
+            "disabled": false,
+            "color": "red"
+          },
+          "updated": {
+            "class": "after",
+            "title": "new",
+            "disabled": false,
+            "color": "blue"
+          }
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "effect-only",
+      "reference": {
+        "repo": "official",
+        "test": "effect-only",
+        "version": "18.3.1",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "effect-only",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "memo-effect",
+      "reference": {
+        "repo": "official",
+        "test": "memo-effect",
+        "version": "18.3.1",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-effect",
+        "afterMount": ["mount"],
+        "afterUnmount": ["mount", "cleanup"],
+        "expected": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "actual": {
+          "afterMount": ["mount"],
+          "afterUnmount": ["mount", "cleanup"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "memo-compare",
+      "reference": {
+        "repo": "official",
+        "test": "memo-compare",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "renders": 1
+        },
+        "expected": {
+          "text": "1",
+          "renders": 1
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-compare",
+        "actual": {
+          "text": "1",
+          "renders": 1
+        },
+        "expected": {
+          "text": "1",
+          "renders": 1
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "handler-update",
+      "reference": {
+        "repo": "official",
+        "test": "handler-update",
+        "version": "18.3.1",
+        "actual": ["new"],
+        "expected": ["new"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "handler-update",
+        "actual": ["new"],
+        "expected": ["new"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "context",
+      "reference": {
+        "repo": "official",
+        "test": "context",
+        "version": "18.3.1",
+        "initial": "first",
+        "updated": "second",
+        "expected": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "actual": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "context",
+        "initial": "first",
+        "updated": "second",
+        "expected": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "actual": {
+          "initial": "first",
+          "updated": "second"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "render-phase",
+      "reference": {
+        "repo": "official",
+        "test": "render-phase",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "renders": 2
+        },
+        "expected": {
+          "text": "1",
+          "renders": 2
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "render-phase",
+        "actual": {
+          "text": "1",
+          "renders": 2
+        },
+        "expected": {
+          "text": "1",
+          "renders": 2
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "render-phase-ref",
+      "reference": {
+        "repo": "official",
+        "test": "render-phase-ref",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "render-phase-ref",
+        "actual": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "mounted": ["1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "ref-update",
+      "reference": {
+        "repo": "official",
+        "test": "ref-update",
+        "version": "18.3.1",
+        "initial": {
+          "first": true,
+          "second": false
+        },
+        "actual": {
+          "first": false,
+          "second": true
+        },
+        "expected": {
+          "first": false,
+          "second": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "ref-update",
+        "initial": {
+          "first": true,
+          "second": false
+        },
+        "actual": {
+          "first": false,
+          "second": true
+        },
+        "expected": {
+          "first": false,
+          "second": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "suspense-update",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-update",
+        "version": "18.3.1",
+        "initial": "<span>ready</span>",
+        "after75ms": "<span>ready</span>",
+        "actual": "loading",
+        "expected": "loading",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-update",
+        "initial": "<span>ready</span>",
+        "after75ms": "<span style=\"display: none;\">ready</span><b>loading</b>",
+        "actual": "loading",
+        "expected": "loading",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "suspense-lazy-function",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-lazy-function",
+        "version": "18.3.1",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-lazy-function",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "siblings-state",
+      "reference": {
+        "repo": "official",
+        "test": "siblings-state",
+        "version": "18.3.1",
+        "actual": "A0B1",
+        "expected": "A0B1",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "siblings-state",
+        "actual": "A0B1",
+        "expected": "A0B1",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "suspense-lazy-class",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-lazy-class",
+        "version": "18.3.1",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-lazy-class",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "error-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "error-boundary",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": ["ERROR Error: probe throw"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "error-boundary",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "effect-order",
+      "reference": {
+        "repo": "official",
+        "test": "effect-order",
+        "version": "18.3.1",
+        "actual": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "expected": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "effect-order",
+        "actual": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "expected": [
+          "i0",
+          "l0",
+          "p0",
+          "-i0",
+          "i1",
+          "-l0",
+          "l1",
+          "-p0",
+          "p1",
+          "-i1",
+          "-l1",
+          "-p1"
+        ],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "effect-tree-delete",
+      "reference": {
+        "repo": "official",
+        "test": "effect-tree-delete",
+        "version": "18.3.1",
+        "actual": ["child+", "parent+", "parent-:", "child-:"],
+        "expected": ["child+", "parent+", "parent-:", "child-:"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "effect-tree-delete",
+        "actual": ["child+", "parent+", "parent-:", "child-:"],
+        "expected": ["child+", "parent+", "parent-:", "child-:"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "render-phase-reducer",
+      "reference": {
+        "repo": "official",
+        "test": "render-phase-reducer",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "expected": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "render-phase-reducer",
+        "actual": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "expected": {
+          "text": "1:2",
+          "attached": ["1:2"],
+          "effects": ["1:2"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "memo-context",
+      "reference": {
+        "repo": "official",
+        "test": "memo-context",
+        "version": "18.3.1",
+        "actual": "new",
+        "expected": "new",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-context",
+        "actual": "new",
+        "expected": "new",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "keyed-diff",
+      "reference": {
+        "repo": "official",
+        "test": "keyed-diff",
+        "version": "18.3.1",
+        "actual": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "expected": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "keyed-diff",
+        "actual": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "expected": {
+          "text": "CAD",
+          "reusedC": true,
+          "reusedA": true,
+          "removedB": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "event-order",
+      "reference": {
+        "repo": "official",
+        "test": "event-order",
+        "version": "18.3.1",
+        "actual": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "expected": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "event-order",
+        "actual": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "expected": [
+          "parent capture",
+          "child capture",
+          "child bubble",
+          "parent bubble",
+          "parent capture",
+          "child capture",
+          "child bubble"
+        ],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "disabled-events",
+      "reference": {
+        "repo": "official",
+        "test": "disabled-events",
+        "version": "18.3.1",
+        "actual": ["parent"],
+        "expected": ["parent"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "disabled-events",
+        "actual": ["parent"],
+        "expected": ["parent"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "controlled-input",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-input",
+        "version": "18.3.1",
+        "actual": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "expected": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-input",
+        "actual": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "expected": {
+          "value": "B",
+          "calls": ["b"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "controlled-restore",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-restore",
+        "version": "18.3.1",
+        "actual": "fixed",
+        "expected": "fixed",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-restore",
+        "actual": "fixed",
+        "expected": "fixed",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "uncontrolled-input",
+      "reference": {
+        "repo": "official",
+        "test": "uncontrolled-input",
+        "version": "18.3.1",
+        "actual": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "expected": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "uncontrolled-input",
+        "actual": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "expected": {
+          "value": "edited",
+          "defaultValue": "next"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "controlled-checkbox",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-checkbox",
+        "version": "18.3.1",
+        "actual": {
+          "checked": true,
+          "calls": [true]
+        },
+        "expected": {
+          "checked": true,
+          "calls": [true]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-checkbox",
+        "actual": {
+          "checked": true,
+          "calls": [true]
+        },
+        "expected": {
+          "checked": true,
+          "calls": [true]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "controlled-select",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-select",
+        "version": "18.3.1",
+        "actual": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "expected": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-select",
+        "actual": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "expected": {
+          "initial": "b",
+          "value": "a",
+          "calls": ["a"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "style-removal",
+      "reference": {
+        "repo": "official",
+        "test": "style-removal",
+        "version": "18.3.1",
+        "actual": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "expected": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "style-removal",
+        "actual": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "expected": {
+          "width": "0px",
+          "lineHeight": "",
+          "color": "",
+          "opacity": "0.5",
+          "accent": "green"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "forward-imperative-ref",
+      "reference": {
+        "repo": "official",
+        "test": "forward-imperative-ref",
+        "version": "18.3.1",
+        "actual": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "expected": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "forward-imperative-ref",
+        "actual": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "expected": {
+          "first": 1,
+          "updated": 2,
+          "cleared": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "didcatch-only",
+      "reference": {
+        "repo": "official",
+        "test": "didcatch-only",
+        "version": "18.3.1",
+        "actual": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "expected": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "messages": ["ERROR Error: bad"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "didcatch-only",
+        "actual": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "expected": {
+          "text": "caught",
+          "calls": ["bad"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "layout-error-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "layout-error-boundary",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": ["ERROR Error: layout"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "layout-error-boundary",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "hook-throw-recovery",
+      "reference": {
+        "repo": "official",
+        "test": "hook-throw-recovery",
+        "version": "18.3.1",
+        "actual": {
+          "text": "6",
+          "invalid": true
+        },
+        "expected": {
+          "text": "6",
+          "invalid": true
+        },
+        "messages": ["ERROR Error: render"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "hook-throw-recovery",
+        "actual": {
+          "text": "6",
+          "invalid": true
+        },
+        "expected": {
+          "text": "6",
+          "invalid": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "external-store",
+      "reference": {
+        "repo": "official",
+        "test": "external-store",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "expected": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "external-store",
+        "actual": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "expected": {
+          "text": "1",
+          "subscribed": 1,
+          "unsubscribed": 1
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "transition-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "transition-rebase",
+        "version": "18.3.1",
+        "actual": "11:false",
+        "expected": "11:false",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "transition-rebase",
+        "actual": "11:false",
+        "expected": "11:false",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "async-batch",
+      "reference": {
+        "repo": "official",
+        "test": "async-batch",
+        "version": "18.3.1",
+        "actual": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "expected": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "async-batch",
+        "actual": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "expected": {
+          "text": "2",
+          "commits": [0, 2]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "deferred-value",
+      "reference": {
+        "repo": "official",
+        "test": "deferred-value",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "expected": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "deferred-value",
+        "actual": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "expected": {
+          "text": "1:1",
+          "commits": ["0:0", "1:0", "1:1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "strict-mode",
+      "reference": {
+        "repo": "official",
+        "test": "strict-mode",
+        "version": "18.3.1",
+        "actual": {
+          "initial": {
+            "renders": 1,
+            "inits": 1,
+            "effects": ["+0"]
+          },
+          "text": "1",
+          "renders": 2,
+          "inits": 1,
+          "effects": ["+0", "-0", "+1"]
+        },
+        "expected": {
+          "initial": {
+            "renders": 1,
+            "inits": 1,
+            "effects": ["+0"]
+          },
+          "text": "1",
+          "renders": 2,
+          "inits": 1,
+          "effects": ["+0", "-0", "+1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "strict-mode",
+        "actual": {
+          "initial": {
+            "renders": 1,
+            "inits": 1,
+            "effects": ["+0"]
+          },
+          "text": "1",
+          "renders": 2,
+          "inits": 1,
+          "effects": ["+0", "-0", "+1"]
+        },
+        "expected": {
+          "initial": {
+            "renders": 1,
+            "inits": 1,
+            "effects": ["+0"]
+          },
+          "text": "1",
+          "renders": 2,
+          "inits": 1,
+          "effects": ["+0", "-0", "+1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "root-unmount",
+      "reference": {
+        "repo": "official",
+        "test": "root-unmount",
+        "version": "18.3.1",
+        "actual": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "expected": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "root-unmount",
+        "actual": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "expected": {
+          "syncEmpty": true,
+          "calls": ["mount", "cleanup"],
+          "cleared": true,
+          "rejected": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "external-store-consistency",
+      "reference": {
+        "repo": "official",
+        "test": "external-store-consistency",
+        "version": "18.3.1",
+        "actual": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "external-store-consistency",
+        "actual": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "expected": {
+          "text": "1",
+          "attached": ["1"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "concurrent-context-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "concurrent-context-rebase",
+        "version": "18.3.1",
+        "actual": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "expected": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "concurrent-context-rebase",
+        "actual": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "expected": {
+          "text": "11:1",
+          "outside": "default"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "lazy-wrappers",
+      "reference": {
+        "repo": "official",
+        "test": "lazy-wrappers",
+        "version": "18.3.1",
+        "actual": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "expected": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "lazy-wrappers",
+        "actual": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "expected": {
+          "text": "memoforward",
+          "ref": "forward"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "scheduler-order",
+      "reference": {
+        "repo": "official",
+        "test": "scheduler-order",
+        "version": "18.3.1",
+        "actual": ["immediate", "normal1", "normal2", "low", "delay"],
+        "expected": ["immediate", "normal1", "normal2", "low", "delay"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "scheduler-order",
+        "actual": ["immediate", "normal1", "normal2", "low", "delay"],
+        "expected": ["immediate", "normal1", "normal2", "low", "delay"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "infinite-render-guard",
+      "reference": {
+        "repo": "official",
+        "test": "infinite-render-guard",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Minified React error #301; visit https://reactjs.org/docs/error-decoder.html?invariant=301 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "infinite-render-guard",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "transition-suspense",
+      "reference": {
+        "repo": "official",
+        "test": "transition-suspense",
+        "version": "18.3.1",
+        "actual": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "expected": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "transition-suspense",
+        "actual": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "expected": {
+          "during": "trueready0",
+          "after": "falseready1"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "suspense-layout-reconnect",
+      "reference": {
+        "repo": "official",
+        "test": "suspense-layout-reconnect",
+        "version": "18.3.1",
+        "actual": ["mount", "cleanup", "mount", "cleanup"],
+        "expected": ["mount", "cleanup", "mount", "cleanup"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "suspense-layout-reconnect",
+        "actual": ["mount", "cleanup", "mount", "cleanup"],
+        "expected": ["mount", "cleanup", "mount", "cleanup"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "lazy-without-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "lazy-without-boundary",
+        "version": "18.3.1",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "lazy-without-boundary",
+        "actual": "resolved",
+        "expected": "resolved",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "error-boundary-update",
+      "reference": {
+        "repo": "official",
+        "test": "error-boundary-update",
+        "version": "18.3.1",
+        "actual": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "messages": ["ERROR Error: updated"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "error-boundary-update",
+        "actual": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["updated"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "passive-error-boundary",
+      "reference": {
+        "repo": "official",
+        "test": "passive-error-boundary",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": ["ERROR Error: passive"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "passive-error-boundary",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "deleted-tree-error",
+      "reference": {
+        "repo": "official",
+        "test": "deleted-tree-error",
+        "version": "18.3.1",
+        "actual": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "messages": ["ERROR Error: cleanup"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "deleted-tree-error",
+        "actual": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "expected": {
+          "text": "caught",
+          "catches": ["outer:cleanup"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "class-lifecycle",
+      "reference": {
+        "repo": "official",
+        "test": "class-lifecycle",
+        "version": "18.3.1",
+        "actual": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "expected": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "class-lifecycle",
+        "actual": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "expected": [
+          "mount:0",
+          "snapshot:0",
+          "update:2:0:0",
+          "callback:2",
+          "unmount:2"
+        ],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "class-transition-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "class-transition-rebase",
+        "version": "18.3.1",
+        "actual": "11",
+        "expected": "11",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "class-transition-rebase",
+        "actual": "11",
+        "expected": "11",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "pure-component",
+      "reference": {
+        "repo": "official",
+        "test": "pure-component",
+        "version": "18.3.1",
+        "actual": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "expected": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "pure-component",
+        "actual": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "expected": {
+          "unchanged": 1,
+          "renders": 2,
+          "text": "1"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "hook-order-error",
+      "reference": {
+        "repo": "official",
+        "test": "hook-order-error",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Minified React error #300; visit https://reactjs.org/docs/error-decoder.html?invariant=300 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "hook-order-error",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "memo-callback-closure",
+      "reference": {
+        "repo": "official",
+        "test": "memo-callback-closure",
+        "version": "18.3.1",
+        "actual": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "expected": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "memo-callback-closure",
+        "actual": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "expected": {
+          "text": "4",
+          "builds": 2,
+          "calls": [1],
+          "identities": [true, true, true]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "same-value-bailout",
+      "reference": {
+        "repo": "official",
+        "test": "same-value-bailout",
+        "version": "18.3.1",
+        "actual": 1,
+        "expected": 1,
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "same-value-bailout",
+        "actual": 1,
+        "expected": 1,
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "promise-batch-flushsync",
+      "reference": {
+        "repo": "official",
+        "test": "promise-batch-flushsync",
+        "version": "18.3.1",
+        "actual": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "expected": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "promise-batch-flushsync",
+        "actual": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "expected": {
+          "commits": [0, 2, 3],
+          "syncText": "3"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "controlled-select-options",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-select-options",
+        "version": "18.3.1",
+        "actual": {
+          "before": "a",
+          "after": "b"
+        },
+        "expected": {
+          "before": "a",
+          "after": "b"
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-select-options",
+        "actual": {
+          "before": "a",
+          "after": "b"
+        },
+        "expected": {
+          "before": "a",
+          "after": "b"
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "select-default-reset",
+      "reference": {
+        "repo": "official",
+        "test": "select-default-reset",
+        "version": "18.3.1",
+        "actual": "b",
+        "expected": "b",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "select-default-reset",
+        "actual": "b",
+        "expected": "b",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "controlled-radio-restore",
+      "reference": {
+        "repo": "official",
+        "test": "controlled-radio-restore",
+        "version": "18.3.1",
+        "actual": [true, false],
+        "expected": [true, false],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "controlled-radio-restore",
+        "actual": [true, false],
+        "expected": [true, false],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "strict-class",
+      "reference": {
+        "repo": "official",
+        "test": "strict-class",
+        "version": "18.3.1",
+        "actual": {
+          "constructs": 1,
+          "renders": 1,
+          "calls": ["mount", "unmount"]
+        },
+        "expected": {
+          "constructs": 1,
+          "renders": 1,
+          "calls": ["mount", "unmount"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "strict-class",
+        "actual": {
+          "constructs": 1,
+          "renders": 1,
+          "calls": ["mount", "unmount"]
+        },
+        "expected": {
+          "constructs": 1,
+          "renders": 1,
+          "calls": ["mount", "unmount"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "use-id",
+      "reference": {
+        "repo": "official",
+        "test": "use-id",
+        "version": "18.3.1",
+        "actual": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "expected": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "use-id",
+        "actual": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "expected": {
+          "stable": true,
+          "distinct": true,
+          "nonempty": true
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "sync-effect-timing",
+      "reference": {
+        "repo": "official",
+        "test": "sync-effect-timing",
+        "version": "18.3.1",
+        "actual": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "expected": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "sync-effect-timing",
+        "actual": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "expected": ["effect:0", "cleanup:0", "effect:1", "flush returned"],
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "sync-suspense-error",
+      "reference": {
+        "repo": "official",
+        "test": "sync-suspense-error",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": [
+          "ERROR Error: Minified React error #426; visit https://reactjs.org/docs/error-decoder.html?invariant=426 for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+        ]
+      },
+      "local": {
+        "repo": "local",
+        "test": "sync-suspense-error",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "ref-cleanup-error",
+      "reference": {
+        "repo": "official",
+        "test": "ref-cleanup-error",
+        "version": "18.3.1",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": ["ERROR Error: detach"]
+      },
+      "local": {
+        "repo": "local",
+        "test": "ref-cleanup-error",
+        "actual": "caught",
+        "expected": "caught",
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "cancelled-state-effect",
+      "reference": {
+        "repo": "official",
+        "test": "cancelled-state-effect",
+        "version": "18.3.1",
+        "actual": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "expected": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "cancelled-state-effect",
+        "actual": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "expected": {
+          "text": "0",
+          "calls": ["layout:0", "passive:0"]
+        },
+        "messages": []
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "derived-state-rebase",
+      "reference": {
+        "repo": "official",
+        "test": "derived-state-rebase",
+        "version": "18.3.1",
+        "actual": "11:x",
+        "expected": "11:x",
+        "messages": []
+      },
+      "local": {
+        "repo": "local",
+        "test": "derived-state-rebase",
+        "actual": "11:x",
+        "expected": "11:x",
+        "messages": []
+      }
+    }
+  ]
+}

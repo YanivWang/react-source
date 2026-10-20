@@ -1,0 +1,140 @@
+diff --git a/packages/react-reconciler/src/ReactFiberBeginWork.ts b/packages/react-reconciler/src/ReactFiberBeginWork.ts
+index 53c3afb..f6f8d06 100644
+--- a/packages/react-reconciler/src/ReactFiberBeginWork.ts
++++ b/packages/react-reconciler/src/ReactFiberBeginWork.ts
+@@ -1,3 +1,4 @@
++import { REACT_FORWARD_REF_TYPE, REACT_MEMO_TYPE } from "shared/ReactSymbols";
+ /**
+  * @file beginWork（Fiber 树构建 - 向下递阶段）
+  * @description 对每个 Fiber 执行"递"阶段：根据 tag 分发，计算新 props/state，reconcile 出子 fiber
+@@ -34,6 +35,7 @@ import {
+   DidCapture,
+   NoFlags,
+   PerformedWork,
++  Placement,
+   Ref,
+ } from "./ReactFiberFlags";
+ import {
+@@ -42,7 +44,8 @@ import {
+   mergeLanes,
+   type Lanes,
+ } from "./ReactFiberLane";
+-import { renderWithHooks } from "./ReactFiberHooks";
++import { StrictLegacyMode } from "./ReactTypeOfMode";
++import { renderWithHooks, bailoutHooks } from "./ReactFiberHooks";
+ import {
+   prepareToReadContext,
+   propagateContextChange,
+@@ -186,7 +189,8 @@ function finishClassComponent(
+   // ref 即使 shouldComponentUpdate 拦下了本次渲染也要更新（官方注释同此）
+   markRef(current, workInProgress);
+ 
+-  if (!shouldUpdate) {
++  const didCapture = (workInProgress.flags & DidCapture) !== NoFlags;
++  if (!shouldUpdate && !didCapture) {
+     return bailoutOnAlreadyFinishedWork(
+       current as FiberNode,
+       workInProgress,
+@@ -195,10 +199,24 @@ function finishClassComponent(
+   }
+ 
+   const instance = workInProgress.stateNode;
+-  const nextChildren = instance.render();
++  if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0 && !didCapture)
++    instance.render();
++  const nextChildren =
++    didCapture && typeof _Component.getDerivedStateFromError !== "function"
++      ? null
++      : instance.render();
+ 
+   workInProgress.flags |= PerformedWork;
+-  reconcileChildren(current, workInProgress, nextChildren, renderLanes);
++  if (current !== null && didCapture) {
++    // 错误恢复不能复用已出错的子树，即使 fallback 的 type/key 相同。
++    reconcileChildren(current, workInProgress, null, renderLanes);
++    workInProgress.child = reconcileChildFibers(
++      workInProgress,
++      null,
++      nextChildren,
++      renderLanes,
++    );
++  } else reconcileChildren(current, workInProgress, nextChildren, renderLanes);
+   return workInProgress.child;
+ }
+ 
+@@ -213,6 +231,17 @@ function updateClassComponent(
+   nextProps: any,
+   renderLanes: Lanes,
+ ): FiberNode | null {
++  if (workInProgress.stateNode === null) {
++    constructClassInstance(workInProgress, Component, nextProps);
++    mountClassInstance(workInProgress, Component, nextProps);
++    return finishClassComponent(
++      current,
++      workInProgress,
++      Component,
++      true,
++      renderLanes,
++    );
++  }
+   const shouldUpdate =
+     current === null
+       ? resumeMountClassInstance(
+@@ -255,6 +284,7 @@ function updateFunctionComponent(
+   );
+ 
+   if (current !== null && !didReceiveUpdate) {
++    bailoutHooks(current, workInProgress, renderLanes);
+     // 没有新的 props/state，children 不变，bailout
+     return bailoutOnAlreadyFinishedWork(current, workInProgress, renderLanes);
+   }
+@@ -288,6 +318,7 @@ function updateForwardRef(
+   );
+ 
+   if (current !== null && !didReceiveUpdate) {
++    bailoutHooks(current, workInProgress, renderLanes);
+     return bailoutOnAlreadyFinishedWork(current, workInProgress, renderLanes);
+   }
+ 
+@@ -373,6 +404,30 @@ function mountLazyComponent(
+     );
+   }
+ 
++  if (typeof Component === "object" && Component !== null) {
++    if (Component.$$typeof === REACT_FORWARD_REF_TYPE) {
++      workInProgress.tag = ForwardRef;
++      return updateForwardRef(
++        null,
++        workInProgress,
++        Component,
++        props,
++        renderLanes,
++      );
++    }
++    if (Component.$$typeof === REACT_MEMO_TYPE) {
++      workInProgress.tag = MemoComponent;
++      return updateMemoComponent(
++        null,
++        workInProgress,
++        Component,
++        props,
++        renderLanes,
++      );
++    }
++  }
++  if (typeof Component !== "function")
++    throw new Error("lazy: expected a class or function component.");
+   workInProgress.tag = FunctionComponent;
+   return updateFunctionComponent(
+     null,
+@@ -622,8 +677,8 @@ function updateSuspenseFallbackChildren(
+       renderLanes,
+       null,
+     );
+-    // 从 primary 切到 fallback：Placement 由父级 completeWork 阶段的 bubbleProperties
+-    // 冒泡出去，这里不需要单独打标记（Fragment 本身没有 DOM，靠子树里的 host 节点插入）
++    // 父 Suspense 已挂载，而 fallback 是新子树；mountChildFibers 不负责插入标志。
++    fallbackChildFragment.flags |= Placement;
+   }
+   fallbackChildFragment.return = workInProgress;
+ 

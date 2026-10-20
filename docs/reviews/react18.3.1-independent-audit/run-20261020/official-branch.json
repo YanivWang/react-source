@@ -1,0 +1,10 @@
+{
+  "requestedPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react",
+  "requestedBranch": "codex/react-18.3.1",
+  "currentBranch": "codex/react-18.3.1",
+  "branchCommit": "f1338f8080abd1386454a10bbf93d67bfe37ce85",
+  "tagCommit": "f1338f8080abd1386454a10bbf93d67bfe37ce85",
+  "tagToBranchDiff": "",
+  "workingTreeStatus": "",
+  "versionSource": "/**\n * Copyright (c) Facebook, Inc. and its affiliates.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n */\n\n// TODO: this is special because it gets imported during build.\n//\n// TODO: 18.0.0 has not been released to NPM;\n// It exists as a placeholder so that DevTools can support work tag changes between releases.\n// When we next publish a release, update the matching TODO in backend/renderer.js\n// TODO: This module is used both by the release scripts and to expose a version\n// at runtime. We should instead inject the version number as part of the build\n// process, and use the ReactVersions.js module as the single source of truth.\nexport default '18.3.1';"
+}

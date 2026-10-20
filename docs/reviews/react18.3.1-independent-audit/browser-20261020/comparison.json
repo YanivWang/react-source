@@ -1,0 +1,209 @@
+{
+  "generatedAt": "2026-10-20T09:10:42.935Z",
+  "compared": 40,
+  "browserAssertions": 80,
+  "passed": 40,
+  "bundleFingerprintsMatchCurrentFiles": true,
+  "comparisons": [
+    {
+      "mode": "development",
+      "name": "official-input-defaultValue-no-reassign",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "official-number-zero-and-precision",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "official-select-multiple-default",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "official-sync-passive-and-layout",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "layout-update-before-next-frame",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "default-render-deferred-commit",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "official-scheduler-priority-cancel",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "official-scheduler-continuation-yields",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "transition-keeps-committed-dom-between-slices",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-text-caret",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-frozen-text",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-number-focus",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-number-blur",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-number-sibling-rerender",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-checkbox",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-radio",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-select",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-textarea",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-portal",
+      "pass": true
+    },
+    {
+      "mode": "development",
+      "name": "trusted-change-coverage",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "official-input-defaultValue-no-reassign",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "official-number-zero-and-precision",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "official-select-multiple-default",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "official-sync-passive-and-layout",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "layout-update-before-next-frame",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "default-render-deferred-commit",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "official-scheduler-priority-cancel",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "official-scheduler-continuation-yields",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "transition-keeps-committed-dom-between-slices",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-text-caret",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-frozen-text",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-number-focus",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-number-blur",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-number-sibling-rerender",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-checkbox",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-radio",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-select",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-textarea",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-portal",
+      "pass": true
+    },
+    {
+      "mode": "production",
+      "name": "trusted-change-coverage",
+      "pass": true
+    }
+  ]
+}

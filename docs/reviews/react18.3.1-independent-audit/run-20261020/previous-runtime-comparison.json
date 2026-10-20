@@ -1,0 +1,98 @@
+[
+  {
+    "mode": "development",
+    "scenario": "hidden-class-delete",
+    "target": "official",
+    "status": 0,
+    "stdout": "{\"target\":\"official\",\"scenario\":\"hidden-class-delete\",\"mode\":\"development\",\"snapshots\":[{\"text\":\"child\",\"log\":[\"mount\"]},{\"text\":\"childwaiting\",\"log\":[\"mount\",\"unmount\"]},{\"text\":\"\",\"log\":[\"mount\",\"unmount\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "development",
+    "scenario": "hidden-class-delete",
+    "target": "previous",
+    "status": 1,
+    "stdout": "",
+    "stderr": "\nnode:internal/event_target:1118\n  process.nextTick(() => { throw err; });\n                           ^\n[DOMException [NotFoundError]: The node to be removed is not a child of this node.]\n\nNode.js v22.23.2\n"
+  },
+  {
+    "mode": "development",
+    "scenario": "hidden-class-delete",
+    "target": "current",
+    "status": 0,
+    "stdout": "{\"target\":\"current\",\"scenario\":\"hidden-class-delete\",\"mode\":\"development\",\"snapshots\":[{\"text\":\"child\",\"log\":[\"mount\"]},{\"text\":\"childwaiting\",\"log\":[\"mount\",\"unmount\"]},{\"text\":\"\",\"log\":[\"mount\",\"unmount\",\"unmount\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "development",
+    "scenario": "memo-subtree-effects",
+    "target": "official",
+    "status": 0,
+    "stdout": "{\"target\":\"official\",\"scenario\":\"memo-subtree-effects\",\"mode\":\"development\",\"snapshots\":[{\"text\":\"leaf0\",\"log\":[\"mount\"]},{\"text\":\"leaf1\",\"log\":[\"mount\"]},{\"text\":\"\",\"log\":[\"mount\",\"cleanup\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "development",
+    "scenario": "memo-subtree-effects",
+    "target": "previous",
+    "status": 0,
+    "stdout": "{\"target\":\"previous\",\"scenario\":\"memo-subtree-effects\",\"mode\":\"development\",\"snapshots\":[{\"text\":\"leaf0\",\"log\":[]},{\"text\":\"leaf1\",\"log\":[]},{\"text\":\"\",\"log\":[]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "development",
+    "scenario": "memo-subtree-effects",
+    "target": "current",
+    "status": 0,
+    "stdout": "{\"target\":\"current\",\"scenario\":\"memo-subtree-effects\",\"mode\":\"development\",\"snapshots\":[{\"text\":\"leaf0\",\"log\":[\"mount\"]},{\"text\":\"leaf1\",\"log\":[\"mount\",\"cleanup\",\"mount\"]},{\"text\":\"\",\"log\":[\"mount\",\"cleanup\",\"mount\",\"cleanup\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "production",
+    "scenario": "hidden-class-delete",
+    "target": "official",
+    "status": 0,
+    "stdout": "{\"target\":\"official\",\"scenario\":\"hidden-class-delete\",\"mode\":\"production\",\"snapshots\":[{\"text\":\"child\",\"log\":[\"mount\"]},{\"text\":\"childwaiting\",\"log\":[\"mount\",\"unmount\"]},{\"text\":\"\",\"log\":[\"mount\",\"unmount\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "production",
+    "scenario": "hidden-class-delete",
+    "target": "previous",
+    "status": 1,
+    "stdout": "",
+    "stderr": "\nnode:internal/event_target:1118\n  process.nextTick(() => { throw err; });\n                           ^\n[DOMException [NotFoundError]: The node to be removed is not a child of this node.]\n\nNode.js v22.23.2\n"
+  },
+  {
+    "mode": "production",
+    "scenario": "hidden-class-delete",
+    "target": "current",
+    "status": 0,
+    "stdout": "{\"target\":\"current\",\"scenario\":\"hidden-class-delete\",\"mode\":\"production\",\"snapshots\":[{\"text\":\"child\",\"log\":[\"mount\"]},{\"text\":\"childwaiting\",\"log\":[\"mount\",\"unmount\"]},{\"text\":\"\",\"log\":[\"mount\",\"unmount\",\"unmount\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "production",
+    "scenario": "memo-subtree-effects",
+    "target": "official",
+    "status": 0,
+    "stdout": "{\"target\":\"official\",\"scenario\":\"memo-subtree-effects\",\"mode\":\"production\",\"snapshots\":[{\"text\":\"leaf0\",\"log\":[\"mount\"]},{\"text\":\"leaf1\",\"log\":[\"mount\"]},{\"text\":\"\",\"log\":[\"mount\",\"cleanup\"]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "production",
+    "scenario": "memo-subtree-effects",
+    "target": "previous",
+    "status": 0,
+    "stdout": "{\"target\":\"previous\",\"scenario\":\"memo-subtree-effects\",\"mode\":\"production\",\"snapshots\":[{\"text\":\"leaf0\",\"log\":[]},{\"text\":\"leaf1\",\"log\":[]},{\"text\":\"\",\"log\":[]}]}\n",
+    "stderr": ""
+  },
+  {
+    "mode": "production",
+    "scenario": "memo-subtree-effects",
+    "target": "current",
+    "status": 0,
+    "stdout": "{\"target\":\"current\",\"scenario\":\"memo-subtree-effects\",\"mode\":\"production\",\"snapshots\":[{\"text\":\"leaf0\",\"log\":[\"mount\"]},{\"text\":\"leaf1\",\"log\":[\"mount\",\"cleanup\",\"mount\"]},{\"text\":\"\",\"log\":[\"mount\",\"cleanup\",\"mount\",\"cleanup\"]}]}\n",
+    "stderr": ""
+  }
+]

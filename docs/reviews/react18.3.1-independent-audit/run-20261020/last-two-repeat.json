@@ -1,0 +1,658 @@
+{
+  "generatedAt": "2026-10-20T07:54:01.879Z",
+  "baseline": "v18.3.1 f1338f8080abd1386454a10bbf93d67bfe37ce85",
+  "records": [
+    {
+      "mode": "development",
+      "scenario": "deferred-render-phase-mount",
+      "validBaseline": true,
+      "match": false,
+      "reference": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "official",
+              "scenario": "deferred-render-phase-mount",
+              "mode": "development",
+              "reactVersion": "18.3.1",
+              "domVersion": "18.3.1",
+              "domPackageVersion": "18.3.1",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "official",
+            "scenario": "deferred-render-phase-mount",
+            "mode": "development",
+            "reactVersion": "18.3.1",
+            "domVersion": "18.3.1",
+            "domPackageVersion": "18.3.1",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": {
+              "text": "1:1",
+              "commits": ["1:1"]
+            },
+            "expected": {
+              "text": "1:1",
+              "commits": ["1:1"]
+            },
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "official",
+          "scenario": "deferred-render-phase-mount",
+          "mode": "development",
+          "reactVersion": "18.3.1",
+          "domVersion": "18.3.1",
+          "domPackageVersion": "18.3.1",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": {
+            "text": "1:1",
+            "commits": ["1:1"]
+          },
+          "expected": {
+            "text": "1:1",
+            "commits": ["1:1"]
+          },
+          "cleanupErrors": [],
+          "messages": []
+        }
+      },
+      "local": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "local",
+              "scenario": "deferred-render-phase-mount",
+              "mode": "development",
+              "domPackageVersion": "1.0.0",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "local",
+            "scenario": "deferred-render-phase-mount",
+            "mode": "development",
+            "domPackageVersion": "1.0.0",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": {
+              "text": "1:0",
+              "commits": ["1:0"]
+            },
+            "expected": {
+              "text": "1:1",
+              "commits": ["1:1"]
+            },
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "local",
+          "scenario": "deferred-render-phase-mount",
+          "mode": "development",
+          "domPackageVersion": "1.0.0",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": {
+            "text": "1:0",
+            "commits": ["1:0"]
+          },
+          "expected": {
+            "text": "1:1",
+            "commits": ["1:1"]
+          },
+          "cleanupErrors": [],
+          "messages": []
+        }
+      }
+    },
+    {
+      "mode": "development",
+      "scenario": "lazy-default-props",
+      "validBaseline": true,
+      "match": false,
+      "reference": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "official",
+              "scenario": "lazy-default-props",
+              "mode": "development",
+              "reactVersion": "18.3.1",
+              "domVersion": "18.3.1",
+              "domPackageVersion": "18.3.1",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "official",
+            "scenario": "lazy-default-props",
+            "mode": "development",
+            "reactVersion": "18.3.1",
+            "domVersion": "18.3.1",
+            "domPackageVersion": "18.3.1",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": "default",
+            "expected": "default",
+            "cleanupErrors": [],
+            "messages": [
+              "Warning: %s: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.%s Child \n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/docs/reviews/react18.3.1-independent-audit/scenarios.cjs:269:22)\n    at Suspense"
+            ]
+          }
+        ],
+        "result": {
+          "runtime": "official",
+          "scenario": "lazy-default-props",
+          "mode": "development",
+          "reactVersion": "18.3.1",
+          "domVersion": "18.3.1",
+          "domPackageVersion": "18.3.1",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": "default",
+          "expected": "default",
+          "cleanupErrors": [],
+          "messages": [
+            "Warning: %s: Support for defaultProps will be removed from function components in a future major release. Use JavaScript default parameters instead.%s Child \n    at Child (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/docs/reviews/react18.3.1-independent-audit/scenarios.cjs:269:22)\n    at Suspense"
+          ]
+        }
+      },
+      "local": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "local",
+              "scenario": "lazy-default-props",
+              "mode": "development",
+              "domPackageVersion": "1.0.0",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "local",
+            "scenario": "lazy-default-props",
+            "mode": "development",
+            "domPackageVersion": "1.0.0",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.development.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": "missing",
+            "expected": "default",
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "local",
+          "scenario": "lazy-default-props",
+          "mode": "development",
+          "domPackageVersion": "1.0.0",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.development.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": "missing",
+          "expected": "default",
+          "cleanupErrors": [],
+          "messages": []
+        }
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "deferred-render-phase-mount",
+      "validBaseline": true,
+      "match": false,
+      "reference": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "official",
+              "scenario": "deferred-render-phase-mount",
+              "mode": "production",
+              "reactVersion": "18.3.1",
+              "domVersion": "18.3.1-next-f1338f8080-20240426",
+              "domPackageVersion": "18.3.1",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "official",
+            "scenario": "deferred-render-phase-mount",
+            "mode": "production",
+            "reactVersion": "18.3.1",
+            "domVersion": "18.3.1-next-f1338f8080-20240426",
+            "domPackageVersion": "18.3.1",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": {
+              "text": "1:1",
+              "commits": ["1:1"]
+            },
+            "expected": {
+              "text": "1:1",
+              "commits": ["1:1"]
+            },
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "official",
+          "scenario": "deferred-render-phase-mount",
+          "mode": "production",
+          "reactVersion": "18.3.1",
+          "domVersion": "18.3.1-next-f1338f8080-20240426",
+          "domPackageVersion": "18.3.1",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": {
+            "text": "1:1",
+            "commits": ["1:1"]
+          },
+          "expected": {
+            "text": "1:1",
+            "commits": ["1:1"]
+          },
+          "cleanupErrors": [],
+          "messages": []
+        }
+      },
+      "local": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "local",
+              "scenario": "deferred-render-phase-mount",
+              "mode": "production",
+              "domPackageVersion": "1.0.0",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "local",
+            "scenario": "deferred-render-phase-mount",
+            "mode": "production",
+            "domPackageVersion": "1.0.0",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": {
+              "text": "1:0",
+              "commits": ["1:0"]
+            },
+            "expected": {
+              "text": "1:1",
+              "commits": ["1:1"]
+            },
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "local",
+          "scenario": "deferred-render-phase-mount",
+          "mode": "production",
+          "domPackageVersion": "1.0.0",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": {
+            "text": "1:0",
+            "commits": ["1:0"]
+          },
+          "expected": {
+            "text": "1:1",
+            "commits": ["1:1"]
+          },
+          "cleanupErrors": [],
+          "messages": []
+        }
+      }
+    },
+    {
+      "mode": "production",
+      "scenario": "lazy-default-props",
+      "validBaseline": true,
+      "match": false,
+      "reference": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "official",
+              "scenario": "lazy-default-props",
+              "mode": "production",
+              "reactVersion": "18.3.1",
+              "domVersion": "18.3.1-next-f1338f8080-20240426",
+              "domPackageVersion": "18.3.1",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "official",
+            "scenario": "lazy-default-props",
+            "mode": "production",
+            "reactVersion": "18.3.1",
+            "domVersion": "18.3.1-next-f1338f8080-20240426",
+            "domPackageVersion": "18.3.1",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": "default",
+            "expected": "default",
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "official",
+          "scenario": "lazy-default-props",
+          "mode": "production",
+          "reactVersion": "18.3.1",
+          "domVersion": "18.3.1-next-f1338f8080-20240426",
+          "domPackageVersion": "18.3.1",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": "default",
+          "expected": "default",
+          "cleanupErrors": [],
+          "messages": []
+        }
+      },
+      "local": {
+        "status": 0,
+        "signal": null,
+        "stderr": "",
+        "events": [
+          {
+            "checkpoint": "loaded",
+            "data": {
+              "runtime": "local",
+              "scenario": "lazy-default-props",
+              "mode": "production",
+              "domPackageVersion": "1.0.0",
+              "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "samePeer": true,
+              "loadedFiles": []
+            }
+          },
+          {
+            "runtime": "local",
+            "scenario": "lazy-default-props",
+            "mode": "production",
+            "domPackageVersion": "1.0.0",
+            "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "samePeer": true,
+            "loadedFiles": [
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.production.min.js",
+              "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+            ],
+            "kind": "result",
+            "actual": "missing",
+            "expected": "default",
+            "cleanupErrors": [],
+            "messages": []
+          }
+        ],
+        "result": {
+          "runtime": "local",
+          "scenario": "lazy-default-props",
+          "mode": "production",
+          "domPackageVersion": "1.0.0",
+          "reactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "domPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+          "peerReactPath": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "samePeer": true,
+          "loadedFiles": [
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.production.min.js",
+            "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js"
+          ],
+          "kind": "result",
+          "actual": "missing",
+          "expected": "default",
+          "cleanupErrors": [],
+          "messages": []
+        }
+      }
+    }
+  ]
+}

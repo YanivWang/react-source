@@ -13,8 +13,12 @@
     "build": "node scripts/rollup/build.js",
     "prepare": "husky",
     "typecheck": "tsc --noEmit",
-    "test": "pnpm run test:core",
-    "test:core": "pnpm run build && node --test scripts/tests/core.test.cjs"
+    "test": "pnpm run build && node --test --test-concurrency=1 scripts/tests/core.test.cjs scripts/tests/regression.test.cjs",
+    "test:core": "pnpm run build && node --test scripts/tests/core.test.cjs",
+    "test:regression": "pnpm run build && node --test scripts/tests/regression.test.cjs",
+    "test:browser:build": "pnpm run build && node scripts/tests/browser/build.cjs",
+    "test:browser:serve": "node scripts/tests/browser/serve.cjs",
+    "test:browser:compare": "node scripts/tests/browser/compare.cjs"
   },
   "lint-staged": {
     "*.{ts,tsx}": "eslint --cache --cache-location node_modules/.cache/eslint/ --fix",

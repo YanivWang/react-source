@@ -15,7 +15,7 @@ import {
 } from "./ReactFiberLane";
 import type { RootTag } from "./ReactRootTags";
 import { initializeUpdateQueue } from "./ReactFiberClassUpdateQueue";
-import type { Container } from "./ReactFiberConfig";
+import type { Container } from "./ReactFiberHostConfig";
 import type { Wakeable } from "shared/ReactTypes";
 
 // 对照官方 packages/react-reconciler/src/ReactFiberRoot.new.js：官方 FiberRootNode 还带

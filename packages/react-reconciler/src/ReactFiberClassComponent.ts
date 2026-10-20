@@ -5,7 +5,8 @@
  */
 
 import { StrictLegacyMode, StrictEffectsMode } from "./ReactTypeOfMode";
-import { MountLayoutDev } from "./ReactFiberFlags";
+import { MountLayoutDev, LayoutStatic } from "./ReactFiberFlags";
+import { readContext } from "./ReactFiberNewContext";
 import shallowEqual from "shared/shallowEqual";
 
 import type { FiberNode } from "./ReactFiber";
@@ -84,9 +85,14 @@ export function constructClassInstance(
   Component: any,
   props: any,
 ): any {
+  const contextType = Component.contextType;
+  const context =
+    typeof contextType === "object" && contextType !== null
+      ? readContext(contextType)
+      : {};
   if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0)
-    new Component(props);
-  const instance = new Component(props);
+    new Component(props, context);
+  const instance = new Component(props, context);
   // 挂载 updater：react 包的 Component.prototype.setState/forceUpdate 都是转发给这个 updater
   instance.updater = classComponentUpdater;
   instance._reactInternals = workInProgress;
@@ -98,7 +104,7 @@ export function constructClassInstance(
   return instance;
 }
 
-// 官方叫 callGetDerivedStateFromProps：静态方法，挂载和更新都可能调用，返回值与旧 state 浅合并
+// React 18.3.1 applyDerivedStateFromProps：派生状态与队列重放起点分开保存。
 function applyDerivedStateFromProps(
   workInProgress: FiberNode,
   getDerivedStateFromProps: (props: any, state: any) => any,
@@ -106,6 +112,9 @@ function applyDerivedStateFromProps(
 ): void {
   const prevState = workInProgress.memoizedState;
   const partialState = getDerivedStateFromProps(nextProps, prevState);
+  if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0) {
+    getDerivedStateFromProps(nextProps, prevState);
+  }
   const newState =
     partialState === null || partialState === undefined
       ? prevState
@@ -139,6 +148,11 @@ export function mountClassInstance(
   instance.props = newProps;
   instance.state = workInProgress.memoizedState;
   instance.refs = {};
+  const contextType = Component.contextType;
+  instance.context =
+    typeof contextType === "object" && contextType !== null
+      ? readContext(contextType)
+      : {};
 
   initializeUpdateQueue(workInProgress);
 
@@ -157,7 +171,7 @@ export function mountClassInstance(
   if (typeof instance.componentDidMount === "function") {
     // Update flag 让 commitLayoutEffects 在 mutation 阶段之后调用 componentDidMount，
     // 与 useLayoutEffect 共用同一个 flag/子阶段
-    workInProgress.flags |= UpdateEffect;
+    workInProgress.flags |= UpdateEffect | LayoutStatic;
   }
 }
 
@@ -181,6 +195,12 @@ export function updateClassInstance(
   const oldProps = workInProgress.memoizedProps;
   instance.props = oldProps;
   const oldState = workInProgress.memoizedState;
+  const oldContext = instance.context;
+  const contextType = Component.contextType;
+  const nextContext =
+    typeof contextType === "object" && contextType !== null
+      ? readContext(contextType)
+      : oldContext;
 
   resetHasForceUpdateBeforeProcessing();
   processUpdateQueue(workInProgress, newProps, instance, renderLanes);
@@ -199,6 +219,7 @@ export function updateClassInstance(
   if (
     oldProps === newProps &&
     oldState === newState &&
+    oldContext === nextContext &&
     !checkHasForceUpdateAfterProcessing()
   ) {
     // props/state 都没变、也没有 forceUpdate：不需要触发任何生命周期或重渲染
@@ -215,6 +236,7 @@ export function updateClassInstance(
       newProps,
       oldState,
       newState,
+      nextContext,
     );
 
   if (shouldUpdate) {
@@ -228,6 +250,7 @@ export function updateClassInstance(
 
   instance.props = newProps;
   instance.state = newState;
+  instance.context = nextContext;
 
   return shouldUpdate;
 }
@@ -237,8 +260,8 @@ export function updateClassInstance(
  * （finishClassComponent 在第一次 beginWork 时执行），子树抛错后 unwindWork 把它标记为
  * DidCapture 并重新进入 beginWork——此时 stateNode/updateQueue 已由 mountClassInstance
  * 初始化好，只需要消费 throwException 塞进去的 CaptureUpdate 算出 fallback state。
- * 对照官方 resumeMountClassInstance（简化版：省略 hasForceUpdate 为 false 时的
- * shouldComponentUpdate 判断，CaptureUpdate 必然已把 hasForceUpdate 置真，恒强制渲染）。
+ * 本项目仅从未提交边界的捕获重试调用此入口；finishClassComponent 的 DidCapture
+ * 强制重建错误子树。恢复时仍须重新收集现代 Context 依赖。
  */
 export function resumeMountClassInstance(
   workInProgress: FiberNode,
@@ -247,6 +270,11 @@ export function resumeMountClassInstance(
   renderLanes: Lanes,
 ): boolean {
   const instance = workInProgress.stateNode;
+  const contextType = Component.contextType;
+  instance.context =
+    typeof contextType === "object" && contextType !== null
+      ? readContext(contextType)
+      : instance.context;
 
   resetHasForceUpdateBeforeProcessing();
   processUpdateQueue(workInProgress, newProps, instance, renderLanes);
@@ -264,7 +292,7 @@ export function resumeMountClassInstance(
   instance.state = workInProgress.memoizedState;
 
   if (typeof instance.componentDidMount === "function") {
-    workInProgress.flags |= UpdateEffect;
+    workInProgress.flags |= UpdateEffect | LayoutStatic;
   }
 
   return true;
@@ -279,10 +307,18 @@ function checkShouldComponentUpdate(
   newProps: any,
   oldState: any,
   newState: any,
+  nextContext: any,
 ): boolean {
   const instance = workInProgress.stateNode;
   if (typeof instance.shouldComponentUpdate === "function") {
-    return instance.shouldComponentUpdate(newProps, newState);
+    const shouldUpdate = instance.shouldComponentUpdate(
+      newProps,
+      newState,
+      nextContext,
+    );
+    if (__DEV__ && (workInProgress.mode & StrictLegacyMode) !== 0)
+      instance.shouldComponentUpdate(newProps, newState, nextContext);
+    return shouldUpdate;
   }
 
   if (Component.prototype && Component.prototype.isPureReactComponent) {

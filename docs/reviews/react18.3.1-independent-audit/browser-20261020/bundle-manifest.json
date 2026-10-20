@@ -1,0 +1,165 @@
+{
+  "generatedAt": "2026-10-20T09:05:00.106Z",
+  "manifests": [
+    {
+      "runtime": "official",
+      "mode": "development",
+      "bundle": "official-development.js",
+      "sha256": "1a6604bf01ef486e2355efd9a7680a721271db040f696bf17cef77dd60b4dab7",
+      "files": [
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.development.js",
+          "sha256": "1ff3a1d9861a87984329584fa1172aea920855d79eb57dae0d1cebe54093d7e3"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "sha256": "a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.development.js",
+          "sha256": "22e3d959dc9f9cd59fca4e1fc95fecb9fde4d2cb8ecadbd279137ada995983ac"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+          "sha256": "b413b3aac7bd209fd82cbe2241fda1467558daaef830744f45ed8396fac9185e"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.development.js",
+          "sha256": "1459b808bc6991de5a1ec3a86d8beee32dbb6c14282cf13f84e00dfebfbdc025"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+          "sha256": "f26fcb81b5d1dc32c6edea34645c75b60d259916293d3208c8be48ac33e882e4"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js",
+          "sha256": "a510041dfc40d69b3aa574e5e111864186c711fbeb3db41aa2f27196b27c429f"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/browser/harness.js",
+          "sha256": "99f827b39cd7c625932497f3604b5191309507685fece814b9c0af6aec6db94b"
+        }
+      ]
+    },
+    {
+      "runtime": "official",
+      "mode": "production",
+      "bundle": "official-production.js",
+      "sha256": "b1ad73db97c6aa7d27c5645639531849e59e68d66a4888314d90ec4866cbfa2f",
+      "files": [
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/cjs/react.production.min.js",
+          "sha256": "4b35e378f469c4f492c7514bb106b5833746dbbae80496bd4aa9acc6e9ac4b42"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+          "sha256": "a216c390bf956cbb906c66d29fdb2e2ad6999464a5ca83e476533a6f25ad0ef3"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/cjs/scheduler.production.min.js",
+          "sha256": "f6cb8cf42696980c702f6b879417ab8bd489660485eb012b46f67e92e18a78ee"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/scheduler@0.23.2/node_modules/scheduler/index.js",
+          "sha256": "b413b3aac7bd209fd82cbe2241fda1467558daaef830744f45ed8396fac9185e"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/cjs/react-dom.production.min.js",
+          "sha256": "cbf7fe6b9726ee65f8bcd5715289cc5161c8dacf74d0b8aaa0d29412516f5f47"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+          "sha256": "f26fcb81b5d1dc32c6edea34645c75b60d259916293d3208c8be48ac33e882e4"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js",
+          "sha256": "a510041dfc40d69b3aa574e5e111864186c711fbeb3db41aa2f27196b27c429f"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/browser/harness.js",
+          "sha256": "99f827b39cd7c625932497f3604b5191309507685fece814b9c0af6aec6db94b"
+        }
+      ]
+    },
+    {
+      "runtime": "local",
+      "mode": "development",
+      "bundle": "local-development.js",
+      "sha256": "0aa6373c41c93ae321214bdabe106fd7e4541c18679341e053dcbb8ea7a326bc",
+      "files": [
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.development.js",
+          "sha256": "b1a7705b2d76fc2fabd529b7ed0fffb624a5c571810df7db9127beeedf8f54fd"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "sha256": "0bdcbae4e2f6e80c256120b5ebea6236bc3c2134a38484278dce43d6421477ab"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.development.js",
+          "sha256": "4b75ffbc5b74fec62a9a32b8778ad22672513f1ca5e7c976948f0972ab7a763f"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+          "sha256": "2cd0dae5b8d7130300971ec3894efd4aeed3ed2335fc83d5fbf1d3ace30be006"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.development.js",
+          "sha256": "0c0ce5fb1a155067ea94758a01a3beb0360414f6f343bbedea8382f20a5065ea"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+          "sha256": "3b231087559fe350a405e7e7bcb419f96c7a3f199a5b13d615dc724cd8ffae5f"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js",
+          "sha256": "8a06e66efc4af433c8f4e4c844b650bfc012ddfe0d9b103a0fa3aff53048978e"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/browser/harness.js",
+          "sha256": "99f827b39cd7c625932497f3604b5191309507685fece814b9c0af6aec6db94b"
+        }
+      ]
+    },
+    {
+      "runtime": "local",
+      "mode": "production",
+      "bundle": "local-production.js",
+      "sha256": "e67fb63e075a964485e75da3a4546507fb20b39d0e6a2293cc1a1aa025167e05",
+      "files": [
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/cjs/react.production.min.js",
+          "sha256": "7aa51f9780f157a09fe48cb9964ebe90054c0db2f873f09b3477fa2b62442710"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react/index.js",
+          "sha256": "0bdcbae4e2f6e80c256120b5ebea6236bc3c2134a38484278dce43d6421477ab"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/cjs/scheduler.production.min.js",
+          "sha256": "d7247be598853f6f4b98407bad0b5b81f82696435f7f264a92d46595a1e27a60"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/scheduler/index.js",
+          "sha256": "2cd0dae5b8d7130300971ec3894efd4aeed3ed2335fc83d5fbf1d3ace30be006"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/cjs/react-dom.production.min.js",
+          "sha256": "2e232aaf53f86a6402527dc02361ae33d21dd0e9026f94e013675a6a74fca25c"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/index.js",
+          "sha256": "3b231087559fe350a405e7e7bcb419f96c7a3f199a5b13d615dc724cd8ffae5f"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/build/node_modules/react-dom/client.js",
+          "sha256": "8a06e66efc4af433c8f4e4c844b650bfc012ddfe0d9b103a0fa3aff53048978e"
+        },
+        {
+          "file": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/browser/harness.js",
+          "sha256": "99f827b39cd7c625932497f3604b5191309507685fece814b9c0af6aec6db94b"
+        }
+      ]
+    }
+  ]
+}

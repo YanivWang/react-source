@@ -1,3 +1,15 @@
+import {
+  popRenderLanes,
+  renderDidSuspend,
+  renderDidSuspendDelayIfPossible,
+} from "./ReactFiberWorkLoop";
+import {
+  popSuspenseContext,
+  suspenseStackCursor,
+  InvisibleParentSuspenseContext,
+} from "./ReactFiberSuspenseContext";
+import { ConcurrentMode, NoMode } from "./ReactTypeOfMode";
+import { OffscreenLane, includesSomeLane } from "./ReactFiberLane";
 /**
  * @file completeWork（Fiber 树构建 - 向上归阶段）
  * @description 对 Fiber 执行"归"阶段：创建真实 DOM 节点（HostComponent/HostText），
@@ -7,17 +19,30 @@
 import type { ReactContext } from "shared/ReactTypes";
 
 import type { FiberNode } from "./ReactFiber";
-import { NoFlags, Update, Visibility, type Flags } from "./ReactFiberFlags";
+import {
+  NoFlags,
+  Placement,
+  Update,
+  Visibility,
+  StaticMask,
+  Snapshot,
+  type Flags,
+} from "./ReactFiberFlags";
 import {
   appendInitialChild,
   createInstance,
   createTextInstance,
   finalizeInitialChildren,
-  getHostContext,
-  getRootHostContainer,
+  preparePortalMount,
   prepareUpdate,
   supportsMutation,
-} from "./ReactFiberConfig";
+} from "./ReactFiberHostConfig";
+import {
+  getHostContext,
+  getRootHostContainer,
+  popHostContext,
+  popHostContainer,
+} from "./ReactFiberHostContext";
 import { NoLanes, mergeLanes, type Lanes } from "./ReactFiberLane";
 import { popProvider } from "./ReactFiberNewContext";
 import {
@@ -38,7 +63,7 @@ import {
   SuspenseComponent,
 } from "./ReactWorkTags";
 import type { OffscreenState } from "./ReactFiberOffscreenComponent";
-import type { SuspenseState } from "./ReactFiberThrow";
+import type { SuspenseState } from "./ReactFiberSuspenseComponent";
 
 function markUpdate(workInProgress: FiberNode): void {
   // 打 Update 标记：让 Placement 变成 PlacementAndUpdate
@@ -126,7 +151,7 @@ function updateHostText(
 }
 
 // 对照官方 bubbleProperties：把子树的 flags/lanes 汇总到父节点。didBailout 时只冒泡静态标记
-// （本项目 StaticMask 目前只有 RefStatic，实际为空集），非 bailout 时冒泡全部 flags。
+// 非 bailout 时冒泡全部 flags。
 // 同时把子树里最早的优先级冒泡到 childLanes。
 function bubbleProperties(completedWork: FiberNode): boolean {
   const didBailout =
@@ -143,8 +168,13 @@ function bubbleProperties(completedWork: FiberNode): boolean {
       mergeLanes(child.lanes, child.childLanes),
     );
 
-    subtreeFlags |= child.subtreeFlags;
-    subtreeFlags |= child.flags;
+    if (didBailout) {
+      subtreeFlags |= child.subtreeFlags & StaticMask;
+      subtreeFlags |= child.flags & StaticMask;
+    } else {
+      subtreeFlags |= child.subtreeFlags;
+      subtreeFlags |= child.flags;
+    }
 
     // 修正 return 指针，保证整棵树结构一致（假定 commit 阶段不与 render 阶段并发）
     child.return = completedWork;
@@ -161,7 +191,7 @@ function bubbleProperties(completedWork: FiberNode): boolean {
 function completeWork(
   current: FiberNode | null,
   workInProgress: FiberNode,
-  _renderLanes: Lanes,
+  renderLanes: Lanes,
 ): FiberNode | null {
   const newProps = workInProgress.pendingProps;
 
@@ -183,7 +213,11 @@ function completeWork(
       return null;
     }
     case HostRoot: {
+      popHostContainer(workInProgress);
       const fiberRoot = workInProgress.stateNode;
+      if (current === null || current.child === null) {
+        workInProgress.flags |= Snapshot;
+      }
       if (fiberRoot.pendingContext) {
         fiberRoot.context = fiberRoot.pendingContext;
         fiberRoot.pendingContext = null;
@@ -192,6 +226,9 @@ function completeWork(
       return null;
     }
     case HostPortal: {
+      popHostContainer(workInProgress);
+      if (current === null)
+        preparePortalMount(workInProgress.stateNode.containerInfo);
       // 官方在 mutation 模式下 updateHostContainer 是 no-op（Portal 的容器不会变，
       // 变了会被当成新建/新的 Portal 处理），popHostContainer/preparePortalMount 依赖的
       // host context 栈本项目未落地（同 attemptEarlyBailoutIfNoScheduledUpdate 的取舍），
@@ -200,6 +237,7 @@ function completeWork(
       return null;
     }
     case HostComponent: {
+      popHostContext(workInProgress);
       const type = workInProgress.type;
       if (current !== null && workInProgress.stateNode != null) {
         updateHostComponent(current, workInProgress, type, newProps);
@@ -272,6 +310,7 @@ function completeWork(
       return null;
     }
     case SuspenseComponent: {
+      popSuspenseContext(workInProgress);
       // DidCapture 未被 beginWork 清掉（updateSuspenseComponent 命中挂起分支会清掉它，
       // 这里能看到说明是嵌套 Suspense 的外层，本次遍历不用管，交给外层自己的完成阶段处理）
       const nextState: SuspenseState | null = workInProgress.memoizedState;
@@ -282,6 +321,17 @@ function completeWork(
       if ((nextState === null) !== (prevState === null)) {
         const offscreenFiber = workInProgress.child as FiberNode;
         offscreenFiber.flags |= Visibility;
+        if (
+          nextState !== null &&
+          (workInProgress.mode & ConcurrentMode) !== NoMode
+        ) {
+          if (
+            current === null ||
+            (suspenseStackCursor.current & InvisibleParentSuspenseContext) !== 0
+          )
+            renderDidSuspend();
+          else renderDidSuspendDelayIfPossible();
+        }
       }
       // updateQueue 是 attachRetryListener 存的 Set<Wakeable>，非空说明本次渲染新挂起了，
       // 需要在 commit 阶段真正挂上 wakeable.then 监听
@@ -292,13 +342,25 @@ function completeWork(
       return null;
     }
     case OffscreenComponent: {
+      popRenderLanes(workInProgress);
       const nextState: OffscreenState | null = workInProgress.memoizedState;
       const prevState: OffscreenState | null =
         current !== null ? current.memoizedState : null;
       if ((nextState === null) !== (prevState === null)) {
         workInProgress.flags |= Visibility;
       }
-      bubbleProperties(workInProgress);
+      if (
+        nextState === null ||
+        (workInProgress.mode & ConcurrentMode) === NoMode ||
+        includesSomeLane(renderLanes, OffscreenLane)
+      ) {
+        bubbleProperties(workInProgress);
+        if (
+          nextState !== null &&
+          (workInProgress.subtreeFlags & (Placement | Update)) !== NoFlags
+        )
+          workInProgress.flags |= Visibility;
+      }
       return null;
     }
   }

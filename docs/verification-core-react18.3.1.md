@@ -1,3 +1,5 @@
+> 历史记录：本文件保留上一轮修复时的路径和结论。当前目录与新增修复验收见 [独立复审修复报告](reviews/react18.3.1-independent-audit/repair-report.md)。
+
 # React 18.3.1 核心修复与验证
 
 日期：2026-10-20。工作分支：`codex/fix-react18-core-flows`。原始代码提交：`92e6f0e267fc1742929a3734d6068621e25729b2`。

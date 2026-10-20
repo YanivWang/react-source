@@ -1,0 +1,9 @@
+{
+  "capturedAt": "2026-10-20T07:36:32.118514+00:00",
+  "head": "e7675ed245d59e1aa001d55836ef4e3ab9fdd599",
+  "branch": "codex/fix-react18-core-flows",
+  "status": "?? docs/reviews/\n",
+  "officialTag": "f1338f8080abd1386454a10bbf93d67bfe37ce85",
+  "node": "v22.23.2",
+  "pnpm": "11.24.0"
+}

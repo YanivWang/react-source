@@ -17,6 +17,8 @@ import type { FiberNode } from "./ReactFiber";
 import type { FiberRootNode } from "./ReactFiberRoot";
 import {
   Passive as PassiveEffect,
+  PassiveStatic as PassiveStaticEffect,
+  LayoutStatic as LayoutStaticEffect,
   MountLayoutDev,
   MountPassiveDev,
   StoreConsistency,
@@ -242,7 +244,7 @@ function mountReducer<S, I, A>(
   return [hook.memoizedState, dispatch];
 }
 
-// 对照官方 updateReducer/updateReducerImpl：把 pending 循环链表解环、并入 baseQueue，
+// 对照 React 18.3.1 updateReducer：把 pending 循环链表解环、并入 baseQueue，
 // 按 renderLanes 逐条重放——优先级不足的 update 被跳过并保留在新的 baseQueue 里
 // （baseState 停在第一条被跳过的 update 之前），供下次高优先级渲染完成后重放，
 // 与 ReactFiberClassUpdateQueue.processUpdateQueue 的跳过/重放逻辑同源。
@@ -599,7 +601,12 @@ function mountEffect(
   create: () => (() => void) | void,
   deps: unknown[] | void | null,
 ): void {
-  mountEffectImpl(PassiveEffect, HookPassive, create, deps);
+  mountEffectImpl(
+    PassiveEffect | PassiveStaticEffect,
+    HookPassive,
+    create,
+    deps,
+  );
 }
 
 function updateEffect(
@@ -613,7 +620,7 @@ function mountLayoutEffect(
   create: () => (() => void) | void,
   deps: unknown[] | void | null,
 ): void {
-  mountEffectImpl(UpdateEffect, HookLayout, create, deps);
+  mountEffectImpl(UpdateEffect | LayoutStaticEffect, HookLayout, create, deps);
 }
 
 function updateLayoutEffect(
@@ -677,7 +684,7 @@ function mountImperativeHandle<T>(
   const effectDeps =
     deps !== null && deps !== undefined ? deps.concat([ref]) : null;
   mountEffectImpl(
-    UpdateEffect,
+    UpdateEffect | LayoutStaticEffect,
     HookLayout,
     () => imperativeHandleEffect(create, ref),
     effectDeps,
@@ -700,12 +707,7 @@ function updateImperativeHandle<T>(
   );
 }
 
-// React 18.3.1 useDeferredValue 复用 TransitionLane；不存在 React 19 的 initialValue 参数。
-function requestDeferredLane(): Lane {
-  return claimNextTransitionLane();
-}
-
-// 对照官方 mountDeferredValueImpl：mount 时没有"上一次的值"可比较，直接以当前值渲染。
+// 对照 React 18.3.1 mountDeferredValue：mount 时直接以当前值渲染。
 // 按 React 18.3.1：首次客户端渲染直接使用当前值。
 function mountDeferredValue<T>(value: T): T {
   const hook = mountWorkInProgressHook();
@@ -715,8 +717,17 @@ function mountDeferredValue<T>(value: T): T {
 
 function updateDeferredValue<T>(value: T): T {
   const hook = updateWorkInProgressHook();
-  const prevValue: T = hook.memoizedState;
+  const prevValue: T = currentHook!.memoizedState;
   return updateDeferredValueImpl(hook, prevValue, value);
+}
+
+function rerenderDeferredValue<T>(value: T): T {
+  const hook = updateWorkInProgressHook();
+  if (currentHook === null) {
+    hook.memoizedState = value;
+    return value;
+  }
+  return updateDeferredValueImpl(hook, currentHook.memoizedState, value);
 }
 
 // 对照官方 updateDeferredValueImpl：值不变直接复用（Object.is 快速跳过）；值变化时，
@@ -724,22 +735,24 @@ function updateDeferredValue<T>(value: T): T {
 // 说明这是一次紧急渲染，先保留旧值渲染、同时派生一条 deferred lane 稍后单独渲染新值；
 // 否则（渲染本身已经是非紧急优先级，比如就是那条 deferred lane 触发的重渲染）直接用新值。
 function updateDeferredValueImpl<T>(hook: Hook, prevValue: T, value: T): T {
-  if (is(value, prevValue)) {
-    return value;
-  }
-
   const shouldDeferValue = !includesOnlyNonUrgentLanes(renderLanes);
   if (shouldDeferValue) {
-    const deferredLane = requestDeferredLane();
-    currentlyRenderingFiber.lanes = mergeLanes(
-      currentlyRenderingFiber.lanes,
-      deferredLane,
-    );
-    markSkippedUpdateLanes(deferredLane);
+    if (!is(value, prevValue)) {
+      const deferredLane = claimNextTransitionLane();
+      currentlyRenderingFiber.lanes = mergeLanes(
+        currentlyRenderingFiber.lanes,
+        deferredLane,
+      );
+      markSkippedUpdateLanes(deferredLane);
+      hook.baseState = true;
+    }
     return prevValue;
   }
 
-  markWorkInProgressReceivedUpdate();
+  if (hook.baseState) {
+    hook.baseState = false;
+    markWorkInProgressReceivedUpdate();
+  }
   hook.memoizedState = value;
   return value;
 }
@@ -1162,9 +1175,13 @@ const HooksDispatcherOnRerender = {
   useState: rerenderState,
   useReducer: rerenderReducer,
   useTransition: rerenderTransition,
+  useDeferredValue: rerenderDeferredValue,
 };
 
 // 对照官方 18.3.1：render-phase 更新在同一次 render 内重试，不提交中间状态。
+// 本地拆分映射：此主体对应 18.3.1 ReactFiberHooks.new.js 的 renderWithHooks；
+// 下方导出包装把 BeginWork.new.js 的 DEV Strict 第二次调用集中到同一处，
+// 不是声称官方存在 renderWithHooksImpl。两次都从 current 重放，保留 18 的语义。
 function renderWithHooksImpl<Props>(
   current: FiberNode | null,
   workInProgress: FiberNode,

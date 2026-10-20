@@ -1,0 +1,21 @@
+development stable-element-effects: DIFF
+development memo-subtree-effects: DIFF
+development nested-suspending-fallback: DIFF
+development nested-suspense-hide: DIFF
+development class-context-type: DIFF
+development suspense-hidden-class-delete: DIFF
+development portal-mount-update: DIFF
+development root-initial-content: DIFF
+development html-content-switch: DIFF
+development strict-class-updater: DIFF
+production stable-element-effects: INVALID BASELINE
+production memo-subtree-effects: INVALID BASELINE
+production nested-suspending-fallback: INVALID BASELINE
+production nested-suspense-hide: INVALID BASELINE
+production class-context-type: INVALID BASELINE
+production suspense-hidden-class-delete: INVALID BASELINE
+production portal-mount-update: INVALID BASELINE
+production root-initial-content: INVALID BASELINE
+production html-content-switch: INVALID BASELINE
+production strict-class-updater: INVALID BASELINE
+{"total":20,"invalidBaseline":10,"matches":0,"differences":10}

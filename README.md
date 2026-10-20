@@ -50,8 +50,8 @@ react-source/
 │   │       ├── ReactFiberCommitWork.ts # commit mutation（插入/更新/删除）
 │   │       ├── ReactFiberWorkLoop.ts   # 调度入口 + 可中断 workLoop（sync + concurrent）+ commit 总控
 │   │       ├── ReactFiberClassUpdateQueue.ts # 更新队列（Update 循环链表，按 lane 消费）
-│   │       ├── ReactFiberConfig.ts     # HostConfig 接口（构建时 fork 注入）
-│   │       ├── ReactFiberLane.ts       # 完整 Lane 优先级模型（30 条 lane 位表）
+│   │       ├── ReactFiberHostConfig.ts     # HostConfig 接口（构建时 fork 注入）
+│   │       ├── ReactFiberLane.ts       # Lane 位表与客户端调度（未开放 hydration 入口）
 │   │       ├── ReactFiberRoot.ts       # FiberRootNode / createFiberRoot
 │   │       ├── ReactFiberFlags.ts      # 副作用标记位掩码
 │   │       ├── ReactFiberReconciler.ts # 对外入口（createContainer/updateContainer）
@@ -63,20 +63,16 @@ react-source/
 │   │   ├── index.ts / client.ts        # npm 分发入口（转出 ReactDOMClient）
 │   │   └── src/client/
 │   │       ├── ReactDOMClient.ts       # 转出层（对照官方，还会挂 findDOMNode/DevTools 等）
-│   │       └── ReactDOMRoot.ts         # createRoot 工厂函数 + ReactDOMRoot（render 包装 FiberRootNode）
+│   │       ├── ReactDOMRoot.ts         # createRoot 工厂与根 render/unmount
+│   │       ├── ReactDOMComponent.ts    # DOM props、Input/Select/Textarea wrapper 调用
+│   │       └── ReactDOMHostConfig.ts   # 宿主创建、插入、删除与上下文
 │   │
-│   ├── react-dom-bindings/    # DOM 平台绑定（供 react-dom 等渲染器共享，对齐官方 react-dom-bindings）
-│   │   └── src/client/
-│   │       └── ReactDOMHostConfig.ts   # DOM HostConfig 实现（createInstance/appendChild 等）
-│   │
-│   └── scheduler/             # 调度器（时间切片、优先级，对照官方完整结构已搭建）
+│   └── scheduler/             # 调度器（时间切片、优先级，采用 18.3.1 默认宿主循环）
 │       ├── index.ts                    # 主入口（转出 Scheduler）
 │       └── src/
-│           ├── Scheduler.ts            # unstable_scheduleCallback/shouldYield 等 + taskQueue/timerQueue
+│           ├── forks/Scheduler.ts      # taskQueue/timerQueue 与宿主循环
 │           ├── SchedulerMinHeap.ts     # 最小堆（按 sortIndex 排序）
-│           ├── SchedulerPriorities.ts  # 5 档优先级常量
-│           ├── SchedulerHostConfig.ts  # 占位接口（构建时 fork 注入）
-│           └── forks/SchedulerHostConfig.default.ts # MessageChannel 宏任务 + 5ms 时间片实现
+│           └── SchedulerPriorities.ts  # 5 档优先级常量
 │
 ├── scripts/                   # 构建脚本
 │   ├── rollup/
@@ -108,28 +104,28 @@ react-source/
 
 ### 重要文件说明
 
-**packages/react/src/ReactElement.ts**  
+**packages/react/src/ReactElement.ts**
 React 元素的核心工厂函数，包含 `createElement`（经典运行时入口）和 `jsx/jsxDEV`（此文件版本不对外导出，是历史遗留拷贝）。
 
-**packages/react/src/jsx/ReactJSXElement.ts**  
+**packages/react/src/jsx/ReactJSXElement.ts**
 babel automatic runtime 实际使用的 JSX 工厂实现，通过 `ReactSharedInternals` 获取 owner 以支持跨包单例共享。
 
-**packages/shared/ReactSymbols.ts**  
+**packages/shared/ReactSymbols.ts**
 使用 `Symbol.for` 定义 React 内部标识符（`REACT_ELEMENT_TYPE`、`REACT_FRAGMENT_TYPE`、`REACT_PORTAL_TYPE`、`REACT_CONTEXT_TYPE`、`REACT_SUSPENSE_TYPE`、`REACT_MEMO_TYPE`、`REACT_LAZY_TYPE` 等，按后续 Phase 用得到的子集逐步补充），保证多份 React 实例间能互认。
 
-**packages/shared/globals.d.ts**  
+**packages/shared/globals.d.ts**
 声明构建时注入的全局常量（`__DEV__`），实际值由 Rollup 的 `@rollup/plugin-replace` 在打包时替换。
 
-**packages/react-reconciler/src/ReactFiberWorkLoop.ts**  
+**packages/react-reconciler/src/ReactFiberWorkLoop.ts**
 调度与渲染总控：`scheduleUpdateOnFiber` → `ensureRootIsScheduled`（按 lane 选同步微任务或 `scheduler.scheduleCallback` 分片）→ `workLoopSync`/`workLoopConcurrent` → `commitRoot`；`flushSync` 走同步队列。
 
-**packages/react-reconciler/src/ReactFiberConfig.ts**  
-平台无关的宿主环境接口占位模块（对齐官方 `ReactFiberConfig.js` / `forks/ReactFiberConfig.custom.js`），构建时被 react-dom-bindings 的 `ReactDOMHostConfig` fork 替换。
+**packages/react-reconciler/src/ReactFiberHostConfig.ts**
+平台无关的宿主环境接口占位模块（对齐官方 `ReactFiberHostConfig.js` / `forks/ReactFiberHostConfig.custom.js`），构建时被 react-dom 的 `ReactDOMHostConfig` fork 替换。
 
-**packages/react-dom-bindings/src/client/ReactDOMHostConfig.ts**  
-DOM 平台的 HostConfig 实现（仓库沿用较新目录命名；React 18.3.1 对应实现实际位于 `packages/react-dom/src`）：`createInstance`/`createTextInstance`、`appendChild`/`insertBefore`/`removeChild`、`prepareUpdate`/`commitUpdate` 等。
+**packages/react-dom/src/client/ReactDOMHostConfig.ts**
+DOM 平台的 HostConfig 实现（对应 React 18.3.1 的同路径模块）：`createInstance`/`createTextInstance`、`appendChild`/`insertBefore`/`removeChild`、`prepareUpdate`/`commitUpdate` 等。
 
-**packages/scheduler/src/Scheduler.ts**  
+**packages/scheduler/src/forks/Scheduler.ts**
 调度器主循环：`unstable_scheduleCallback`/`unstable_shouldYield`/`unstable_now` 等导出，taskQueue/timerQueue 双最小堆管理任务过期时间。
 
 ## 常用命令

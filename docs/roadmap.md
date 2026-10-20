@@ -55,7 +55,7 @@
 - [x] **beginWork**（`ReactFiberBeginWork.ts`）
   - HostRoot / HostComponent / HostText / Fragment / Mode / FunctionComponent / IndeterminateComponent 全部分发
   - 基础 bailout：bailoutOnAlreadyFinishedWork + attemptEarlyBailoutIfNoScheduledUpdate + didReceiveUpdate（props/state 不变跳过子树）
-  - renderWithHooks 目前是占位（直接 `Component(props)`，Hooks 见 Phase 5）
+  - renderWithHooks 的完整 Hook 链与 dispatcher 见 Phase 5
 
 - [x] **completeWork**（`ReactFiberCompleteWork.ts`）
   - HostComponent：createInstance / appendAllChildren / finalizeInitialChildren
@@ -69,15 +69,15 @@
   - Deletion（递归卸载子树）
   - 错误边界 / effect 卸载 / Portal 分支留待后续
 
-- [x] **HostConfig 接口**（`ReactFiberConfig.ts`）
-  - 平台无关接口，**构建时 fork 注入**（对齐官方 `ReactFiberConfig.js` / forks/ReactFiberConfig.custom.js）
-  - 占位模块模块加载时即 throw，react-dom-bindings 构建时把它替换成 `ReactDOMHostConfig`（reconciler 自身仍以 shim 打包）
+- [x] **HostConfig 接口**（`ReactFiberHostConfig.ts`）
+  - 平台无关接口，**构建时 fork 注入**（对齐官方 `ReactFiberHostConfig.js` / forks/ReactFiberHostConfig.custom.js）
+  - 占位模块模块加载时即 throw，react-dom 构建时把它替换成 `ReactDOMHostConfig`（reconciler 自身仍以 shim 打包）
 
 - [x] **react-dom 简版**（`packages/react-dom`）
   - `createRoot(container).render(element)`：ReactDOMClient（转出层）→ ReactDOMRoot（createRoot 实现），底层走 reconciler 的 createContainer/updateContainer
-  - DOM HostConfig（`packages/react-dom-bindings/src/client/ReactDOMHostConfig.ts`，对齐官方独立的 react-dom-bindings 包）：createInstance/createTextInstance、className/style/普通属性子集、prepareUpdate/commitUpdate、appendChild/insertBefore/removeChild 等
+  - DOM HostConfig（`packages/react-dom/src/client/ReactDOMHostConfig.ts`，对齐官方 18.3.1 的 react-dom 目录）：createInstance/createTextInstance、className/style/普通属性子集、prepareUpdate/commitUpdate、appendChild/insertBefore/removeChild 等
   - npm 分发文件夹 + rollup 构建产物（cjs dev/prod），bundles.js 注册 react-dom bundle，build.js fork 注入 HostConfig
-  - 简版边界：不含 hydrate / legacy render / 事件系统 / shouldSetTextContent 优化 / DOMPropertyOperations 完整体系，留待后续 Phase
+  - 简版边界：不含 hydrate / legacy render / 事件系统 / DOMPropertyOperations 完整体系，留待后续 Phase
 
 - [x] **Fragment**（beginWork / completeWork / ChildFiber / ReactFiber 均已处理 `REACT_FRAGMENT_TYPE`）
 
@@ -96,16 +96,16 @@
 
 **当前能做什么**：可以创建 ReactElement 对象，有一套完整的 reconciler 主链路——`createContainer/updateContainer` → `workLoop` → `commit mutation`，能对 Fiber 树做挂载、单/多节点 diff、更新、删除；并通过 react-dom 简版的 `createRoot().render()` 把结果渲染到真实 DOM（HostConfig 由构建时 fork 注入）。`fixtures/` 用 react-dom 驱动 reconciler 调试，`pnpm dev` 可看到挂载与二次更新的 DOM 变化。
 
-### Phase 4: 调度器（Scheduler）+ 时间切片 + 完整 Lane 模型
+### Phase 4: 调度器（Scheduler）+ 时间切片 + 客户端 Lane 模型
 
 > 说明：引入可中断渲染，长渲染不再一次性占死主线程。scheduler 包按官方完整结构还原，reconciler 接入后普通 `createRoot().render()` 走 DefaultLane 并发路径（异步提交），`flushSync` 走 SyncLane 同步路径。
 
 - [x] **scheduler 包**（`packages/scheduler`，对照官方完整结构）
   - `Scheduler.ts`：`unstable_scheduleCallback`/`unstable_cancelCallback`/`unstable_shouldYield`/`unstable_now` 等导出，taskQueue/timerQueue 双最小堆，expirationTime + timeout 表
-  - `SchedulerMinHeap.ts`（按 sortIndex 排序）、`SchedulerPriorities.ts`（5 档优先级）、`SchedulerFeatureFlags.ts`
-  - `SchedulerHostConfig.ts` 占位 + `forks/SchedulerHostConfig.default.ts`（MessageChannel 宏任务 + setTimeout fallback、`shouldYieldToHost` 5ms 时间片），构建时 fork 注入（rollup build.js / vite resolveId）
+  - `SchedulerMinHeap.ts`（按 sortIndex 排序）、`SchedulerPriorities.ts`（5 档优先级）（默认 feature 分支直接保留在 Scheduler fork）
+  - `forks/Scheduler.ts` 内的宿主循环：setImmediate → 复用 MessageChannel → setTimeout，`shouldYieldToHost` 默认 5ms 时间片；与 18.3.1 同一文件职责
 
-- [x] **完整 Lane 模型**（`ReactFiberLane.ts` + `ReactFiberRoot.ts`）
+- [x] **客户端 Lane 模型**（`ReactFiberLane.ts` + `ReactFiberRoot.ts`）
   - 30 条 lane 位表逐位对齐官方（SyncLane 修正为 bit1、SyncHydrationLane=bit0，InputContinuous/Default/Transition×16/Retry×5/Idle/Offscreen…）
   - getHighestPriorityLane/getNextLanes/markRootUpdated/markRootFinished/markStarvedLanesAsExpired/computeExpirationTime 等优先级与过期/饥饿计算
   - FiberRootNode 补 eventTimes/expirationTimes/suspendedLanes/pingedLanes/expiredLanes/entangledLanes/entanglements
@@ -198,7 +198,7 @@
 
 **目标**：实现合成事件（SyntheticEvent）和事件委托。
 
-- [x] **6.1 事件插件系统**：新增 `packages/react-dom-bindings/src/events/`：
+- [x] **6.1 事件插件系统**：新增 `packages/react-dom/src/events/`：
   - `EventRegistry.ts`：`allNativeEvents` Set + `registerTwoPhaseEvent`/`registerDirectEvent`（同时注册冒泡版 `onXxx` 与捕获版 `onXxxCapture`）
   - `DOMEventProperties.ts`：精简版 `topLevelEventsToReactNames` Map + `registerSimpleEvents()`（原生事件名 → React 注册名，如 `click` → `onClick`），模块加载时由 `DOMPluginEventSystem.ts` 顶层副作用调用
   - `DOMEventNames.ts`：只列出常见交互事件（`click/dblclick/contextmenu/mousedown/mouseup/mousemove/mouseover/mouseout/keydown/keyup/keypress/focusin/focusout/input/change/submit`），覆盖 onClick/onChange/onKeyDown 等主流场景
@@ -376,7 +376,7 @@
 - 对照文件路径：
   - react 核心：`packages/react/src/`
   - react-dom：`packages/react-dom/src/`
-  - react-dom-bindings：`packages/react-dom-bindings/src/`
+  - react-dom DOM 模块：`packages/react-dom/src/`
   - reconciler：`packages/react-reconciler/src/`
   - scheduler：`packages/scheduler/src/`
 

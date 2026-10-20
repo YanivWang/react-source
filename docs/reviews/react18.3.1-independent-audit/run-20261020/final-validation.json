@@ -1,0 +1,14 @@
+{
+  "time": "2026-10-20T08:10:54.162215+00:00",
+  "report": "/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/docs/reviews/react18.3.1-independent-audit/report.md",
+  "sha256": "3d923614566547dfcfa31083c27b2ec1350e184ad49a1e660141c3f86ae861e0",
+  "localLinks": 130,
+  "officialTagLinks": 63,
+  "sourceHead": "e7675ed245d59e1aa001d55836ef4e3ab9fdd599",
+  "sourceStatus": "?? docs/reviews/",
+  "trackedSourceDiff": "empty",
+  "officialStatus": "clean",
+  "officialBranch": "codex/react-18.3.1",
+  "officialHead": "f1338f8080abd1386454a10bbf93d67bfe37ce85",
+  "scriptSyntaxChecks": "4 scripts passed node --check"
+}

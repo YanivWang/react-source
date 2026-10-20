@@ -20,12 +20,16 @@ import type { Dependencies } from "./ReactInternalTypes";
 import { createCursor, pop, push, type StackCursor } from "./ReactFiberStack";
 import {
   isSubsetOfLanes,
+  includesSomeLane,
   mergeLanes,
   NoLanes,
+  NoTimestamp,
+  getHighestPriorityLane,
   type Lanes,
 } from "./ReactFiberLane";
 import { markWorkInProgressReceivedUpdate } from "./ReactFiberBeginWork";
-import { ContextProvider } from "./ReactWorkTags";
+import { ContextProvider, ClassComponent } from "./ReactWorkTags";
+import { createUpdate, ForceUpdate } from "./ReactFiberClassUpdateQueue";
 
 const valueCursor: StackCursor<any> = createCursor(null);
 
@@ -84,7 +88,7 @@ export function prepareToReadContext(
   if (dependencies !== null) {
     const firstContext = dependencies.firstContext;
     if (firstContext !== null) {
-      if (isSubsetOfLanes(renderLanes, dependencies.lanes)) {
+      if (includesSomeLane(renderLanes, dependencies.lanes)) {
         markWorkInProgressReceivedUpdate();
       }
       // 重新开始收集本次渲染实际读取的 context 列表
@@ -152,6 +156,23 @@ export function propagateContextChange<T>(
       let dependency = list.firstContext;
       while (dependency !== null) {
         if (dependency.context === context) {
+          if (fiber.tag === ClassComponent && fiber.updateQueue !== null) {
+            // 与 18.3.1 eager context propagation 一样直接进入 shared pending，
+            // 当前 render 即将访问这个 Class，不能延后到下一次 fresh stack。
+            const update = createUpdate(
+              NoTimestamp,
+              getHighestPriorityLane(renderLanes),
+            );
+            update.tag = ForceUpdate;
+            const shared = fiber.updateQueue.shared;
+            const pending = shared.pending;
+            if (pending === null) update.next = update;
+            else {
+              update.next = pending.next;
+              pending.next = update;
+            }
+            shared.pending = update;
+          }
           // 命中：给这个 fiber 标记本次 renderLanes，冒泡到祖先的 childLanes
           fiber.lanes = mergeLanes(fiber.lanes, renderLanes);
           const alternate = fiber.alternate;

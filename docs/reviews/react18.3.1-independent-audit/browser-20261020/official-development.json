@@ -1,0 +1,491 @@
+{
+  "runtime": "official",
+  "mode": "development",
+  "reactVersion": "18.3.1",
+  "domVersion": "18.3.1",
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36 Edg/152.0.0.0",
+  "generatedAt": "2026-10-20T09:05:27.243Z",
+  "visibility": "visible",
+  "observations": [
+    {
+      "name": "official-input-defaultValue-no-reassign",
+      "actual": 0,
+      "expected": 0,
+      "pass": true
+    },
+    {
+      "name": "official-number-zero-and-precision",
+      "actual": ["", "0", "3.0000", "3"],
+      "expected": ["", "0", "3.0000", "3"],
+      "pass": true
+    },
+    {
+      "name": "official-select-multiple-default",
+      "actual": [
+        [false, true, true],
+        [false, true, true]
+      ],
+      "expected": [
+        [false, true, true],
+        [false, true, true]
+      ],
+      "pass": true
+    },
+    {
+      "name": "official-sync-passive-and-layout",
+      "actual": ["layout:committed", "passive:committed", "returned"],
+      "expected": ["layout:committed", "passive:committed", "returned"],
+      "pass": true
+    },
+    {
+      "name": "layout-update-before-next-frame",
+      "actual": {
+        "returned": "1",
+        "frame": "1",
+        "log": ["layout:0", "passive:0", "layout:1", "passive:1"]
+      },
+      "expected": {
+        "returned": "1",
+        "frame": "1",
+        "log": ["layout:0", "passive:0", "layout:1", "passive:1"]
+      },
+      "pass": true
+    },
+    {
+      "name": "default-render-deferred-commit",
+      "actual": {
+        "immediate": "",
+        "final": "async",
+        "log": ["layout", "passive"]
+      },
+      "expected": {
+        "immediate": "",
+        "final": "async",
+        "log": ["layout", "passive"]
+      },
+      "pass": true
+    },
+    {
+      "name": "official-scheduler-priority-cancel",
+      "actual": ["C", "D", "A", "B"],
+      "expected": ["C", "D", "A", "B"],
+      "pass": true
+    },
+    {
+      "name": "official-scheduler-continuation-yields",
+      "actual": ["task", "microtask", "continuation"],
+      "expected": ["task", "microtask", "continuation"],
+      "pass": true
+    },
+    {
+      "name": "transition-keeps-committed-dom-between-slices",
+      "actual": {
+        "intermediateFrame": true,
+        "atomic": true,
+        "final": true
+      },
+      "expected": {
+        "intermediateFrame": true,
+        "atomic": true,
+        "final": true
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-text-caret",
+      "actual": {
+        "value": "abXcd",
+        "model": "abXcd",
+        "caret": 3,
+        "trusted": true
+      },
+      "expected": {
+        "value": "abXcd",
+        "model": "abXcd",
+        "caret": 3,
+        "trusted": true
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-frozen-text",
+      "actual": "2",
+      "expected": "2",
+      "pass": true
+    },
+    {
+      "name": "trusted-number-focus",
+      "actual": {
+        "value": "2.0",
+        "defaultValue": "2",
+        "selectionStart": null,
+        "selectionEnd": null,
+        "focused": true,
+        "trusted": true
+      },
+      "expected": {
+        "value": "2.0",
+        "defaultValue": "2",
+        "selectionStart": null,
+        "selectionEnd": null,
+        "focused": true,
+        "trusted": true
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-number-blur",
+      "actual": {
+        "value": "2.0",
+        "defaultValue": "2.0",
+        "trusted": true
+      },
+      "expected": {
+        "value": "2.0",
+        "defaultValue": "2.0",
+        "trusted": true
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-number-sibling-rerender",
+      "actual": {
+        "value": "2.0",
+        "defaultValue": "2",
+        "model": 2
+      },
+      "expected": {
+        "value": "2.0",
+        "defaultValue": "2",
+        "model": 2
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-checkbox",
+      "actual": {
+        "dom": true,
+        "model": true,
+        "restored": false
+      },
+      "expected": {
+        "dom": true,
+        "model": true,
+        "restored": false
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-radio",
+      "actual": {
+        "a": false,
+        "b": true,
+        "model": "b"
+      },
+      "expected": {
+        "a": false,
+        "b": true,
+        "model": "b"
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-select",
+      "actual": {
+        "dom": "b",
+        "model": "b"
+      },
+      "expected": {
+        "dom": "b",
+        "model": "b"
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-textarea",
+      "actual": {
+        "dom": "line one",
+        "model": "line one"
+      },
+      "expected": {
+        "dom": "line one",
+        "model": "line one"
+      },
+      "pass": true
+    },
+    {
+      "name": "trusted-portal",
+      "actual": [
+        ["portal-child", true],
+        ["portal-parent", true]
+      ],
+      "expected": [
+        ["portal-child", true],
+        ["portal-parent", true]
+      ],
+      "pass": true
+    },
+    {
+      "name": "trusted-change-coverage",
+      "actual": [true, true, true, true, true, true, true, true],
+      "expected": [true, true, true, true, true, true, true, true],
+      "pass": true
+    }
+  ],
+  "inputEvents": [
+    {
+      "id": "text",
+      "type": "change",
+      "trusted": true,
+      "value": "a",
+      "checked": false
+    },
+    {
+      "id": "text",
+      "type": "change",
+      "trusted": true,
+      "value": "ab",
+      "checked": false
+    },
+    {
+      "id": "text",
+      "type": "change",
+      "trusted": true,
+      "value": "abc",
+      "checked": false
+    },
+    {
+      "id": "text",
+      "type": "change",
+      "trusted": true,
+      "value": "abcd",
+      "checked": false
+    },
+    {
+      "id": "text",
+      "type": "change",
+      "trusted": true,
+      "value": "abXcd",
+      "checked": false
+    },
+    {
+      "id": "frozen",
+      "type": "change",
+      "trusted": true,
+      "value": "2.",
+      "checked": false
+    },
+    {
+      "id": "frozen",
+      "type": "change",
+      "trusted": true,
+      "value": "20",
+      "checked": false
+    },
+    {
+      "id": "number",
+      "type": "change",
+      "trusted": true,
+      "value": "2.0",
+      "checked": false
+    },
+    {
+      "id": "check",
+      "type": "change",
+      "trusted": true,
+      "value": "on",
+      "checked": true
+    },
+    {
+      "id": "frozen-check",
+      "type": "change",
+      "trusted": true,
+      "value": "on",
+      "checked": true
+    },
+    {
+      "id": "radio",
+      "type": "change",
+      "trusted": true,
+      "value": "b",
+      "checked": true
+    },
+    {
+      "id": "select",
+      "type": "change",
+      "trusted": true,
+      "value": "b"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "l"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "li"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "lin"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "line"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "line "
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "line o"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "line on"
+    },
+    {
+      "id": "area",
+      "type": "change",
+      "trusted": true,
+      "value": "line one"
+    },
+    {
+      "id": "portal-child",
+      "type": "click",
+      "trusted": true,
+      "value": ""
+    },
+    {
+      "id": "portal-parent",
+      "type": "click",
+      "trusted": true,
+      "value": ""
+    }
+  ],
+  "keys": {
+    "text": {
+      "value": "abXcd",
+      "defaultValue": "abXcd",
+      "selectionStart": 3,
+      "selectionEnd": 3,
+      "focused": true,
+      "trusted": true
+    },
+    "number": {
+      "value": "2.0",
+      "defaultValue": "2",
+      "selectionStart": null,
+      "selectionEnd": null,
+      "focused": true,
+      "trusted": true
+    },
+    "numberBlur": {
+      "value": "2.0",
+      "defaultValue": "2.0",
+      "trusted": true
+    }
+  },
+  "frameTrace": [
+    {
+      "kind": "layout-update-frame",
+      "t": 265.5,
+      "dom": "1"
+    },
+    {
+      "kind": "transition",
+      "t": 332.3,
+      "rendered": 0,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 348.3,
+      "rendered": 5,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 364.9,
+      "rendered": 26,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 381.8,
+      "rendered": 46,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 399,
+      "rendered": 65,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 414.7,
+      "rendered": 79,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 431.5,
+      "rendered": 92,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 448.7,
+      "rendered": 99,
+      "dom": "A",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 465.7,
+      "rendered": 120,
+      "dom": "B",
+      "length": 120,
+      "homogeneous": true
+    },
+    {
+      "kind": "transition",
+      "t": 482.4,
+      "rendered": 120,
+      "dom": "B",
+      "length": 120,
+      "homogeneous": true
+    }
+  ],
+  "errors": []
+}

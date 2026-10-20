@@ -4,7 +4,7 @@
 // 第三方渲染器用 `require('react-reconciler')(hostConfig)` 把 host config 作为参数传入，而不是
 // 像 react/react-dom 那样直接 `require('xxx')` 拿到现成的 API。所以打包时要把整段产物包进一个
 // `$$$reconciler` 顶层函数，形参 `$$$config` 就是渲染器传入的 host config，对应
-// forks/ReactFiberConfig.custom.ts 里引用的那个「看起来像全局变量」的 `$$$config`。
+// forks/ReactFiberHostConfig.custom.ts 里引用的那个「看起来像全局变量」的 `$$$config`。
 //
 // 官方 wrappers.js 还覆盖 FB_WWW/RN/PROFILING 等本项目未搭建的发布通道，这里只还原
 // NODE_DEV/NODE_PROD 两种（对应 react-reconciler bundle 在 bundles.js 里声明的 bundleTypes）。

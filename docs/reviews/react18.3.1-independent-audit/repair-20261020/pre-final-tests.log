@@ -1,0 +1,1389 @@
+$ pnpm run build && node --test --test-concurrency=1 scripts/tests/core.test.cjs scripts/tests/regression.test.cjs
+$ node scripts/rollup/build.js
+built react (NODE_DEV)
+built react (NODE_PROD)
+built react (UMD_DEV)
+built react (UMD_PROD)
+built react-jsx-runtime (NODE_DEV)
+built react-jsx-runtime (NODE_PROD)
+built react-jsx-dev-runtime (NODE_DEV)
+built react-jsx-dev-runtime (NODE_PROD)
+built react-reconciler (NODE_DEV)
+built react-reconciler (NODE_PROD)
+built react-reconciler-reflection (NODE_DEV)
+built react-reconciler-reflection (NODE_PROD)
+built react-reconciler-constants (NODE_DEV)
+built react-reconciler-constants (NODE_PROD)
+built scheduler (NODE_DEV)
+built scheduler (NODE_PROD)
+built react-dom (NODE_DEV)
+built react-dom (NODE_PROD)
+prepared npm package: react -> build/node_modules/react
+prepared npm package: react-reconciler -> build/node_modules/react-reconciler
+prepared npm package: scheduler -> build/node_modules/scheduler
+prepared npm package: react-dom -> build/node_modules/react-dom
+TAP version 13
+# Subtest: React 18.3.1 [development]: basic-state
+ok 1 - React 18.3.1 [development]: basic-state
+  ---
+  duration_ms: 965.011709
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: state-batch
+ok 2 - React 18.3.1 [development]: state-batch
+  ---
+  duration_ms: 758.884166
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: props
+ok 3 - React 18.3.1 [development]: props
+  ---
+  duration_ms: 804.524958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: effect-only
+ok 4 - React 18.3.1 [development]: effect-only
+  ---
+  duration_ms: 815.395125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: memo-effect
+ok 5 - React 18.3.1 [development]: memo-effect
+  ---
+  duration_ms: 747.6045
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: memo-compare
+ok 6 - React 18.3.1 [development]: memo-compare
+  ---
+  duration_ms: 746.331917
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: handler-update
+ok 7 - React 18.3.1 [development]: handler-update
+  ---
+  duration_ms: 848.261541
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: context
+ok 8 - React 18.3.1 [development]: context
+  ---
+  duration_ms: 781.4715
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: render-phase
+ok 9 - React 18.3.1 [development]: render-phase
+  ---
+  duration_ms: 607.012166
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: render-phase-ref
+ok 10 - React 18.3.1 [development]: render-phase-ref
+  ---
+  duration_ms: 632.511834
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: ref-update
+ok 11 - React 18.3.1 [development]: ref-update
+  ---
+  duration_ms: 774.448625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: suspense-update
+ok 12 - React 18.3.1 [development]: suspense-update
+  ---
+  duration_ms: 2281.213584
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: suspense-lazy-function
+ok 13 - React 18.3.1 [development]: suspense-lazy-function
+  ---
+  duration_ms: 937.17325
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: siblings-state
+ok 14 - React 18.3.1 [development]: siblings-state
+  ---
+  duration_ms: 768.59275
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: suspense-lazy-class
+ok 15 - React 18.3.1 [development]: suspense-lazy-class
+  ---
+  duration_ms: 879.908666
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: error-boundary
+ok 16 - React 18.3.1 [development]: error-boundary
+  ---
+  duration_ms: 663.871792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: effect-order
+ok 17 - React 18.3.1 [development]: effect-order
+  ---
+  duration_ms: 1124.685084
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: effect-tree-delete
+ok 18 - React 18.3.1 [development]: effect-tree-delete
+  ---
+  duration_ms: 775.060625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: render-phase-reducer
+ok 19 - React 18.3.1 [development]: render-phase-reducer
+  ---
+  duration_ms: 641.6935
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: memo-context
+ok 20 - React 18.3.1 [development]: memo-context
+  ---
+  duration_ms: 821.045333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: keyed-diff
+ok 21 - React 18.3.1 [development]: keyed-diff
+  ---
+  duration_ms: 823.439292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: event-order
+ok 22 - React 18.3.1 [development]: event-order
+  ---
+  duration_ms: 1796.895042
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: disabled-events
+ok 23 - React 18.3.1 [development]: disabled-events
+  ---
+  duration_ms: 680.169375
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: controlled-input
+ok 24 - React 18.3.1 [development]: controlled-input
+  ---
+  duration_ms: 819.816208
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: controlled-restore
+ok 25 - React 18.3.1 [development]: controlled-restore
+  ---
+  duration_ms: 660.5415
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: uncontrolled-input
+ok 26 - React 18.3.1 [development]: uncontrolled-input
+  ---
+  duration_ms: 827.94575
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: controlled-checkbox
+ok 27 - React 18.3.1 [development]: controlled-checkbox
+  ---
+  duration_ms: 808.506458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: controlled-select
+ok 28 - React 18.3.1 [development]: controlled-select
+  ---
+  duration_ms: 825.16675
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: style-removal
+ok 29 - React 18.3.1 [development]: style-removal
+  ---
+  duration_ms: 773.181333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: forward-imperative-ref
+ok 30 - React 18.3.1 [development]: forward-imperative-ref
+  ---
+  duration_ms: 1014.392167
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: didcatch-only
+ok 31 - React 18.3.1 [development]: didcatch-only
+  ---
+  duration_ms: 655.269667
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: layout-error-boundary
+ok 32 - React 18.3.1 [development]: layout-error-boundary
+  ---
+  duration_ms: 643.71775
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: hook-throw-recovery
+ok 33 - React 18.3.1 [development]: hook-throw-recovery
+  ---
+  duration_ms: 778.604083
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: external-store
+ok 34 - React 18.3.1 [development]: external-store
+  ---
+  duration_ms: 984.4735
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: transition-rebase
+ok 35 - React 18.3.1 [development]: transition-rebase
+  ---
+  duration_ms: 1402.536834
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: async-batch
+ok 36 - React 18.3.1 [development]: async-batch
+  ---
+  duration_ms: 898.040333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: deferred-value
+ok 37 - React 18.3.1 [development]: deferred-value
+  ---
+  duration_ms: 977.453917
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: strict-mode
+ok 38 - React 18.3.1 [development]: strict-mode
+  ---
+  duration_ms: 788.255333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: root-unmount
+ok 39 - React 18.3.1 [development]: root-unmount
+  ---
+  duration_ms: 751.074
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: external-store-consistency
+ok 40 - React 18.3.1 [development]: external-store-consistency
+  ---
+  duration_ms: 1606.996917
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: concurrent-context-rebase
+ok 41 - React 18.3.1 [development]: concurrent-context-rebase
+  ---
+  duration_ms: 1988.104125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: lazy-wrappers
+ok 42 - React 18.3.1 [development]: lazy-wrappers
+  ---
+  duration_ms: 838.135792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: scheduler-order
+ok 43 - React 18.3.1 [development]: scheduler-order
+  ---
+  duration_ms: 1022.079375
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: infinite-render-guard
+ok 44 - React 18.3.1 [development]: infinite-render-guard
+  ---
+  duration_ms: 886.763708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: transition-suspense
+ok 45 - React 18.3.1 [development]: transition-suspense
+  ---
+  duration_ms: 1312.669625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: suspense-layout-reconnect
+ok 46 - React 18.3.1 [development]: suspense-layout-reconnect
+  ---
+  duration_ms: 2862.6375
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: lazy-without-boundary
+ok 47 - React 18.3.1 [development]: lazy-without-boundary
+  ---
+  duration_ms: 1168.917708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: error-boundary-update
+ok 48 - React 18.3.1 [development]: error-boundary-update
+  ---
+  duration_ms: 1081.627
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: passive-error-boundary
+ok 49 - React 18.3.1 [development]: passive-error-boundary
+  ---
+  duration_ms: 759.5565
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: deleted-tree-error
+ok 50 - React 18.3.1 [development]: deleted-tree-error
+  ---
+  duration_ms: 987.487584
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: class-lifecycle
+ok 51 - React 18.3.1 [development]: class-lifecycle
+  ---
+  duration_ms: 897.130583
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: class-transition-rebase
+ok 52 - React 18.3.1 [development]: class-transition-rebase
+  ---
+  duration_ms: 1103.872958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: pure-component
+ok 53 - React 18.3.1 [development]: pure-component
+  ---
+  duration_ms: 861.753791
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: hook-order-error
+ok 54 - React 18.3.1 [development]: hook-order-error
+  ---
+  duration_ms: 958.262958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: memo-callback-closure
+ok 55 - React 18.3.1 [development]: memo-callback-closure
+  ---
+  duration_ms: 956.921167
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: same-value-bailout
+ok 56 - React 18.3.1 [development]: same-value-bailout
+  ---
+  duration_ms: 1023.897792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: promise-batch-flushsync
+ok 57 - React 18.3.1 [development]: promise-batch-flushsync
+  ---
+  duration_ms: 869.165666
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: controlled-select-options
+ok 58 - React 18.3.1 [development]: controlled-select-options
+  ---
+  duration_ms: 817.898542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: select-default-reset
+ok 59 - React 18.3.1 [development]: select-default-reset
+  ---
+  duration_ms: 731.372583
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: controlled-radio-restore
+ok 60 - React 18.3.1 [development]: controlled-radio-restore
+  ---
+  duration_ms: 803.191292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: strict-class
+ok 61 - React 18.3.1 [development]: strict-class
+  ---
+  duration_ms: 784.35725
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: use-id
+ok 62 - React 18.3.1 [development]: use-id
+  ---
+  duration_ms: 809.391583
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: sync-effect-timing
+ok 63 - React 18.3.1 [development]: sync-effect-timing
+  ---
+  duration_ms: 648.914292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: sync-suspense-error
+ok 64 - React 18.3.1 [development]: sync-suspense-error
+  ---
+  duration_ms: 627.4695
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: ref-cleanup-error
+ok 65 - React 18.3.1 [development]: ref-cleanup-error
+  ---
+  duration_ms: 871.998792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: cancelled-state-effect
+ok 66 - React 18.3.1 [development]: cancelled-state-effect
+  ---
+  duration_ms: 842.294833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [development]: derived-state-rebase
+ok 67 - React 18.3.1 [development]: derived-state-rebase
+  ---
+  duration_ms: 951.559125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: basic-state
+ok 68 - React 18.3.1 [production]: basic-state
+  ---
+  duration_ms: 828.183708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: state-batch
+ok 69 - React 18.3.1 [production]: state-batch
+  ---
+  duration_ms: 860.85125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: props
+ok 70 - React 18.3.1 [production]: props
+  ---
+  duration_ms: 771.462458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: effect-only
+ok 71 - React 18.3.1 [production]: effect-only
+  ---
+  duration_ms: 754.544542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: memo-effect
+ok 72 - React 18.3.1 [production]: memo-effect
+  ---
+  duration_ms: 751.663916
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: memo-compare
+ok 73 - React 18.3.1 [production]: memo-compare
+  ---
+  duration_ms: 740.0505
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: handler-update
+ok 74 - React 18.3.1 [production]: handler-update
+  ---
+  duration_ms: 869.651208
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: context
+ok 75 - React 18.3.1 [production]: context
+  ---
+  duration_ms: 771.575458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: render-phase
+ok 76 - React 18.3.1 [production]: render-phase
+  ---
+  duration_ms: 647.445166
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: render-phase-ref
+ok 77 - React 18.3.1 [production]: render-phase-ref
+  ---
+  duration_ms: 690.805833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: ref-update
+ok 78 - React 18.3.1 [production]: ref-update
+  ---
+  duration_ms: 751.74925
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: suspense-update
+ok 79 - React 18.3.1 [production]: suspense-update
+  ---
+  duration_ms: 2282.879542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: suspense-lazy-function
+ok 80 - React 18.3.1 [production]: suspense-lazy-function
+  ---
+  duration_ms: 1146.396833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: siblings-state
+ok 81 - React 18.3.1 [production]: siblings-state
+  ---
+  duration_ms: 841.2915
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: suspense-lazy-class
+ok 82 - React 18.3.1 [production]: suspense-lazy-class
+  ---
+  duration_ms: 925.884958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: error-boundary
+ok 83 - React 18.3.1 [production]: error-boundary
+  ---
+  duration_ms: 696.118625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: effect-order
+ok 84 - React 18.3.1 [production]: effect-order
+  ---
+  duration_ms: 1236.10125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: effect-tree-delete
+ok 85 - React 18.3.1 [production]: effect-tree-delete
+  ---
+  duration_ms: 789.653625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: render-phase-reducer
+ok 86 - React 18.3.1 [production]: render-phase-reducer
+  ---
+  duration_ms: 604.965292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: memo-context
+ok 87 - React 18.3.1 [production]: memo-context
+  ---
+  duration_ms: 748.126792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: keyed-diff
+ok 88 - React 18.3.1 [production]: keyed-diff
+  ---
+  duration_ms: 857.806875
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: event-order
+ok 89 - React 18.3.1 [production]: event-order
+  ---
+  duration_ms: 646.993542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: disabled-events
+ok 90 - React 18.3.1 [production]: disabled-events
+  ---
+  duration_ms: 707.185791
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: controlled-input
+ok 91 - React 18.3.1 [production]: controlled-input
+  ---
+  duration_ms: 870.2025
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: controlled-restore
+ok 92 - React 18.3.1 [production]: controlled-restore
+  ---
+  duration_ms: 795.805125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: uncontrolled-input
+ok 93 - React 18.3.1 [production]: uncontrolled-input
+  ---
+  duration_ms: 931.24975
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: controlled-checkbox
+ok 94 - React 18.3.1 [production]: controlled-checkbox
+  ---
+  duration_ms: 804.621375
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: controlled-select
+ok 95 - React 18.3.1 [production]: controlled-select
+  ---
+  duration_ms: 765.670167
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: style-removal
+ok 96 - React 18.3.1 [production]: style-removal
+  ---
+  duration_ms: 797.27175
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: forward-imperative-ref
+ok 97 - React 18.3.1 [production]: forward-imperative-ref
+  ---
+  duration_ms: 930.619625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: didcatch-only
+ok 98 - React 18.3.1 [production]: didcatch-only
+  ---
+  duration_ms: 603.973042
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: layout-error-boundary
+ok 99 - React 18.3.1 [production]: layout-error-boundary
+  ---
+  duration_ms: 645.09625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: hook-throw-recovery
+ok 100 - React 18.3.1 [production]: hook-throw-recovery
+  ---
+  duration_ms: 824.488125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: external-store
+ok 101 - React 18.3.1 [production]: external-store
+  ---
+  duration_ms: 1445.095333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: transition-rebase
+ok 102 - React 18.3.1 [production]: transition-rebase
+  ---
+  duration_ms: 1101.087
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: async-batch
+ok 103 - React 18.3.1 [production]: async-batch
+  ---
+  duration_ms: 805.169917
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: deferred-value
+ok 104 - React 18.3.1 [production]: deferred-value
+  ---
+  duration_ms: 1295.078958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: strict-mode
+ok 105 - React 18.3.1 [production]: strict-mode
+  ---
+  duration_ms: 835.704292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: root-unmount
+ok 106 - React 18.3.1 [production]: root-unmount
+  ---
+  duration_ms: 677.980042
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: external-store-consistency
+ok 107 - React 18.3.1 [production]: external-store-consistency
+  ---
+  duration_ms: 1489.779708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: concurrent-context-rebase
+ok 108 - React 18.3.1 [production]: concurrent-context-rebase
+  ---
+  duration_ms: 2121.53
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: lazy-wrappers
+ok 109 - React 18.3.1 [production]: lazy-wrappers
+  ---
+  duration_ms: 617.162208
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: scheduler-order
+ok 110 - React 18.3.1 [production]: scheduler-order
+  ---
+  duration_ms: 1121.049042
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: infinite-render-guard
+ok 111 - React 18.3.1 [production]: infinite-render-guard
+  ---
+  duration_ms: 646.115542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: transition-suspense
+ok 112 - React 18.3.1 [production]: transition-suspense
+  ---
+  duration_ms: 1162.868292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: suspense-layout-reconnect
+ok 113 - React 18.3.1 [production]: suspense-layout-reconnect
+  ---
+  duration_ms: 2819.526792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: lazy-without-boundary
+ok 114 - React 18.3.1 [production]: lazy-without-boundary
+  ---
+  duration_ms: 851.338125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: error-boundary-update
+ok 115 - React 18.3.1 [production]: error-boundary-update
+  ---
+  duration_ms: 930.887292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: passive-error-boundary
+ok 116 - React 18.3.1 [production]: passive-error-boundary
+  ---
+  duration_ms: 769.00575
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: deleted-tree-error
+ok 117 - React 18.3.1 [production]: deleted-tree-error
+  ---
+  duration_ms: 766.48475
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: class-lifecycle
+ok 118 - React 18.3.1 [production]: class-lifecycle
+  ---
+  duration_ms: 821.199333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: class-transition-rebase
+ok 119 - React 18.3.1 [production]: class-transition-rebase
+  ---
+  duration_ms: 1017.690416
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: pure-component
+ok 120 - React 18.3.1 [production]: pure-component
+  ---
+  duration_ms: 902.377125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: hook-order-error
+ok 121 - React 18.3.1 [production]: hook-order-error
+  ---
+  duration_ms: 910.172916
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: memo-callback-closure
+ok 122 - React 18.3.1 [production]: memo-callback-closure
+  ---
+  duration_ms: 1015.834833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: same-value-bailout
+ok 123 - React 18.3.1 [production]: same-value-bailout
+  ---
+  duration_ms: 1452.070583
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: promise-batch-flushsync
+ok 124 - React 18.3.1 [production]: promise-batch-flushsync
+  ---
+  duration_ms: 781.888
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: controlled-select-options
+ok 125 - React 18.3.1 [production]: controlled-select-options
+  ---
+  duration_ms: 836.341875
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: select-default-reset
+ok 126 - React 18.3.1 [production]: select-default-reset
+  ---
+  duration_ms: 691.297792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: controlled-radio-restore
+ok 127 - React 18.3.1 [production]: controlled-radio-restore
+  ---
+  duration_ms: 668.082084
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: strict-class
+ok 128 - React 18.3.1 [production]: strict-class
+  ---
+  duration_ms: 871.948542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: use-id
+ok 129 - React 18.3.1 [production]: use-id
+  ---
+  duration_ms: 793.755708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: sync-effect-timing
+ok 130 - React 18.3.1 [production]: sync-effect-timing
+  ---
+  duration_ms: 649.315458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: sync-suspense-error
+ok 131 - React 18.3.1 [production]: sync-suspense-error
+  ---
+  duration_ms: 633.807875
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: ref-cleanup-error
+ok 132 - React 18.3.1 [production]: ref-cleanup-error
+  ---
+  duration_ms: 735.045041
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: cancelled-state-effect
+ok 133 - React 18.3.1 [production]: cancelled-state-effect
+  ---
+  duration_ms: 795.70075
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 [production]: derived-state-rebase
+ok 134 - React 18.3.1 [production]: derived-state-rebase
+  ---
+  duration_ms: 899.152125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: stable-element-effects
+ok 135 - React 18.3.1 regression [development]: stable-element-effects
+  ---
+  duration_ms: 542.202375
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: memo-subtree-effects
+ok 136 - React 18.3.1 regression [development]: memo-subtree-effects
+  ---
+  duration_ms: 473.406125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: nested-suspending-fallback
+ok 137 - React 18.3.1 regression [development]: nested-suspending-fallback
+  ---
+  duration_ms: 471.660083
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: nested-suspense-hide
+ok 138 - React 18.3.1 regression [development]: nested-suspense-hide
+  ---
+  duration_ms: 566.862958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: class-context-type
+ok 139 - React 18.3.1 regression [development]: class-context-type
+  ---
+  duration_ms: 619.290583
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: suspense-hidden-class-delete
+ok 140 - React 18.3.1 regression [development]: suspense-hidden-class-delete
+  ---
+  duration_ms: 460.280166
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: portal-mount-update
+ok 141 - React 18.3.1 regression [development]: portal-mount-update
+  ---
+  duration_ms: 463.740792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: root-initial-content
+ok 142 - React 18.3.1 regression [development]: root-initial-content
+  ---
+  duration_ms: 498.691667
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: html-content-switch
+ok 143 - React 18.3.1 regression [development]: html-content-switch
+  ---
+  duration_ms: 515.452834
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: strict-class-updater
+ok 144 - React 18.3.1 regression [development]: strict-class-updater
+  ---
+  duration_ms: 564.409792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: error-boundary-fallback-throws
+ok 145 - React 18.3.1 regression [development]: error-boundary-fallback-throws
+  ---
+  duration_ms: 470.696291
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: concurrent-update-after-subtree-completes
+ok 146 - React 18.3.1 regression [development]: concurrent-update-after-subtree-completes
+  ---
+  duration_ms: 1170.208042
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: context-after-suspended-transition
+ok 147 - React 18.3.1 regression [development]: context-after-suspended-transition
+  ---
+  duration_ms: 499.921542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: scheduler-preempt-current-callback
+ok 148 - React 18.3.1 regression [development]: scheduler-preempt-current-callback
+  ---
+  duration_ms: 629.195541
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: scheduler-natural-exit
+ok 149 - React 18.3.1 regression [development]: scheduler-natural-exit
+  ---
+  duration_ms: 650.012
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: effect-order-control
+ok 150 - React 18.3.1 regression [development]: effect-order-control
+  ---
+  duration_ms: 475.076125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: keyed-fragment-identity-control
+ok 151 - React 18.3.1 regression [development]: keyed-fragment-identity-control
+  ---
+  duration_ms: 495.80275
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: cross-root-passive-control
+ok 152 - React 18.3.1 regression [development]: cross-root-passive-control
+  ---
+  duration_ms: 609.222958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: store-subscription-control
+ok 153 - React 18.3.1 regression [development]: store-subscription-control
+  ---
+  duration_ms: 504.22025
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: deferred-render-phase-mount
+ok 154 - React 18.3.1 regression [development]: deferred-render-phase-mount
+  ---
+  duration_ms: 466.63075
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: lazy-default-props
+ok 155 - React 18.3.1 regression [development]: lazy-default-props
+  ---
+  duration_ms: 485.495542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: html-bidirectional-content
+ok 156 - React 18.3.1 regression [development]: html-bidirectional-content
+  ---
+  duration_ms: 477.97
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: hidden-reveal-delete-lifecycle
+ok 157 - React 18.3.1 regression [development]: hidden-reveal-delete-lifecycle
+  ---
+  duration_ms: 468.459958
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: hidden-update-then-reveal
+ok 158 - React 18.3.1 regression [development]: hidden-update-then-reveal
+  ---
+  duration_ms: 505.98275
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: class-context-constructor-scu
+ok 159 - React 18.3.1 regression [development]: class-context-constructor-scu
+  ---
+  duration_ms: 462.094667
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: lazy-default-props-update
+ok 160 - React 18.3.1 regression [development]: lazy-default-props-update
+  ---
+  duration_ms: 524.197833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: portal-state-event-reorder
+ok 161 - React 18.3.1 regression [development]: portal-state-event-reorder
+  ---
+  duration_ms: 533.217
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: host-context-svg-portal-document
+ok 162 - React 18.3.1 regression [development]: host-context-svg-portal-document
+  ---
+  duration_ms: 484.572583
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: native-event-priority
+ok 163 - React 18.3.1 regression [development]: native-event-priority
+  ---
+  duration_ms: 490.468
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: root-error-surfaces-and-recovers
+ok 164 - React 18.3.1 regression [development]: root-error-surfaces-and-recovers
+  ---
+  duration_ms: 480.885209
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: layout-nested-update-limit
+ok 165 - React 18.3.1 regression [development]: layout-nested-update-limit
+  ---
+  duration_ms: 479.609
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: layout-cross-root-flushsync
+ok 166 - React 18.3.1 regression [development]: layout-cross-root-flushsync
+  ---
+  duration_ms: 501.095042
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: select-multiple-default-toggle
+ok 167 - React 18.3.1 regression [development]: select-multiple-default-toggle
+  ---
+  duration_ms: 470.158833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: textarea-default-value-reset
+ok 168 - React 18.3.1 regression [development]: textarea-default-value-reset
+  ---
+  duration_ms: 469.663458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: input-default-value-removed
+ok 169 - React 18.3.1 regression [development]: input-default-value-removed
+  ---
+  duration_ms: 474.087791
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: controlled-number-blur
+ok 170 - React 18.3.1 regression [development]: controlled-number-blur
+  ---
+  duration_ms: 471.034708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: context-error-boundary-resume
+not ok 171 - React 18.3.1 regression [development]: context-error-boundary-resume
+  ---
+  duration_ms: 481.670458
+  type: 'test'
+  location: '/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/regression.test.cjs:61:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    []
+    + actual - expected
+    
+      [
+        'a',
+    +   'a'
+    -   'b'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'a'
+    1: 'b'
+  actual:
+    0: 'a'
+    1: 'a'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/regression.test.cjs:76:14)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: React 18.3.1 regression [development]: legacy-boundary-didcatch-throws
+ok 172 - React 18.3.1 regression [development]: legacy-boundary-didcatch-throws
+  ---
+  duration_ms: 481.883459
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: passive-cleanup-updates-other-root
+ok 173 - React 18.3.1 regression [development]: passive-cleanup-updates-other-root
+  ---
+  duration_ms: 568.514417
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: scheduler-priority-context
+ok 174 - React 18.3.1 regression [development]: scheduler-priority-context
+  ---
+  duration_ms: 488.728208
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [development]: scheduler-time-refresh
+ok 175 - React 18.3.1 regression [development]: scheduler-time-refresh
+  ---
+  duration_ms: 533.286333
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: stable-element-effects
+ok 176 - React 18.3.1 regression [production]: stable-element-effects
+  ---
+  duration_ms: 456.621625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: memo-subtree-effects
+ok 177 - React 18.3.1 regression [production]: memo-subtree-effects
+  ---
+  duration_ms: 473.386708
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: nested-suspending-fallback
+ok 178 - React 18.3.1 regression [production]: nested-suspending-fallback
+  ---
+  duration_ms: 473.543834
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: nested-suspense-hide
+ok 179 - React 18.3.1 regression [production]: nested-suspense-hide
+  ---
+  duration_ms: 459.767541
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: class-context-type
+ok 180 - React 18.3.1 regression [production]: class-context-type
+  ---
+  duration_ms: 455.031417
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: suspense-hidden-class-delete
+ok 181 - React 18.3.1 regression [production]: suspense-hidden-class-delete
+  ---
+  duration_ms: 457.699291
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: portal-mount-update
+ok 182 - React 18.3.1 regression [production]: portal-mount-update
+  ---
+  duration_ms: 460.824625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: root-initial-content
+ok 183 - React 18.3.1 regression [production]: root-initial-content
+  ---
+  duration_ms: 482.930792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: html-content-switch
+ok 184 - React 18.3.1 regression [production]: html-content-switch
+  ---
+  duration_ms: 468.707625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: strict-class-updater
+ok 185 - React 18.3.1 regression [production]: strict-class-updater
+  ---
+  duration_ms: 461.21125
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: error-boundary-fallback-throws
+ok 186 - React 18.3.1 regression [production]: error-boundary-fallback-throws
+  ---
+  duration_ms: 458.480834
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: concurrent-update-after-subtree-completes
+ok 187 - React 18.3.1 regression [production]: concurrent-update-after-subtree-completes
+  ---
+  duration_ms: 1080.45925
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: context-after-suspended-transition
+ok 188 - React 18.3.1 regression [production]: context-after-suspended-transition
+  ---
+  duration_ms: 480.857209
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: scheduler-preempt-current-callback
+ok 189 - React 18.3.1 regression [production]: scheduler-preempt-current-callback
+  ---
+  duration_ms: 617.715458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: scheduler-natural-exit
+ok 190 - React 18.3.1 regression [production]: scheduler-natural-exit
+  ---
+  duration_ms: 562.535208
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: effect-order-control
+ok 191 - React 18.3.1 regression [production]: effect-order-control
+  ---
+  duration_ms: 469.04275
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: keyed-fragment-identity-control
+ok 192 - React 18.3.1 regression [production]: keyed-fragment-identity-control
+  ---
+  duration_ms: 501.24625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: cross-root-passive-control
+ok 193 - React 18.3.1 regression [production]: cross-root-passive-control
+  ---
+  duration_ms: 590.370542
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: store-subscription-control
+ok 194 - React 18.3.1 regression [production]: store-subscription-control
+  ---
+  duration_ms: 466.80625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: deferred-render-phase-mount
+ok 195 - React 18.3.1 regression [production]: deferred-render-phase-mount
+  ---
+  duration_ms: 481.301459
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: lazy-default-props
+ok 196 - React 18.3.1 regression [production]: lazy-default-props
+  ---
+  duration_ms: 468.585334
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: html-bidirectional-content
+ok 197 - React 18.3.1 regression [production]: html-bidirectional-content
+  ---
+  duration_ms: 491.413417
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: hidden-reveal-delete-lifecycle
+ok 198 - React 18.3.1 regression [production]: hidden-reveal-delete-lifecycle
+  ---
+  duration_ms: 470.138292
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: hidden-update-then-reveal
+ok 199 - React 18.3.1 regression [production]: hidden-update-then-reveal
+  ---
+  duration_ms: 505.2895
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: class-context-constructor-scu
+ok 200 - React 18.3.1 regression [production]: class-context-constructor-scu
+  ---
+  duration_ms: 460.976709
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: lazy-default-props-update
+ok 201 - React 18.3.1 regression [production]: lazy-default-props-update
+  ---
+  duration_ms: 483.260334
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: portal-state-event-reorder
+ok 202 - React 18.3.1 regression [production]: portal-state-event-reorder
+  ---
+  duration_ms: 485.922709
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: host-context-svg-portal-document
+ok 203 - React 18.3.1 regression [production]: host-context-svg-portal-document
+  ---
+  duration_ms: 477.503625
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: native-event-priority
+ok 204 - React 18.3.1 regression [production]: native-event-priority
+  ---
+  duration_ms: 455.031458
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: root-error-surfaces-and-recovers
+ok 205 - React 18.3.1 regression [production]: root-error-surfaces-and-recovers
+  ---
+  duration_ms: 461.985667
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: layout-nested-update-limit
+ok 206 - React 18.3.1 regression [production]: layout-nested-update-limit
+  ---
+  duration_ms: 465.312875
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: layout-cross-root-flushsync
+ok 207 - React 18.3.1 regression [production]: layout-cross-root-flushsync
+  ---
+  duration_ms: 494.13675
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: select-multiple-default-toggle
+ok 208 - React 18.3.1 regression [production]: select-multiple-default-toggle
+  ---
+  duration_ms: 469.363917
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: textarea-default-value-reset
+ok 209 - React 18.3.1 regression [production]: textarea-default-value-reset
+  ---
+  duration_ms: 498.981833
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: input-default-value-removed
+ok 210 - React 18.3.1 regression [production]: input-default-value-removed
+  ---
+  duration_ms: 466.902875
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: controlled-number-blur
+ok 211 - React 18.3.1 regression [production]: controlled-number-blur
+  ---
+  duration_ms: 483.746792
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: context-error-boundary-resume
+not ok 212 - React 18.3.1 regression [production]: context-error-boundary-resume
+  ---
+  duration_ms: 455.477417
+  type: 'test'
+  location: '/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/regression.test.cjs:61:5'
+  failureType: 'testCodeFailure'
+  error: |-
+    []
+    + actual - expected
+    
+      [
+        'a',
+    +   'a'
+    -   'b'
+      ]
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'a'
+    1: 'b'
+  actual:
+    0: 'a'
+    1: 'a'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source/scripts/tests/regression.test.cjs:76:14)
+    Test.runInAsyncScope (node:async_hooks:214:14)
+    Test.run (node:internal/test_runner/test:1047:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+    Test.postRun (node:internal/test_runner/test:1173:19)
+    Test.run (node:internal/test_runner/test:1101:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: React 18.3.1 regression [production]: legacy-boundary-didcatch-throws
+ok 213 - React 18.3.1 regression [production]: legacy-boundary-didcatch-throws
+  ---
+  duration_ms: 500.234084
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: passive-cleanup-updates-other-root
+ok 214 - React 18.3.1 regression [production]: passive-cleanup-updates-other-root
+  ---
+  duration_ms: 516.596375
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: scheduler-priority-context
+ok 215 - React 18.3.1 regression [production]: scheduler-priority-context
+  ---
+  duration_ms: 493.423917
+  type: 'test'
+  ...
+# Subtest: React 18.3.1 regression [production]: scheduler-time-refresh
+ok 216 - React 18.3.1 regression [production]: scheduler-time-refresh
+  ---
+  duration_ms: 508.094834
+  type: 'test'
+  ...
+1..216
+# tests 216
+# suites 0
+# pass 214
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 167253.541792
+[ELIFECYCLE] Test failed. See above for more details.

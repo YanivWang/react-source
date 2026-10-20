@@ -1,0 +1,510 @@
+{
+  "ReactFiberFlags": [
+    {
+      "name": "NoFlags",
+      "local": 0,
+      "official": 0,
+      "equal": true
+    },
+    {
+      "name": "PerformedWork",
+      "local": 1,
+      "official": 1,
+      "equal": true
+    },
+    {
+      "name": "Placement",
+      "local": 2,
+      "official": 2,
+      "equal": true
+    },
+    {
+      "name": "Update",
+      "local": 4,
+      "official": 4,
+      "equal": true
+    },
+    {
+      "name": "Deletion",
+      "local": 8,
+      "official": 8,
+      "equal": true
+    },
+    {
+      "name": "ChildDeletion",
+      "local": 16,
+      "official": 16,
+      "equal": true
+    },
+    {
+      "name": "ContentReset",
+      "local": 32,
+      "official": 32,
+      "equal": true
+    },
+    {
+      "name": "Callback",
+      "local": 64,
+      "official": 64,
+      "equal": true
+    },
+    {
+      "name": "DidCapture",
+      "local": 128,
+      "official": 128,
+      "equal": true
+    },
+    {
+      "name": "Ref",
+      "local": 512,
+      "official": 512,
+      "equal": true
+    },
+    {
+      "name": "Snapshot",
+      "local": 1024,
+      "official": 1024,
+      "equal": true
+    },
+    {
+      "name": "Passive",
+      "local": 2048,
+      "official": 2048,
+      "equal": true
+    },
+    {
+      "name": "Visibility",
+      "local": 8192,
+      "official": 8192,
+      "equal": true
+    },
+    {
+      "name": "HostEffectMask",
+      "local": 32767,
+      "official": 32767,
+      "equal": true
+    },
+    {
+      "name": "Incomplete",
+      "local": 32768,
+      "official": 32768,
+      "equal": true
+    },
+    {
+      "name": "ShouldCapture",
+      "local": 65536,
+      "official": 65536,
+      "equal": true
+    },
+    {
+      "name": "RefStatic",
+      "local": 2097152,
+      "official": 2097152,
+      "equal": true
+    },
+    {
+      "name": "MountLayoutDev",
+      "local": 16777216,
+      "official": 16777216,
+      "equal": true
+    },
+    {
+      "name": "MountPassiveDev",
+      "local": 33554432,
+      "official": 33554432,
+      "equal": true
+    },
+    {
+      "name": "StoreConsistency",
+      "local": 8192,
+      "official": 16384,
+      "equal": false
+    }
+  ],
+  "ReactFiberLane": [
+    {
+      "name": "TotalLanes",
+      "local": 31,
+      "official": 31,
+      "equal": true
+    },
+    {
+      "name": "NoLanes",
+      "local": 0,
+      "official": 0,
+      "equal": true
+    },
+    {
+      "name": "NoLane",
+      "local": 0,
+      "official": 0,
+      "equal": true
+    },
+    {
+      "name": "SyncLane",
+      "local": 1,
+      "official": 1,
+      "equal": true
+    },
+    {
+      "name": "InputContinuousHydrationLane",
+      "local": 2,
+      "official": 2,
+      "equal": true
+    },
+    {
+      "name": "InputContinuousLane",
+      "local": 4,
+      "official": 4,
+      "equal": true
+    },
+    {
+      "name": "DefaultHydrationLane",
+      "local": 8,
+      "official": 8,
+      "equal": true
+    },
+    {
+      "name": "DefaultLane",
+      "local": 16,
+      "official": 16,
+      "equal": true
+    },
+    {
+      "name": "TransitionHydrationLane",
+      "local": 32,
+      "official": 32,
+      "equal": true
+    },
+    {
+      "name": "TransitionLanes",
+      "local": 4194240,
+      "official": 4194240,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane1",
+      "local": 64,
+      "official": 64,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane2",
+      "local": 128,
+      "official": 128,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane3",
+      "local": 256,
+      "official": 256,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane4",
+      "local": 512,
+      "official": 512,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane5",
+      "local": 1024,
+      "official": 1024,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane6",
+      "local": 2048,
+      "official": 2048,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane7",
+      "local": 4096,
+      "official": 4096,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane8",
+      "local": 8192,
+      "official": 8192,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane9",
+      "local": 16384,
+      "official": 16384,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane10",
+      "local": 32768,
+      "official": 32768,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane11",
+      "local": 65536,
+      "official": 65536,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane12",
+      "local": 131072,
+      "official": 131072,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane13",
+      "local": 262144,
+      "official": 262144,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane14",
+      "local": 524288,
+      "official": 524288,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane15",
+      "local": 1048576,
+      "official": 1048576,
+      "equal": true
+    },
+    {
+      "name": "TransitionLane16",
+      "local": 2097152,
+      "official": 2097152,
+      "equal": true
+    },
+    {
+      "name": "RetryLanes",
+      "local": 130023424,
+      "official": 130023424,
+      "equal": true
+    },
+    {
+      "name": "RetryLane1",
+      "local": 4194304,
+      "official": 4194304,
+      "equal": true
+    },
+    {
+      "name": "RetryLane2",
+      "local": 8388608,
+      "official": 8388608,
+      "equal": true
+    },
+    {
+      "name": "RetryLane3",
+      "local": 16777216,
+      "official": 16777216,
+      "equal": true
+    },
+    {
+      "name": "RetryLane4",
+      "local": 33554432,
+      "official": 33554432,
+      "equal": true
+    },
+    {
+      "name": "RetryLane5",
+      "local": 67108864,
+      "official": 67108864,
+      "equal": true
+    },
+    {
+      "name": "SelectiveHydrationLane",
+      "local": 134217728,
+      "official": 134217728,
+      "equal": true
+    },
+    {
+      "name": "NonIdleLanes",
+      "local": 268435455,
+      "official": 268435455,
+      "equal": true
+    },
+    {
+      "name": "IdleHydrationLane",
+      "local": 268435456,
+      "official": 268435456,
+      "equal": true
+    },
+    {
+      "name": "IdleLane",
+      "local": 536870912,
+      "official": 536870912,
+      "equal": true
+    },
+    {
+      "name": "OffscreenLane",
+      "local": 1073741824,
+      "official": 1073741824,
+      "equal": true
+    },
+    {
+      "name": "NoTimestamp",
+      "local": -1,
+      "official": -1,
+      "equal": true
+    }
+  ],
+  "ReactTypeOfMode": [
+    {
+      "name": "NoMode",
+      "local": 0,
+      "official": 0,
+      "equal": true
+    },
+    {
+      "name": "ConcurrentMode",
+      "local": 1,
+      "official": 1,
+      "equal": true
+    },
+    {
+      "name": "StrictLegacyMode",
+      "local": 8,
+      "official": 8,
+      "equal": true
+    },
+    {
+      "name": "StrictEffectsMode",
+      "local": 16,
+      "official": 16,
+      "equal": true
+    }
+  ],
+  "ReactWorkTags": [
+    {
+      "name": "FunctionComponent",
+      "local": 0,
+      "official": 0,
+      "equal": true
+    },
+    {
+      "name": "ClassComponent",
+      "local": 1,
+      "official": 1,
+      "equal": true
+    },
+    {
+      "name": "IndeterminateComponent",
+      "local": 2,
+      "official": 2,
+      "equal": true
+    },
+    {
+      "name": "HostRoot",
+      "local": 3,
+      "official": 3,
+      "equal": true
+    },
+    {
+      "name": "HostPortal",
+      "local": 4,
+      "official": 4,
+      "equal": true
+    },
+    {
+      "name": "HostComponent",
+      "local": 5,
+      "official": 5,
+      "equal": true
+    },
+    {
+      "name": "HostText",
+      "local": 6,
+      "official": 6,
+      "equal": true
+    },
+    {
+      "name": "Fragment",
+      "local": 7,
+      "official": 7,
+      "equal": true
+    },
+    {
+      "name": "Mode",
+      "local": 8,
+      "official": 8,
+      "equal": true
+    },
+    {
+      "name": "ContextConsumer",
+      "local": 9,
+      "official": 9,
+      "equal": true
+    },
+    {
+      "name": "ContextProvider",
+      "local": 10,
+      "official": 10,
+      "equal": true
+    },
+    {
+      "name": "ForwardRef",
+      "local": 11,
+      "official": 11,
+      "equal": true
+    },
+    {
+      "name": "SuspenseComponent",
+      "local": 13,
+      "official": 13,
+      "equal": true
+    },
+    {
+      "name": "MemoComponent",
+      "local": 14,
+      "official": 14,
+      "equal": true
+    },
+    {
+      "name": "LazyComponent",
+      "local": 16,
+      "official": 16,
+      "equal": true
+    },
+    {
+      "name": "OffscreenComponent",
+      "local": 22,
+      "official": 22,
+      "equal": true
+    }
+  ],
+  "ReactHookEffectTags": [
+    {
+      "name": "NoFlags",
+      "local": 0,
+      "official": 0,
+      "equal": true
+    },
+    {
+      "name": "HasEffect",
+      "local": 1,
+      "official": 1,
+      "equal": true
+    },
+    {
+      "name": "Insertion",
+      "local": 2,
+      "official": 2,
+      "equal": true
+    },
+    {
+      "name": "Layout",
+      "local": 4,
+      "official": 4,
+      "equal": true
+    },
+    {
+      "name": "Passive",
+      "local": 8,
+      "official": 8,
+      "equal": true
+    }
+  ]
+}

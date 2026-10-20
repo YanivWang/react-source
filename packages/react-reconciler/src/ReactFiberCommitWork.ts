@@ -7,6 +7,7 @@ import type { FiberNode } from "./ReactFiber";
 import {
   Callback,
   ChildDeletion,
+  ContentReset,
   Passive,
   LayoutMask,
   MountLayoutDev,
@@ -24,6 +25,8 @@ import {
   appendChildToContainer,
   commitTextUpdate,
   commitUpdate,
+  clearContainer,
+  resetTextContent,
   hideInstance,
   hideTextInstance,
   insertBefore,
@@ -33,11 +36,11 @@ import {
   supportsMutation,
   unhideInstance,
   unhideTextInstance,
-} from "./ReactFiberConfig";
+} from "./ReactFiberHostConfig";
 import type { Lanes } from "./ReactFiberLane";
 import type { FiberRootNode } from "./ReactFiberRoot";
 import type { Effect, FunctionComponentUpdateQueue } from "./ReactFiberHooks";
-import type { Update as ClassUpdate } from "./ReactFiberClassUpdateQueue";
+import { commitUpdateQueue } from "./ReactFiberClassUpdateQueue";
 import {
   HasEffect as HookHasEffect,
   Insertion as HookInsertion,
@@ -68,6 +71,7 @@ import {
 // commitDeletionEffectsOnFiber 递归间传递。
 let hostParent: any = null;
 let hostParentIsContainer = false;
+let offscreenSubtreeWasHidden = false;
 
 // 对照官方 commitHookEffectListMount：遍历 fiber.updateQueue（Hook effect 的循环链表），
 // 只执行 tag 与 flags 按位匹配的 effect（HookHasEffect 标记 deps 是否变化，
@@ -304,6 +308,10 @@ function commitPlacement(finishedWork: FiberNode): void {
   switch (parentFiber.tag) {
     case HostComponent: {
       const parent = parentFiber.stateNode;
+      if (parentFiber.flags & ContentReset) {
+        resetTextContent(parent);
+        parentFiber.flags &= ~ContentReset;
+      }
       const before = getHostSibling(finishedWork);
       insertOrAppendPlacementNode(finishedWork, before, parent);
       break;
@@ -359,7 +367,8 @@ function commitDeletionEffectsOnFiber(
     case HostComponent: {
       // 先清 ref，随后故意 fall through 到 HostText 分支——
       // 宿主的子节点由它自己整体移除，所以递归时把 hostParent 置空，避免子节点重复 remove
-      safelyDetachRef(deletedFiber, nearestMountedAncestor);
+      if (!offscreenSubtreeWasHidden)
+        safelyDetachRef(deletedFiber, nearestMountedAncestor);
     }
     case HostText: {
       // 只需移除最近的宿主子节点：递归期间 hostParent 置空，嵌套的 host 节点不会各自 remove，
@@ -437,11 +446,12 @@ function commitDeletionEffectsOnFiber(
         deletedFiber,
         nearestMountedAncestor,
       );
-      commitHookEffectListUnmount(
-        HookLayout,
-        deletedFiber,
-        nearestMountedAncestor,
-      );
+      if (!offscreenSubtreeWasHidden)
+        commitHookEffectListUnmount(
+          HookLayout,
+          deletedFiber,
+          nearestMountedAncestor,
+        );
       recursivelyTraverseDeletionEffects(
         finishedRoot,
         nearestMountedAncestor,
@@ -451,13 +461,27 @@ function commitDeletionEffectsOnFiber(
     }
     case ClassComponent: {
       // 从仍挂载的祖先捕获卸载错误，随后继续清理其余子节点。
-      safelyDetachRef(deletedFiber, nearestMountedAncestor);
-      safelyCallComponentWillUnmount(deletedFiber, nearestMountedAncestor);
+      if (!offscreenSubtreeWasHidden) {
+        safelyDetachRef(deletedFiber, nearestMountedAncestor);
+        safelyCallComponentWillUnmount(deletedFiber, nearestMountedAncestor);
+      }
       recursivelyTraverseDeletionEffects(
         finishedRoot,
         nearestMountedAncestor,
         deletedFiber,
       );
+      return;
+    }
+    case OffscreenComponent: {
+      const previous = offscreenSubtreeWasHidden;
+      offscreenSubtreeWasHidden =
+        previous || deletedFiber.memoizedState !== null;
+      recursivelyTraverseDeletionEffects(
+        finishedRoot,
+        nearestMountedAncestor,
+        deletedFiber,
+      );
+      offscreenSubtreeWasHidden = previous;
       return;
     }
     default: {
@@ -535,6 +559,11 @@ function commitBeforeMutationEffectsOnFiber(
     const flags = finishedWork.flags;
 
     switch (finishedWork.tag) {
+      case HostRoot: {
+        recursivelyTraverseBeforeMutationEffects(root, finishedWork);
+        if (flags & Snapshot) clearContainer(root.containerInfo);
+        return;
+      }
       case ClassComponent: {
         recursivelyTraverseBeforeMutationEffects(root, finishedWork);
         if (flags & Snapshot) {
@@ -612,10 +641,11 @@ function hideOrUnhideAllChildren(
         unhideTextInstance(instance, node.memoizedProps);
       }
     } else if (
-      (node.tag === OffscreenComponent || node.tag === SuspenseComponent) &&
+      node.tag === OffscreenComponent &&
+      node.memoizedState !== null &&
       node !== finishedWork
     ) {
-      // 嵌套的 Offscreen/Suspense 交给它自己的 commit 分支处理，这里不下探
+      // 已经隐藏的内层边界保持隐藏；可见的嵌套边界仍须随外层隐藏。
     } else if (node.child !== null) {
       node.child.return = node;
       node = node.child;
@@ -675,9 +705,13 @@ function commitMutationEffectsOnFiber(
         commitReconciliationEffects(finishedWork);
 
         if (flags & Ref) {
-          if (current !== null) {
+          if (current !== null && !offscreenSubtreeWasHidden) {
             safelyDetachRef(current, finishedWork.return);
           }
+        }
+        if (finishedWork.flags & ContentReset) {
+          resetTextContent(finishedWork.stateNode);
+          finishedWork.flags &= ~ContentReset;
         }
 
         if (flags & Update) {
@@ -757,7 +791,11 @@ function commitMutationEffectsOnFiber(
           // commit 完全结束、root.current 已切换之后的 commitLayoutEffects——这样能保证一棵树里
           // 所有兄弟组件的销毁都先跑完，才轮到任何一个组件挂载新的 layout effect，不会互相干扰。
           // MemoComponent 本身没有 hook updateQueue，这里调用是安全的空操作。
-          commitHookEffectListUnmount(HookLayout | HookHasEffect, finishedWork);
+          if (!offscreenSubtreeWasHidden)
+            commitHookEffectListUnmount(
+              HookLayout | HookHasEffect,
+              finishedWork,
+            );
         }
         return;
       }
@@ -766,7 +804,7 @@ function commitMutationEffectsOnFiber(
         commitReconciliationEffects(finishedWork);
 
         if (flags & Ref) {
-          if (current !== null) {
+          if (current !== null && !offscreenSubtreeWasHidden) {
             safelyDetachRef(current, finishedWork.return);
           }
         }
@@ -784,17 +822,21 @@ function commitMutationEffectsOnFiber(
         return;
       }
       case OffscreenComponent: {
+        const previous = offscreenSubtreeWasHidden;
+        const wasHidden = current !== null && current.memoizedState !== null;
+        offscreenSubtreeWasHidden = previous || wasHidden;
         recursivelyTraverseMutationEffects(root, finishedWork, lanes);
+        offscreenSubtreeWasHidden = previous;
         commitReconciliationEffects(finishedWork);
 
         if (flags & Visibility) {
           const offscreenInstance: OffscreenInstance = finishedWork.stateNode;
-          const isHidden = finishedWork.pendingProps.mode === "hidden";
+          const isHidden = finishedWork.memoizedState !== null;
           offscreenInstance.isHidden = isHidden;
           if (supportsMutation) {
             hideOrUnhideAllChildren(finishedWork, isHidden);
           }
-          if (isHidden && current !== null && current.memoizedState === null) {
+          if (isHidden && !wasHidden && !offscreenSubtreeWasHidden) {
             let child = finishedWork.child;
             while (child !== null) {
               disappearLayoutEffects(child);
@@ -821,6 +863,7 @@ export function commitMutationEffects(
   finishedWork: FiberNode,
   committedLanes: Lanes,
 ): void {
+  offscreenSubtreeWasHidden = false;
   commitMutationEffectsOnFiber(finishedWork, root, committedLanes);
 }
 
@@ -833,28 +876,6 @@ function recursivelyTraverseLayoutEffects(
     while (child !== null) {
       commitLayoutEffectsOnFiber(root, child);
       child = child.sibling;
-    }
-  }
-}
-
-// 对照官方 commitClassCallbacks：processUpdateQueue 把带 callback 的 update 攒到
-// updateQueue.effects（本项目复用 ReactFiberClassUpdateQueue.Update 这个数据结构），
-// layout 子阶段统一执行并清空，保证 setState(partial, callback) 的 callback 在这里触发。
-function commitClassCallbacks(finishedWork: FiberNode): void {
-  const updateQueue = finishedWork.updateQueue;
-  if (updateQueue === null) {
-    return;
-  }
-  const effects: ClassUpdate<any>[] | null = updateQueue.effects;
-  updateQueue.effects = null;
-  if (effects !== null) {
-    for (let i = 0; i < effects.length; i++) {
-      const effect = effects[i];
-      const callback = effect.callback;
-      if (callback !== null) {
-        effect.callback = null;
-        callback.call(finishedWork.stateNode);
-      }
     }
   }
 }
@@ -873,33 +894,48 @@ function commitLayoutEffectsOnFiber(
     switch (finishedWork.tag) {
       case OffscreenComponent: {
         if (finishedWork.memoizedState !== null) return;
-        if (
+        const previous = offscreenSubtreeWasHidden;
+        const wasHidden =
           finishedWork.alternate !== null &&
-          finishedWork.alternate.memoizedState !== null
-        ) {
+          finishedWork.alternate.memoizedState !== null;
+        offscreenSubtreeWasHidden = previous || wasHidden;
+        if (wasHidden && !previous) {
           let child = finishedWork.child;
           while (child !== null) {
             reappearLayoutEffects(child);
             child = child.sibling;
           }
-          return;
         }
         recursivelyTraverseLayoutEffects(root, finishedWork);
+        offscreenSubtreeWasHidden = previous;
         break;
       }
       case FunctionComponent:
       case ForwardRef:
       case MemoComponent: {
         recursivelyTraverseLayoutEffects(root, finishedWork);
-        if (flags & Update) {
+        if (flags & Update && !offscreenSubtreeWasHidden) {
           commitHookEffectListMount(HookLayout | HookHasEffect, finishedWork);
+        }
+        break;
+      }
+      case HostRoot: {
+        recursivelyTraverseLayoutEffects(root, finishedWork);
+        if (flags & Callback && finishedWork.updateQueue !== null) {
+          const child = finishedWork.child;
+          const instance =
+            child !== null &&
+            (child.tag === HostComponent || child.tag === ClassComponent)
+              ? child.stateNode
+              : null;
+          commitUpdateQueue(finishedWork, finishedWork.updateQueue, instance);
         }
         break;
       }
       case ClassComponent: {
         recursivelyTraverseLayoutEffects(root, finishedWork);
         const instance = finishedWork.stateNode;
-        if (flags & Update) {
+        if (flags & Update && !offscreenSubtreeWasHidden) {
           const current = finishedWork.alternate;
           if (current === null) {
             instance.componentDidMount();
@@ -914,7 +950,7 @@ function commitLayoutEffectsOnFiber(
           }
         }
         if (flags & Callback) {
-          commitClassCallbacks(finishedWork);
+          commitUpdateQueue(finishedWork, finishedWork.updateQueue, instance);
         }
         break;
       }
@@ -924,7 +960,7 @@ function commitLayoutEffectsOnFiber(
       }
     }
 
-    if (flags & Ref) {
+    if (flags & Ref && !offscreenSubtreeWasHidden) {
       commitAttachRef(finishedWork);
     }
   } catch (error) {
@@ -936,6 +972,7 @@ export function commitLayoutEffects(
   finishedWork: FiberNode,
   root: FiberRootNode,
 ): void {
+  offscreenSubtreeWasHidden = false;
   commitLayoutEffectsOnFiber(root, finishedWork);
 }
 

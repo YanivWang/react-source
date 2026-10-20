@@ -98,9 +98,6 @@ importers:
       react:
         specifier: workspace:*
         version: link:../react
-      react-dom-bindings:
-        specifier: workspace:*
-        version: link:../react-dom-bindings
       react-reconciler:
         specifier: workspace:*
         version: link:../react-reconciler
@@ -110,8 +107,6 @@ importers:
       shared:
         specifier: workspace:*
         version: link:../shared
-
-  packages/react-dom-bindings: {}
 
   packages/react-reconciler:
     dependencies:

@@ -26,9 +26,9 @@
         "./packages/react-reconciler/constants.ts"
       ],
       "react-reconciler/src/*": ["./packages/react-reconciler/src/*"],
-      "react-dom-bindings/src/*": ["./packages/react-dom-bindings/src/*"],
       "scheduler": ["./packages/scheduler/index.ts"],
-      "scheduler/src/*": ["./packages/scheduler/src/*"]
+      "scheduler/src/*": ["./packages/scheduler/src/*"],
+      "react-dom/src/*": ["./packages/react-dom/src/*"]
     }
   },
   "exclude": ["node_modules", "dist", "build"]

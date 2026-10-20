@@ -1,0 +1,63 @@
+diff --git a/packages/react-reconciler/src/ReactFiberThrow.ts b/packages/react-reconciler/src/ReactFiberThrow.ts
+index 6bd5ccd..e3a10ab 100644
+--- a/packages/react-reconciler/src/ReactFiberThrow.ts
++++ b/packages/react-reconciler/src/ReactFiberThrow.ts
+@@ -6,16 +6,20 @@
+  * （class 组件实现 getDerivedStateFromError/componentDidCatch），命中就打 ShouldCapture 并塞
+  * 一条 CaptureUpdate；找不到则兜底在 HostRoot 卸载整棵树。
+  *
+- * 简化范围：不追踪 componentStack；找不到 Suspense 边界时不做官方"是否同步渲染"的区分，
+- * 直接落进下面统一的错误处理循环（把 Promise 本身当错误处理，命中最近 class 错误边界或
+- * 兜底卸载 HostRoot）——对应 Phase 9.1 计划里"找不到边界则维持现有错误路径"的取舍。
++ * 简化范围：不追踪 componentStack；无 Suspense 边界的非同步更新等待 ping，
++ * 同步输入挂起按官方 18.3.1 转成错误交给 Class 边界或 HostRoot。
+  */
+ 
+ import type { FiberNode } from "./ReactFiber";
+ import type { FiberRootNode } from "./ReactFiberRoot";
+ import { ClassComponent, HostRoot, SuspenseComponent } from "./ReactWorkTags";
+ import { ShouldCapture, Incomplete } from "./ReactFiberFlags";
+-import { getHighestPriorityLane, type Lanes } from "./ReactFiberLane";
++import {
++  getHighestPriorityLane,
++  includesSomeLane,
++  SyncLane,
++  type Lanes,
++} from "./ReactFiberLane";
+ import {
+   CaptureUpdate,
+   createUpdate,
+@@ -29,7 +33,7 @@ import { pingSuspendedRoot } from "./ReactFiberWorkLoop";
+ // processUpdateQueue 的浅合并语义（getDerivedStateFromError 返回值即 partial state），
+ // callback 走 commitClassCallbacks（layout 子阶段统一执行），不需要为 componentDidCatch
+ // 新增专门的 commit 分支。
+-function createClassErrorUpdate(
++export function createClassErrorUpdate(
+   boundaryFiber: FiberNode,
+   error: any,
+   lane: any,
+@@ -54,7 +58,7 @@ function createClassErrorUpdate(
+ 
+ // 兜底：整棵树都没有错误边界时，直接卸载 HostRoot 的 children（element: null），
+ // 并把错误打到控制台（不做 componentStack 追踪）
+-function createRootErrorUpdate(error: any, lane: any): Update<any> {
++export function createRootErrorUpdate(error: any, lane: any): Update<any> {
+   const update = createUpdate<any>(0, lane);
+   update.tag = CaptureUpdate;
+   update.payload = { element: null };
+@@ -169,8 +173,13 @@ export function throwException(
+       attachRetryListener(suspenseBoundary, root, wakeable, renderLanes);
+       return;
+     }
+-    // 找不到 Suspense 边界：不做官方"同步渲染时抛新错误"的区分，直接把 Promise 当错误值，
+-    // 落进下面的错误边界查找循环（命中最近 class 错误边界，或兜底卸载 HostRoot）。
++    if (!includesSomeLane(renderLanes, SyncLane)) {
++      attachPingListener(root, wakeable, renderLanes);
++      return;
++    }
++    value = new Error(
++      "A component suspended while responding to synchronous input. Updates that suspend should be wrapped with startTransition.",
++    );
+   }
+ 
+   const lane = getHighestPriorityLane(renderLanes);
