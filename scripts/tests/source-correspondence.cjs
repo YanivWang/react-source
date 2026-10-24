@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const { execFileSync } = require('node:child_process');
-const official = process.env.REACT18_SOURCE || '/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react';
+const official = process.env.REACT18_SOURCE || '/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react18';
 const git=(args)=>execFileSync('git',['-C',official,...args],{encoding:'utf8'}).trim();
 const commit='f1338f8080abd1386454a10bbf93d67bfe37ce85';
 assert.equal(git(['rev-parse','HEAD']),commit);

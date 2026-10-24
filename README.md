@@ -54,13 +54,14 @@ react-source/
 │   │       ├── ReactFiberLane.ts       # Lane 位表与客户端调度（未开放 hydration 入口）
 │   │       ├── ReactFiberRoot.ts       # FiberRootNode / createFiberRoot
 │   │       ├── ReactFiberFlags.ts      # 副作用标记位掩码
-│   │       ├── ReactFiberReconciler.ts # 对外入口（createContainer/updateContainer）
-│   │       ├── ReactFiberTreeReflection.ts # Fiber 树反射（getNearestMountedFiber/findCurrentHostFiber）
+│   │       ├── ReactFiberReconciler.ts # 对外入口（createContainer/updateContainer、findDOMNode 用的 findHostInstance、injectIntoDevTools）
+│   │       ├── ReactFiberDevToolsHook.ts # DevTools 注入与 commit/unmount 回调（18.3.1 默认构建，不含 __PROFILE__ timeline）
+│   │       ├── ReactFiberTreeReflection.ts # Fiber 树反射（getNearestMountedFiber、findCurrentFiberUsingSlowPath、findCurrentHostFiber）
 │   │       ├── ReactEventPriorities.ts # 事件优先级 → lane 映射
 │   │       └── ...                     # WorkTags/RootTags/TypeOfMode 等常量
 │   │
-│   ├── react-dom/             # DOM 渲染器（简版 createRoot 已搭建）
-│   │   ├── index.ts / client.ts        # npm 分发入口（转出 ReactDOMClient）
+│   ├── react-dom/             # DOM 渲染器（createRoot、findDOMNode、常用事件与受控表单；无 hydrateRoot）
+│   │   ├── index.ts / client.ts        # npm 分发入口（转出 createRoot 与 findDOMNode）
 │   │   └── src/client/
 │   │       ├── ReactDOMClient.ts       # 转出层（对照官方，还会挂 findDOMNode/DevTools 等）
 │   │       ├── ReactDOMRoot.ts         # createRoot 工厂与根 render/unmount

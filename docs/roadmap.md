@@ -91,10 +91,10 @@
 
 - [x] **Fiber 树反射**（`ReactFiberTreeReflection.ts` + `react-reconciler/reflection` 入口）
   - getNearestMountedFiber（沿 return 指针找最近的已挂载 Fiber）
-  - findCurrentHostFiber（深度优先找第一个真实 DOM 节点对应的 Fiber）
+  - findCurrentHostFiber（先 `findCurrentFiberUsingSlowPath` 定位 current 树，再深度优先找第一个真实 DOM 节点；Portal 用 `findCurrentHostFiberWithNoPortals` 跳过）
   - reflection 入口独立于主入口打包，供渲染器按需引入定位真实 DOM 节点（对照官方 reflection.js）
 
-**当前能做什么**：可以创建 ReactElement 对象，有一套完整的 reconciler 主链路——`createContainer/updateContainer` → `workLoop` → `commit mutation`，能对 Fiber 树做挂载、单/多节点 diff、更新、删除；并通过 react-dom 简版的 `createRoot().render()` 把结果渲染到真实 DOM（HostConfig 由构建时 fork 注入）。`fixtures/` 用 react-dom 驱动 reconciler 调试，`pnpm dev` 可看到挂载与二次更新的 DOM 变化。
+**本阶段结束时能做什么**（后面的 Phase 已经超出这段）：可以创建 ReactElement 对象，有一套 reconciler 主链路——`createContainer/updateContainer` → `workLoop` → `commit mutation`，能对 Fiber 树做挂载、单/多节点 diff、更新、删除；并通过 `createRoot().render()` 把结果渲染到真实 DOM（HostConfig 由构建时 fork 注入）。事件、Hooks、Class、Suspense、`findDOMNode` 和 DevTools 注入见后续 Phase 与 README。
 
 ### Phase 4: 调度器（Scheduler）+ 时间切片 + 客户端 Lane 模型
 
@@ -363,7 +363,7 @@
 ### 明确搁置（暂不安排，仅记录范围）
 
 - **noop-renderer**（Phase 5.5）：新建 `react-noop-renderer` 包（官方 `packages/react-noop-renderer` 对应用来测 reconciler 的宿主），实现一套不操作真实 DOM 的 HostConfig（内存树），配合 useEffect 等副作用做确定性测试
-- **Phase 10 Hydrate / Legacy render**：Lane 表里已经铺了 `SyncHydrationLane`/`InputContinuousHydrationLane`/`DefaultHydrationLane`/`SelectiveHydrationLane`/`IdleHydrationLane` 五条 hydration lane（对齐官方位表），但本项目 react-dom 简版目前只有 `createRoot`，没有 `hydrateRoot`/`ReactDOM.render`（legacy）：
+- **Phase 10 Hydrate / Legacy render**：Lane 表里已经铺了 `SyncHydrationLane`/`InputContinuousHydrationLane`/`DefaultHydrationLane`/`SelectiveHydrationLane`/`IdleHydrationLane` 五条 hydration lane（对齐官方位表）。客户端入口已有 `createRoot` 和 `findDOMNode`，仍然没有 `hydrateRoot`/`ReactDOM.render`（legacy）：
   - **hydrateRoot**：SSR 场景下复用已有 DOM 而非新建，需要 `getIsHydrating`/`tryToClaimNextHydratableInstance` 等一整套匹配已有 DOM 节点的逻辑（`ReactFiberHydrationContext.ts`）
   - **legacy render（ReactDOM.render）**：LegacyRoot 模式，更新恒为 SyncLane，行为上更接近 React 17（无并发特性），本项目 ReactRootTags 已有 LegacyRoot 占位但未接入
   - **selective hydration**：并发模式下 hydration 与交互事件的优先级协调（用户点击未 hydrate 完的区域时优先 hydrate 该部分）

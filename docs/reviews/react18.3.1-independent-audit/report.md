@@ -1,4 +1,4 @@
-> 修复前审查记录。后续修复和最终验收见 [repair-report.md](./repair-report.md)，本报告的问题与原始结果保留作历史证据。
+> 修复前审查记录。后续修复和最终验收见 [repair-report.md](./repair-report.md)，本报告的问题与原始结果保留作历史证据。审查当时本地 DOM 在 `packages/react-dom-bindings`，现行代码在 `packages/react-dom/src`。官方 18.3.1 快照现为 `repos/react/react18`。
 
 # React 18.3.1 独立源码复审报告
 
@@ -26,7 +26,7 @@
 | 待审仓库             | `/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react-source` |
 | 待审分支 / HEAD      | `codex/fix-react18-core-flows` / `e7675ed245d59e1aa001d55836ef4e3ab9fdd599`                |
 | 上一修复前提交       | `92e6f0e267fc1742929a3734d6068621e25729b2`                                                 |
-| 官方仓库             | `/Users/wangcheng/Documents/workSpace/frontEnd/referenceProjects/repos/react/react`        |
+| 官方仓库             | 审查时为 `repos/react/react` 的 `codex/react-18.3.1`；同一提交现为 `repos/react/react18`   |
 | 官方检出分支         | `codex/react-18.3.1`                                                                       |
 | 官方分支与 `v18.3.1` | 均为 `f1338f8080abd1386454a10bbf93d67bfe37ce85`，两者无差异，官方工作区干净                |
 | 运行环境             | Node `v22.23.2`、pnpm `11.24.0`、jsdom                                                     |

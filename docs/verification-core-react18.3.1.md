@@ -10,7 +10,7 @@
 
 最终运行结果见下方“验收结果”。验证覆盖根更新、Fiber 协调、Hooks、批处理、并发重放、Effect、Context、memo/ref、Class、Error Boundary、Suspense、事件和表单等典型核心机制。它支持将本项目作为这些调用链的 TS 阅读入口；不等于完整移植官方 React，也不能以通过率推算全部源码的正确率。
 
-本仓库 `react-dom-bindings` 是沿用的目录组织；官方 **18.3.1** 的对应 DOM 实现实际在 `packages/react-dom/src`。阅读时应以算法与版本为准。
+DOM 实现在 `packages/react-dom/src`（与官方 18.3.1 同路径）。早先的 `packages/react-dom-bindings` 已清空，不要再按那个目录找文件。
 
 ## 修复内容
 
@@ -25,8 +25,8 @@
 | Suspense 更新只隐藏 primary，未插 fallback                       | 新 fallback Fragment 标记 Placement；可见内容的 Transition 挂起保留 current；ping 后重试；隐藏/恢复重新连接 layout effects                                                      | `ReactFiberBeginWork.ts`、`ReactFiberCommitWork.ts`、`ReactFiberWorkLoop.ts`                                  |
 | lazy Class / memo / forwardRef 不能正确解析                      | 按真实解析类型选择 Fiber 路径；尚无 Class 实例时走 construct/mount；无边界非同步挂起等待 ping，同步挂起转为错误                                                                 | `ReactFiberBeginWork.ts`、`ReactFiberThrow.ts`                                                                |
 | componentDidCatch-only、更新时 fallback 或 commit 错误恢复不完整 | 错误捕获标志与队列隔离；错误恢复卸载旧子树并插入新树；commit 错误沿仍挂载祖先进入 SyncLane；删除树中的内部边界不再接收卸载错误                                                  | `ReactFiberClassUpdateQueue.ts`、`ReactFiberBeginWork.ts`、`ReactFiberCommitWork.ts`、`ReactFiberWorkLoop.ts` |
-| handler-only 更新仍读到旧回调                                    | 监听器变化也生成提交载荷，刷新 DOM 已提交 props 缓存                                                                                                                            | `packages/react-dom-bindings/src/client/ReactDOMHostConfig.ts`                                                |
-| disabled=false 变 true、camelCase style 无效                     | 布尔属性使用存在/删除语义；style 支持 camelCase、单位、自定义属性与旧样式移除                                                                                                   | `ReactDOMHostConfig.ts`、`CSSPropertyOperations.ts`、`shared/CSSProperty.ts`（DOM bindings/src）              |
+| handler-only 更新仍读到旧回调                                    | 监听器变化也生成提交载荷，刷新 DOM 已提交 props 缓存                                                                                                                            | `packages/react-dom/src/client/ReactDOMHostConfig.ts`                                                         |
+| disabled=false 变 true、camelCase style 无效                     | 布尔属性使用存在/删除语义；style 支持 camelCase、单位、自定义属性与旧样式移除                                                                                                   | `packages/react-dom/src/client/ReactDOMHostConfig.ts`、`CSSPropertyOperations.ts`、`shared/CSSProperty.ts`    |
 | value/onChange 缺受控闭环                                        | input/textarea/select 初始化和提交；值跟踪区分程序赋值与原生输入；事件后先 flush 再恢复值；radio 联动；select 在子 option 提交后更新                                            | `ReactDOMInput.ts`、`inputValueTracking.ts`、`DOMPluginEventSystem.ts`                                        |
 | StrictMode、公共 API、root unmount 缺口                          | DEV render 双调用与 Effect 重挂载；生产关闭；导出 Fragment/StrictMode/createRef/startTransition/flushSync；unmount 同步清理且后续 render 拒绝                                   | `ReactTypeOfMode.ts`、`ReactFiber.ts`、`ReactFiberHooks.ts`、`ReactFiberCommitWork.ts`、React/ReactDOM 入口   |
 | 教学说明混入 React 19                                            | 修正 async Action、DeferredLane、useDeferredValue initialValue 归属；更新 roadmap、README 与旧能力注释                                                                          | `README.md`、`CLAUDE.md`、`docs/roadmap.md`、相关 TS 注释                                                     |
@@ -117,7 +117,7 @@ CORE_TEST_MODE=production node --test scripts/tests/core.test.cjs
 
 ## 保留的简化与验证限制
 
-- 本轮范围是用户指定的客户端核心流程和原理学习，不实现 SSR/hydration/流式渲染、SuspenseList、Profiler/DevTools、完整 DEV 警告、legacy context/旧生命周期和所有 renderer。
+- 本轮（2026-10-20）范围是用户指定的客户端核心流程和原理学习，不实现 SSR/hydration/流式渲染、SuspenseList、Profiler timeline、完整 DEV 警告、legacy context/旧生命周期和所有 renderer。2026-10-24 已按 18.3.1 默认构建补上 `findDOMNode` 与 DevTools 注入（`injectIntoDevTools`、commit/unmount 回调）；`__PROFILE__` 的 timeline 和 hydration 仍然没有。
 - Suspense 保留了常见挂起、fallback、ping/retry、Transition 保留旧内容与 layout 重新连接；官方所有超时节流启发式、嵌套隐藏树和重试优先级分支没有完整移植或穷尽验证。
 - DOM 只覆盖常见 HTML 属性、样式、事件与表单。完整 SVG/namespace、selection/IME、跨文档 root、Portal 事件重映射、所有原生事件边界和旧浏览器兼容不在验收范围。表单类型切换和平台特殊输入行为也不能据这些用例推断全部正确。
 - StrictMode 用例覆盖本轮列出的 render、初始化、effect 与 Class 主路径；不等于实现官方全部 StrictMode DEV 诊断。Hooks 调用顺序的开发期全部类型校验没有移植。
