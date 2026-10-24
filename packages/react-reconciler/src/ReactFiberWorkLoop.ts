@@ -33,6 +33,7 @@ import {
   throwException,
 } from "./ReactFiberThrow";
 import { unwindWork, unwindInterruptedWork } from "./ReactFiberUnwindWork";
+import { onCommitRoot, onPostCommitRoot } from "./ReactFiberDevToolsHook";
 import { resetHooksAfterThrow } from "./ReactFiberHooks";
 import {
   NoLane,
@@ -574,6 +575,7 @@ function commitRootImpl(root: FiberRootNode): void {
     }
   } else nestedUpdateCount = 0;
   flushSyncCallbacks();
+  onCommitRoot(root);
 }
 
 // 对照官方 flushPassiveEffectsImpl（精简版）：commit 结束后异步执行，先卸载再挂载，
@@ -607,6 +609,7 @@ function flushPassiveEffects(): void {
     ReactCurrentBatchConfig.transition = previousTransition;
   }
   flushSyncCallbacks();
+  onPostCommitRoot(root);
 }
 
 function commitRoot(root: FiberRootNode): void {

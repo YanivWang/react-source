@@ -2,7 +2,7 @@
  * @file ReactDOMRoot（createRoot 的返回值）与 createRoot 实现
  * @description 包装 FiberRootNode，暴露 render 方法。对照官方 ReactDOMRoot.js：
  * createRoot 的真正实现和 ReactDOMRoot class 同属这一个文件；上层 ReactDOMClient.ts
- * 只做转出（官方那层还额外挂 findDOMNode/DevTools 注入等，本项目简版暂不需要）。
+ * 只做 createRoot；findDOMNode 与 DevTools 注入在 ReactDOMClient.ts，对照官方 ReactDOM.js。
  * ReactDOMRoot.render 内部调用 updateContainer 把 ReactElement 挂到根 fiber 的更新队列。
  */
 

@@ -5,7 +5,7 @@
 
 import { Placement } from "./ReactFiberFlags";
 import { FiberNode } from "./ReactFiber";
-import { HostComponent, HostRoot, HostText } from "./ReactWorkTags";
+import { HostComponent, HostPortal, HostRoot, HostText } from "./ReactWorkTags";
 
 // 对照官方 packages/react-reconciler/src/ReactFiberTreeReflection.js 的
 // getNearestMountedFiber：从任意 Fiber 出发，找到离它最近的、已经挂载到页面上的 Fiber。
@@ -46,33 +46,174 @@ export function getNearestMountedFiber(fiber: FiberNode): FiberNode | null {
   return null;
 }
 
-// 对照官方 findCurrentHostFiber：从给定 Fiber 开始，深度优先遍历 child/sibling，
-// 找到第一个真实 DOM 节点对应的 Fiber（HostComponent/HostText）。
-/**
- * 从给定 Fiber 开始，深度优先查找第一个真实 DOM 节点对应的 Fiber
- * @param parent - 起始 Fiber
- * @returns 第一个 HostComponent/HostText Fiber，找不到则返回 null
- */
-export function findCurrentHostFiber(parent: FiberNode): FiberNode | null {
-  let node: FiberNode = parent;
-  while (true) {
-    if (node.tag === HostComponent || node.tag === HostText) {
-      return node;
-    } else if (node.child) {
-      node.child.return = node;
-      node = node.child;
-      continue;
+function assertIsMounted(fiber: FiberNode): void {
+  if (getNearestMountedFiber(fiber) !== fiber) {
+    throw new Error("Unable to find node on an unmounted component.");
+  }
+}
+
+// 对照官方 findCurrentFiberUsingSlowPath：在 current / workInProgress 两棵树里
+// 确定传入 fiber 对应的 current 分支。findDOMNode 必须读已提交的树，不能读正在渲染的那份。
+export function findCurrentFiberUsingSlowPath(
+  fiber: FiberNode,
+): FiberNode | null {
+  const alternate = fiber.alternate;
+  if (!alternate) {
+    const nearestMounted = getNearestMountedFiber(fiber);
+    if (nearestMounted === null) {
+      throw new Error("Unable to find node on an unmounted component.");
     }
-    if (node === parent) {
+    if (nearestMounted !== fiber) {
       return null;
     }
-    while (!node.sibling) {
-      if (!node.return || node.return === parent) {
-        return null;
-      }
-      node = node.return;
-    }
-    node.sibling.return = node.return;
-    node = node.sibling;
+    return fiber;
   }
+
+  let a: FiberNode = fiber;
+  let b: FiberNode = alternate;
+  while (true) {
+    const parentA = a.return;
+    if (parentA === null) {
+      break;
+    }
+    const parentB = parentA.alternate;
+    if (parentB === null) {
+      const nextParent = parentA.return;
+      if (nextParent !== null) {
+        a = nextParent;
+        b = nextParent;
+        continue;
+      }
+      break;
+    }
+
+    if (parentA.child === parentB.child) {
+      let child = parentA.child;
+      while (child) {
+        if (child === a) {
+          assertIsMounted(parentA);
+          return fiber;
+        }
+        if (child === b) {
+          assertIsMounted(parentA);
+          return alternate;
+        }
+        child = child.sibling;
+      }
+    }
+
+    if (a.return !== b.return) {
+      a = parentA;
+      b = parentB;
+    } else {
+      let didFindChild = false;
+      let child = parentA.child;
+      while (child) {
+        if (child === a) {
+          didFindChild = true;
+          a = parentA;
+          b = parentB;
+          break;
+        }
+        if (child === b) {
+          didFindChild = true;
+          b = parentA;
+          a = parentB;
+          break;
+        }
+        child = child.sibling;
+      }
+      if (!didFindChild) {
+        child = parentB.child;
+        while (child) {
+          if (child === a) {
+            didFindChild = true;
+            a = parentB;
+            b = parentA;
+            break;
+          }
+          if (child === b) {
+            didFindChild = true;
+            b = parentB;
+            a = parentA;
+            break;
+          }
+          child = child.sibling;
+        }
+        if (!didFindChild) {
+          throw new Error(
+            "Child was not found in either parent set. This indicates a bug " +
+              "in React related to the return pointer. Please file an issue.",
+          );
+        }
+      }
+    }
+
+    if (a.alternate !== b) {
+      throw new Error(
+        "Return fibers should always be each others' alternates. " +
+          "This error is likely caused by a bug in React. Please file an issue.",
+      );
+    }
+  }
+
+  if (a.tag !== HostRoot) {
+    throw new Error("Unable to find node on an unmounted component.");
+  }
+  if (a.stateNode.current === a) {
+    return fiber;
+  }
+  return alternate;
+}
+
+function findCurrentHostFiberImpl(node: FiberNode): FiberNode | null {
+  if (node.tag === HostComponent || node.tag === HostText) {
+    return node;
+  }
+  let child = node.child;
+  while (child !== null) {
+    const match = findCurrentHostFiberImpl(child);
+    if (match !== null) {
+      return match;
+    }
+    child = child.sibling;
+  }
+  return null;
+}
+
+function findCurrentHostFiberWithNoPortalsImpl(
+  node: FiberNode,
+): FiberNode | null {
+  if (node.tag === HostComponent || node.tag === HostText) {
+    return node;
+  }
+  let child = node.child;
+  while (child !== null) {
+    if (child.tag !== HostPortal) {
+      const match = findCurrentHostFiberWithNoPortalsImpl(child);
+      if (match !== null) {
+        return match;
+      }
+    }
+    child = child.sibling;
+  }
+  return null;
+}
+
+// 对照官方 findCurrentHostFiber：先定位 current 分支，再深度优先找第一个宿主节点。
+export function findCurrentHostFiber(parent: FiberNode): FiberNode | null {
+  const currentParent = findCurrentFiberUsingSlowPath(parent);
+  return currentParent !== null
+    ? findCurrentHostFiberImpl(currentParent)
+    : null;
+}
+
+// 对照官方 findCurrentHostFiberWithNoPortals：跳过 HostPortal，供根实例公开节点使用。
+export function findCurrentHostFiberWithNoPortals(
+  parent: FiberNode,
+): FiberNode | null {
+  const currentParent = findCurrentFiberUsingSlowPath(parent);
+  return currentParent !== null
+    ? findCurrentHostFiberWithNoPortalsImpl(currentParent)
+    : null;
 }

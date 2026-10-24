@@ -1497,4 +1497,42 @@ module.exports = {
     result.actual = container.textContent;
     result.expected = "11:x";
   },
+  "find-dom-node": async ({
+    React: R,
+    h,
+    render,
+    result,
+    findDOMNode,
+  }) => {
+    let inst;
+    class App extends R.Component {
+      render() {
+        inst = this;
+        return h("div", null, "hi");
+      }
+    }
+    await render(h(App));
+    const node = findDOMNode(inst);
+    const same = findDOMNode(node);
+    let threw = false;
+    try {
+      findDOMNode({ foo: "bar" });
+    } catch (error) {
+      threw = true;
+    }
+    result.actual = {
+      tag: node && node.tagName,
+      text: node && node.textContent,
+      same: same === node,
+      nullish: findDOMNode(null),
+      threw,
+    };
+    result.expected = {
+      tag: "DIV",
+      text: "hi",
+      same: true,
+      nullish: null,
+      threw: true,
+    };
+  },
 };

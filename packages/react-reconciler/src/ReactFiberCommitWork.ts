@@ -4,6 +4,7 @@
  */
 
 import type { FiberNode } from "./ReactFiber";
+import { onCommitUnmount } from "./ReactFiberDevToolsHook";
 import {
   Callback,
   ChildDeletion,
@@ -363,6 +364,7 @@ function commitDeletionEffectsOnFiber(
   nearestMountedAncestor: FiberNode,
   deletedFiber: FiberNode,
 ): void {
+  onCommitUnmount(deletedFiber);
   switch (deletedFiber.tag) {
     case HostComponent: {
       // 先清 ref，随后故意 fall through 到 HostText 分支——

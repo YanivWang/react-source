@@ -5,7 +5,7 @@
  * 主入口只暴露 createRoot/hydrateRoot 等客户端 API。
  */
 
-export { createRoot } from "./src/client/ReactDOMClient";
+export { createRoot, findDOMNode } from "./src/client/ReactDOMClient";
 export { createPortal } from "react-reconciler/src/ReactPortal";
 
 export { flushSync } from "react-reconciler/src/ReactFiberWorkLoop";

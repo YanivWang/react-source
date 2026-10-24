@@ -26,7 +26,7 @@ if (repo === "official") {
   React = require(path.join(built, "react"));
   ({ createRoot } = require(path.join(built, "react-dom/client")));
 }
-const { flushSync } =
+const { flushSync, findDOMNode } =
   repo === "official"
     ? require("react-dom-reference")
     : require(path.resolve(__dirname, "../../build/node_modules/react-dom"));
@@ -338,6 +338,7 @@ async function run() {
       root,
       createRoot,
       flushSync,
+      findDOMNode,
       getScheduler,
       render,
       sleep,

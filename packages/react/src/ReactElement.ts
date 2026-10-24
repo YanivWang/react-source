@@ -243,11 +243,7 @@ const ReactElement = function (
  * @param maybeKey - 显式传入的 key（优先级高于 config.key）
  * @returns 构造好的 ReactElement 对象
  */
-export function jsx(
-  type: ElementType,
-  config: any,
-  maybeKey?: Key,
-): ReactElementType {
+function jsx(type: ElementType, config: any, maybeKey?: Key): ReactElementType {
   let propName: string;
 
   const props: Props = {};
@@ -314,7 +310,7 @@ export function jsx(
  * @param self - 调用处的 this
  * @returns 构造好的 ReactElement 对象（prod 构建下此函数体被删除，返回 undefined）
  */
-export function jsxDEV(
+function jsxDEV(
   type: ElementType,
   config: any,
   maybeKey: Key | undefined,
@@ -493,3 +489,7 @@ export function isValidElement(object: any): boolean {
     object.$$typeof === REACT_ELEMENT_TYPE
   );
 }
+
+// 历史遗留拷贝留在本文件供对照，不加入 react 包入口。
+void jsx;
+void jsxDEV;
